@@ -10,6 +10,8 @@
  */
 package com.robin.lazy.net.http;
 
+import android.content.Context;
+
 import com.robin.lazy.cache.CacheLoaderConfiguration;
 import com.robin.lazy.cache.disk.naming.HashCodeFileNameGenerator;
 import com.robin.lazy.cache.memory.MemoryCache;
@@ -72,9 +74,9 @@ public class HttpRequestManager extends AsyncHttpClient {
 	/**
 	 * 默认构造函数
 	 */
-	private HttpRequestManager() {
+	private HttpRequestManager(Context context) {
 		super();
-		initHttpCache();
+		initHttpCache(context);
 		contextRequests = new ConcurrentHashMap<RequestLifecycleContext, List<String>>();
 		isVisibleDialog = true;
 	}
@@ -85,13 +87,13 @@ public class HttpRequestManager extends AsyncHttpClient {
 	 * @throws
 	 * @see [类、类#方法、类#成员]
 	 */
-	private void initHttpCache() {
+	private void initHttpCache(Context context) {
 		httpCacheLoaderManager = new HttpCacheLoaderManager();
 		MemoryCache memoryCache = MemoryCacheUtils.createMemoryCache(
-				LazyApplication.getApplication(), 0.1f,
+				context, 0.1f,
 				new SizeOfHttpCacheCalculator());
 		CacheLoaderConfiguration cofing = new CacheLoaderConfiguration(
-				LazyApplication.getApplication(),
+				context,
 				new HashCodeFileNameGenerator(), MB_UNIT_TO_BYTE * 50, 100,
 				memoryCache);
 		httpCacheLoaderManager.init(cofing);
@@ -102,11 +104,11 @@ public class HttpRequestManager extends AsyncHttpClient {
 	 * @return
 	 * @see [类、类#方法、类#成员]
 	 */
-	public static HttpRequestManager getInstance() {
+	public static HttpRequestManager getInstance(Context context) {
 		if (adrManager == null) {
 			synchronized (HttpRequestManager.class) {
 				if (adrManager == null) {
-					adrManager = new HttpRequestManager();
+					adrManager = new HttpRequestManager(context);
 				}
 			}
 		}
