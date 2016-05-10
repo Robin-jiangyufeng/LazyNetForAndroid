@@ -216,7 +216,7 @@ public class DownloadReceiver extends BroadcastReceiver
             }
             else
             {
-                mDownLoadListening.onFailure(messageId, message);
+                mDownLoadListening.onFailure(messageId,status, message);
             }
         }
     }

@@ -52,10 +52,11 @@ public interface DownLoadListening
      * 下载失败
      * 
      * @param messageId
-     * @param message
+     * @param statusCode 错误码
+     * @param message 错误信息
      * @see [类、类#方法、类#成员]
      */
-    public abstract void onFailure(int messageId, String message);
+    public abstract void onFailure(int messageId, int statusCode,String message);
     
     /**
      * 用户取消下载回调
