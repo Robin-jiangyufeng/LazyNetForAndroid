@@ -1,7 +1,7 @@
 package com.robin.lazy.net.http.cache.callback;
 
 import com.robin.lazy.net.http.AsyncTextResponseCallback;
-import com.robin.lazy.net.http.HttpRequesrDialog;
+import com.robin.lazy.net.http.LoadingViewInterface;
 import com.robin.lazy.net.http.ResponseListener;
 import com.robin.lazy.net.http.cache.CacheTextHttpResponseHandler;
 import com.robin.lazy.net.http.cache.HttpCacheLoadType;
@@ -25,19 +25,19 @@ public class CacheAsyncTextResponseCallback extends AsyncTextResponseCallback {
 
 	public CacheAsyncTextResponseCallback(
 			ResponseListener<String, String> listener,
-			HttpRequesrDialog dialogHandle,
+			LoadingViewInterface loadingView,
 			HttpCacheLoaderManager httpCacheLoader,
 			HttpCacheLoadType httpCacheLoadType, long maxCacheAge) {
-		this(listener, dialogHandle, httpCacheLoader, httpCacheLoadType);
+		this(listener, loadingView, httpCacheLoader, httpCacheLoadType);
 		this.maxCacheAge = maxCacheAge;
 	}
 
 	public CacheAsyncTextResponseCallback(
 			ResponseListener<String, String> listener,
-			HttpRequesrDialog dialogHandle,
+			LoadingViewInterface loadingView,
 			HttpCacheLoaderManager httpCacheLoader,
 			HttpCacheLoadType httpCacheLoadType) {
-		super(listener, dialogHandle);
+		super(listener, loadingView);
 		this.httpCacheLoader = httpCacheLoader;
 		this.httpCacheLoadType = httpCacheLoadType;
 	}

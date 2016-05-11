@@ -29,9 +29,9 @@ public class AsyncTextResponseCallback extends TextResponseCallback {
 	protected static final int FAIL_MESSAGE = 3;
 
 	/**
-	 * 与ui交互的信息管理
+	 * 加载数据时显示的view
 	 */
-	private HttpRequesrDialog dialogHandle;
+	private LoadingViewInterface loadingView;
 
 	/**
 	 * 数据反馈监听器
@@ -43,9 +43,9 @@ public class AsyncTextResponseCallback extends TextResponseCallback {
 	}
 
 	public AsyncTextResponseCallback(ResponseListener<String, String> listener,
-			HttpRequesrDialog dialogHandle) {
+									 LoadingViewInterface loadingView) {
 		this(listener);
-		this.dialogHandle = dialogHandle;
+		this.loadingView = loadingView;
 	}
 
 	/**
@@ -58,25 +58,33 @@ public class AsyncTextResponseCallback extends TextResponseCallback {
 			int messageId = msg.arg1;
 			int statusCode = msg.arg2;
 			if (msg.what == START_MESSAGE) {
-				if (dialogHandle != null) {
-					dialogHandle.showDialog();
+				if (loadingView != null) {
+					loadingView.loadStart(messageId);
 				}
 				if (listener != null) {
 					listener.onStart(messageId);
 				}
 			} else if (msg.what == SUCCESS_MESSAGE) {
-				if (dialogHandle != null) {
-					dialogHandle.dismissDialog(statusCode);
+				Object[] objects=(Object[])msg.obj;
+				Map<String,List<String>> headers=(Map<String,List<String>>)objects[0];
+				String response=(String) objects[1];
+				if (loadingView != null) {
+					loadingView.loadSuccess(messageId,response);
+					loadingView=null;
 				}
 				if (listener != null) {
-					listener.onSuccess(messageId, (String) msg.obj);
+					listener.onSuccess(messageId, headers,response);
 				}
 			} else if (msg.what == FAIL_MESSAGE) {
-				if (dialogHandle != null) {
-					dialogHandle.dismissDialog(statusCode);
+				Object[] objects=(Object[])msg.obj;
+				Map<String,List<String>> headers=(Map<String,List<String>>)objects[0];
+				String errorResponse=(String) objects[1];
+				if (loadingView != null) {
+					loadingView.loadFail(messageId,statusCode,HttpError.getMessageByStatusCode(statusCode));
+					loadingView=null;
 				}
 				if (listener != null) {
-					listener.onFail(messageId, statusCode,(String) msg.obj);
+					listener.onFail(messageId, statusCode,headers,errorResponse);
 				}
 			}
 			super.handleMessage(msg);
@@ -92,13 +100,13 @@ public class AsyncTextResponseCallback extends TextResponseCallback {
 	public void sendSuccessMessage(int messageId,
 			Map<String, List<String>> headers, String responseData) {
 		handler.sendMessage(handler.obtainMessage(SUCCESS_MESSAGE, messageId,
-				HttpError.RESPONSE_CODE_200, responseData));
+				HttpError.RESPONSE_CODE_200,new Object[]{headers,responseData} ));
 	}
 
 	@Override
 	public void sendFailMessage(int messageId, int statusCode,
 			Map<String, List<String>> headers, String responseData) {
 		handler.sendMessage(handler.obtainMessage(FAIL_MESSAGE, messageId,
-				statusCode, responseData));
+				statusCode, new Object[]{headers,responseData}));
 	}
 }
