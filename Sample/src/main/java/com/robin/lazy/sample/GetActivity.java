@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.robin.lazy.net.http.HttpRequestManager;
 import com.robin.lazy.net.http.RequestLifecycleContext;
 import com.robin.lazy.net.http.TextResponseListener;
+import com.robin.lazy.net.http.cache.HttpCacheLoadType;
 import com.robin.lazy.net.http.core.RequestParam;
 
 import java.util.List;
@@ -20,10 +22,15 @@ public class GetActivity extends AppCompatActivity implements RequestLifecycleCo
     private TextView textView;
     private EditText editText;
     private HttpRequestManager httpRequestManager;
+    private boolean isUseCache;
+    private long lastTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         httpRequestManager=HttpRequestManager.getInstance(this);
+        if(getIntent()!=null){
+            isUseCache=getIntent().getBooleanExtra("isUseCache",false);
+        }
         setContentView(R.layout.activity_get);
         textView=(TextView)findViewById(R.id.textView);
         editText=(EditText)findViewById(R.id.editText);
@@ -31,8 +38,16 @@ public class GetActivity extends AppCompatActivity implements RequestLifecycleCo
             @Override
             public void onClick(View v) {
                 RequestParam param=new RequestParam(101,editText.getText().toString());
-                param.addSendData("key","03222bd3467ec2aa045aef63cd134a9e");
-                httpRequestManager.sendHttpGetRequest(GetActivity.this,param,new DefaultLoadingView(getContext()),GetActivity.this);
+                param.addSendData("key", "03222bd3467ec2aa045aef63cd134a9e");
+                if(isUseCache){
+                    httpRequestManager.sendCacheHttpGetRequest(GetActivity.this,param,
+                            new DefaultLoadingView(getContext()),
+                            GetActivity.this,
+                            HttpCacheLoadType.USE_CACHE_UPLOAD_CACHE);
+                }else{
+                    httpRequestManager.sendHttpGetRequest(GetActivity.this,param,new DefaultLoadingView(getContext()),GetActivity.this);
+                }
+                lastTime=System.currentTimeMillis();
             }
         });
     }
@@ -49,11 +64,13 @@ public class GetActivity extends AppCompatActivity implements RequestLifecycleCo
 
     @Override
     public void onSuccess(int messageId, Map<String, List<String>> headers, String data) {
+        Toast.makeText(this,"onSuccess"+(System.currentTimeMillis()-lastTime)+"毫秒",Toast.LENGTH_SHORT).show();
         textView.setText(data);
     }
 
     @Override
     public void onFail(int messageId, int statusCode, Map<String, List<String>> headers, String data) {
+        Toast.makeText(this,"onFail"+(System.currentTimeMillis()-lastTime)+"毫秒",Toast.LENGTH_SHORT).show();
         textView.setText(data);
     }
 }

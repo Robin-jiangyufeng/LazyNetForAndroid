@@ -7,7 +7,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 9
         targetSdkVersion 23
         versionCode 12
         versionName "1.2.0"
@@ -22,8 +22,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.robin.lazy.cache:CacheLibrary:1.0.0'
-    compile 'com.robin.lazy.json:JsonParseLibrary:1.0.0'
+    compile 'com.robin.lazy.cache:CacheLibrary:1.0.1'
+    compile 'com.robin.lazy.json:JsonParseLibrary:1.0.1'
     compile 'com.robin.lazy.util:UtilLibrary:1.1.1'
     testCompile 'junit:junit:4.12'
 }

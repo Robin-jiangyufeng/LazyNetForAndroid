@@ -215,13 +215,6 @@ public class AsyncHttpClient implements NetChangeObserver {
 	private boolean startSendRequest(HttpRequestMethod httpMethod,
 			RequestParam request, HttpResponseHandlerBase httpRequestHandler) {
 		boolean isSuccess = false;
-		if (!NetworkStateReceiver.isNetwork()) {
-			LazyLogger.e("当前没有网络");
-			httpRequestHandler.sendStartMessage(request.getMessageId());
-			httpRequestHandler.sendFailMessage(request.getMessageId(),
-					HttpError.NOT_NETWORK, null, null);
-			return isSuccess;
-		}
 		if (threadPool != null) {
 			removeDone();
 			if (!isExistTask(request.getMessageId())) {

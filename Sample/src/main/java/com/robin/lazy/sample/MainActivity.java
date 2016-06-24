@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements NetChangeObserver
             case R.id.button2:
                 break;
             case R.id.button3:
+                Intent intent=new Intent(this,GetActivity.class);
+                intent.putExtra("isUseCache",true);
+                startActivity(intent);
                 break;
             case R.id.button4:
                 break;
