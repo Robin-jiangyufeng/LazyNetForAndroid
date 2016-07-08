@@ -30,6 +30,6 @@ public interface RequestLifecycleContext {
 	 * @throws
 	 * @see [类、类#方法、类#成员]
 	 */
-	public Activity getContext();
+	public Activity getCurrContext();
 }
 
