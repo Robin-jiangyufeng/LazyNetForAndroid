@@ -71,7 +71,7 @@ public class HttpRequestManager extends AsyncHttpClient {
     /**
      * 默认构造函数
      */
-    private HttpRequestManager(Context context) {
+    public HttpRequestManager(Context context) {
         super();
         initHttpCache(context);
         contextRequests = new ConcurrentHashMap<RequestLifecycleContext, List<String>>();
@@ -358,7 +358,7 @@ public class HttpRequestManager extends AsyncHttpClient {
      * @throws
      * @see [类、类#方法、类#成员]
      */
-    private void addContextRequest(RequestLifecycleContext requestContext,
+    public void addContextRequest(RequestLifecycleContext requestContext,
                                    int messageId) {
         if (contextRequests != null) {
             if (contextRequests.containsKey(requestContext)) {

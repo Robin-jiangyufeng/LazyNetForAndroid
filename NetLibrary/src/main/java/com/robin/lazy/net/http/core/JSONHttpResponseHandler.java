@@ -71,7 +71,7 @@ public class JSONHttpResponseHandler<T extends Serializable,E extends Serializab
             {
                 outStream = urlConnection.getOutputStream();
                 out = new DataOutputStream(outStream);
-                String json=JSONUtil.toJSON(request.getUrlWithPsaram());
+                String json=request.getSendData();
                 out.writeBytes(json);
             }
         }
@@ -167,6 +167,12 @@ public class JSONHttpResponseHandler<T extends Serializable,E extends Serializab
         super.sendFailMessage(messageId, statusCode, headers, responseErrorByteData);
     }
 
+    /**
+     * 获取到的bytes转String
+     * @param stringBytes
+     * @param charset
+     * @return
+     */
     public String getResponseString(byte[] stringBytes, String charset)
     {
         try

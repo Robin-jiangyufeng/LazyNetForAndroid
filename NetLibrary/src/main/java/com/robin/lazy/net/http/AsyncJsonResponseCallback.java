@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 异步的json请求回调
@@ -144,4 +143,19 @@ public class AsyncJsonResponseCallback<T extends Serializable, E extends Seriali
         return ReflectUtils.getSuperClassGenricType(getClass(), index);
     }
 
+    /**
+     * 获取监听器
+     * @return
+     */
+    public ResponseListener<T, E> getListener() {
+        return listener;
+    }
+
+    /**
+     * 获取加载中view
+     * @return
+     */
+    public LoadingViewInterface getLoadingView() {
+        return loadingView;
+    }
 }

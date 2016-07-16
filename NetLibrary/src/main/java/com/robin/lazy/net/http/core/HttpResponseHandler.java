@@ -80,7 +80,7 @@ public abstract class HttpResponseHandler implements HttpResponseHandlerBase {
 			RequestParam request) {
 		LazyLogger.i("報文==" + request.getMessageId() + ";;请求URL=="
 				+ request.getUrl());
-		LazyLogger.i("请求发送的数据==" + request.getUrlWithPsaram());
+		LazyLogger.i("请求发送的数据==" + request.getSendData());
 		if (urlConnection != null && request != null) {
 			int responseCode = 0;
 			byte[] data = null;
