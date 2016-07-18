@@ -51,11 +51,6 @@ public class HttpRequestManager extends AsyncHttpClient {
      */
     private final static int MB_UNIT_TO_BYTE = 1024 * 1024;
 
-    /***
-     * 单例
-     */
-    private static HttpRequestManager adrManager;
-
     private HttpCacheLoaderManager httpCacheLoaderManager;
 
     /**
@@ -97,20 +92,11 @@ public class HttpRequestManager extends AsyncHttpClient {
     }
 
     /**
-     * 单例模式返回http数据请求管理对象
-     *
+     * 获取http缓存管理者
      * @return
-     * @see [类、类#方法、类#成员]
      */
-    public static HttpRequestManager getInstance(Context context) {
-        if (adrManager == null) {
-            synchronized (HttpRequestManager.class) {
-                if (adrManager == null) {
-                    adrManager = new HttpRequestManager(context);
-                }
-            }
-        }
-        return adrManager;
+    protected HttpCacheLoaderManager getHttpCacheLoaderManager() {
+        return httpCacheLoaderManager;
     }
 
     /**
@@ -358,7 +344,7 @@ public class HttpRequestManager extends AsyncHttpClient {
      * @throws
      * @see [类、类#方法、类#成员]
      */
-    public void addContextRequest(RequestLifecycleContext requestContext,
+    protected void addContextRequest(RequestLifecycleContext requestContext,
                                    int messageId) {
         if (contextRequests != null) {
             if (contextRequests.containsKey(requestContext)) {
@@ -397,32 +383,32 @@ public class HttpRequestManager extends AsyncHttpClient {
             RequestParam requestParam, LoadingViewInterface loadingView, ResponseListener<T, E> listener, HttpCacheLoadType cacheLoadType,
             long maxCacheAge) {
         boolean isSuccess = false;
-        ResponseCallbackInterface<T, E> responseHandler = null;
+        ResponseCallbackInterface<T, E> callbackInterface = null;
         if (cacheLoadType != null) {
             if (maxCacheAge > 0) {
-                responseHandler = new CacheAsyncJsonResponseCallback<T, E>(listener,
+                callbackInterface = new CacheAsyncJsonResponseCallback<T, E>(listener,
                         loadingView, httpCacheLoaderManager,
                         cacheLoadType, maxCacheAge);
             } else {
-                responseHandler = new CacheAsyncJsonResponseCallback<T, E>(listener,
+                callbackInterface = new CacheAsyncJsonResponseCallback<T, E>(listener,
                         loadingView, httpCacheLoaderManager,
                         cacheLoadType);
             }
         } else {
             if (maxCacheAge > 0) {
-                responseHandler = new CacheAsyncJsonResponseCallback<T, E>(listener,
+                callbackInterface = new CacheAsyncJsonResponseCallback<T, E>(listener,
                         loadingView, httpCacheLoaderManager,
                         HttpCacheLoadType.USE_CACHE_UPLOAD_CACHE, maxCacheAge);
             } else {
-                responseHandler = new CacheAsyncJsonResponseCallback<T, E>(listener,
+                callbackInterface = new CacheAsyncJsonResponseCallback<T, E>(listener,
                         loadingView, httpCacheLoaderManager,
                         HttpCacheLoadType.USE_CACHE_UPLOAD_CACHE);
             }
         }
         if (httpMethod == HttpRequestMethod.HTTP_GET) {
-            isSuccess = doGet(requestParam, responseHandler);
+            isSuccess = doGet(requestParam, callbackInterface);
         } else if (httpMethod == HttpRequestMethod.HTTP_POST) {
-            isSuccess = doPost(requestParam, responseHandler);
+            isSuccess = doPost(requestParam, callbackInterface);
         }
         return isSuccess;
     }
@@ -447,32 +433,32 @@ public class HttpRequestManager extends AsyncHttpClient {
             RequestParam requestParam, LoadingViewInterface loadingView, TextResponseListener listener, HttpCacheLoadType cacheLoadType,
             long maxCacheAge) {
         boolean isSuccess = false;
-        ResponseCallbackInterface<String, String> responseHandler = null;
+        ResponseCallbackInterface<String, String> callbackInterface = null;
         if (cacheLoadType != null) {
             if (maxCacheAge > 0) {
-                responseHandler = new CacheAsyncTextResponseCallback(listener,
+                callbackInterface = new CacheAsyncTextResponseCallback(listener,
                         loadingView, httpCacheLoaderManager,
                         cacheLoadType, maxCacheAge);
             } else {
-                responseHandler = new CacheAsyncTextResponseCallback(listener,
+                callbackInterface = new CacheAsyncTextResponseCallback(listener,
                         loadingView, httpCacheLoaderManager,
                         cacheLoadType);
             }
         } else {
             if (maxCacheAge > 0) {
-                responseHandler = new CacheAsyncTextResponseCallback(listener,
+                callbackInterface = new CacheAsyncTextResponseCallback(listener,
                         loadingView, httpCacheLoaderManager,
                         HttpCacheLoadType.USE_CACHE_UPLOAD_CACHE, maxCacheAge);
             } else {
-                responseHandler = new CacheAsyncTextResponseCallback(listener,
+                callbackInterface = new CacheAsyncTextResponseCallback(listener,
                         loadingView, httpCacheLoaderManager,
                         HttpCacheLoadType.USE_CACHE_UPLOAD_CACHE);
             }
         }
         if (httpMethod == HttpRequestMethod.HTTP_GET) {
-            isSuccess = doGet(requestParam, responseHandler);
+            isSuccess = doGet(requestParam, callbackInterface);
         } else if (httpMethod == HttpRequestMethod.HTTP_POST) {
-            isSuccess = doPost(requestParam, responseHandler);
+            isSuccess = doPost(requestParam, callbackInterface);
         }
         return isSuccess;
     }
@@ -578,9 +564,6 @@ public class HttpRequestManager extends AsyncHttpClient {
         if (httpCacheLoaderManager != null) {
             httpCacheLoaderManager.close();
             httpCacheLoaderManager = null;
-        }
-        if (adrManager != null) {
-            adrManager = null;
         }
     }
 

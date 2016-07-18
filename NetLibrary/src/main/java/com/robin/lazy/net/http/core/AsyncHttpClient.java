@@ -11,6 +11,7 @@
 
 package com.robin.lazy.net.http.core;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -131,19 +132,19 @@ public class AsyncHttpClient implements NetChangeObserver {
 	 * 
 	 * @param param
 	 *            请求参数
-	 * @param responseHandler
+	 * @param callbackInterface
 	 *            数据回调监听(不能设为空)
 	 * @return 添加一个请求是否成功
 	 * @see [类、类#方法、类#成员]
 	 */
-	protected <T, E> boolean doGet(RequestParam param,
-			ResponseCallbackInterface<T, E> responseHandler) {
+	protected <T, E> boolean doGet(@NonNull RequestParam param,
+								   @NonNull ResponseCallbackInterface<T, E> callbackInterface) {
 		if (!StringUtils.isEmpty(param.getSendData())) {
 			param.setUrl(param.getUrl() + param.getSendData());// 把要发送的数据拼接到url链接后面
 		}
 		param.cleanWithPsaram();// 清理掉数据，次数据是用于post下发送的，程序会自动检测,不清理会抛错
 		return startSendRequest(HttpRequestMethod.HTTP_GET, param,
-				responseHandler.getHttpResponseHandler());
+				callbackInterface.getHttpResponseHandler());
 	}
 
 	/**
@@ -151,15 +152,15 @@ public class AsyncHttpClient implements NetChangeObserver {
 	 * 
 	 * @param param
 	 *            请求参数
-	 * @param responseHandler
+	 * @param callbackInterface
 	 *            数据回调监听
 	 * @return 添加一个请求是否成功
 	 * @see [类、类#方法、类#成员]
 	 */
-	protected <T, E> boolean doPost(RequestParam param,
-			ResponseCallbackInterface<T, E> responseHandler) {
+	protected <T, E> boolean doPost(@NonNull RequestParam param,
+			@NonNull ResponseCallbackInterface<T, E> callbackInterface) {
 		return startSendRequest(HttpRequestMethod.HTTP_POST, param,
-				responseHandler.getHttpResponseHandler());
+				callbackInterface.getHttpResponseHandler());
 	}
 
 	/**
@@ -169,17 +170,17 @@ public class AsyncHttpClient implements NetChangeObserver {
 	 *            请求参数
 	 * @param fileBuff
 	 *            目标文件缓冲器,用于保存下载文件
-	 * @param listening
+	 * @param callbackInterface
 	 *            下载进度监听接口
 	 * @return 添加一个下载文件请求是否成功
 	 * @see [类、类#方法、类#成员]
 	 */
 	protected boolean doGetDownloadFile(RequestParam param,
-			FileBuffer fileBuff, DownloadCallbackInterface listening) {
+			FileBuffer fileBuff, DownloadCallbackInterface callbackInterface) {
 		param.setConnectTimeOut(0);
 		param.setReadTimeOut(0);
 		return startSendRequest(HttpRequestMethod.HTTP_GET, param,
-				listening.getHttpResponseHandler(fileBuff));
+				callbackInterface.getHttpResponseHandler(fileBuff));
 	}
 
 	/**
@@ -187,17 +188,17 @@ public class AsyncHttpClient implements NetChangeObserver {
 	 * 
 	 * @param param
 	 *            请求参数
-	 * @param listening
+	 * @param callbackInterface
 	 *            上传进度监听接口
 	 * @return 添加一个上传文件请求是否成功
 	 * @see [类、类#方法、类#成员]
 	 */
 	protected boolean doPostUploadFile(RequestParam param,
-			UploadCallbackInterface listening) {
+			UploadCallbackInterface callbackInterface) {
 		param.setConnectTimeOut(0);
 		param.setReadTimeOut(0);
 		return startSendRequest(HttpRequestMethod.HTTP_POST, param,
-				new UploadHttpResponseHandler(listening));
+				new UploadHttpResponseHandler(callbackInterface));
 	}
 
 	/**

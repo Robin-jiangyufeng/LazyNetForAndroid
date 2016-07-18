@@ -24,7 +24,7 @@ public class CacheAsyncJsonResponseCallback<T extends Serializable, E extends Se
         extends
         AsyncJsonResponseCallback<T, E> {
     /**
-     * byte数组类型缓存加载管理者
+     * json类型缓存加载管理者
      */
     private HttpCacheLoaderManager httpCacheLoader;
     private HttpCacheLoadType httpCacheLoadType;

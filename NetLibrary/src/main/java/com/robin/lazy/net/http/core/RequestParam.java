@@ -198,7 +198,6 @@ public class RequestParam
         {
             urlWithPsaram = new ConcurrentHashMap<String, Object>();
         }
-        urlWithPsaram.clear();
         urlWithPsaram.putAll(dataGroup);
     }
     

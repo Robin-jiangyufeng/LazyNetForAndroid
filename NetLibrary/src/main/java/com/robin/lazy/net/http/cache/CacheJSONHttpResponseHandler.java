@@ -21,7 +21,7 @@ public class CacheJSONHttpResponseHandler<T extends Serializable, E extends Seri
 		implements
 			CacheHttpResponeHandlerBase {
 
-	/** byte数组类型缓存加载管理者 */
+	/** 缓存加载管理者 */
 	private HttpCacheLoaderManager httpCacheLoader;
 	private HttpCacheLoadType httpCacheLoadType;
 	/** 缓存最大的有效时间 */
