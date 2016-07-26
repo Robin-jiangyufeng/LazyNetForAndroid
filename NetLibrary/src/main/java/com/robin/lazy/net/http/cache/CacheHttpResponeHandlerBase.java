@@ -10,6 +10,10 @@
  */
 
 package com.robin.lazy.net.http.cache;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * http缓存Respone接口
  * @author jiangyufeng
@@ -18,6 +22,15 @@ package com.robin.lazy.net.http.cache;
  * @since [产品/模块版本]
  */
 public interface CacheHttpResponeHandlerBase {
+
+	/**
+	 * 得到缓存后的回调
+	 *
+	 * @param messageId 设置的请求ID（用于多个请求回调识别）
+	 * @param headers   返回的header信息
+	 * @param data      回调数据
+	 */
+	public void loadCache(int messageId, Map<String, List<String>> headers, byte[] data);
 
 	/***
 	 * 获取http缓存管理者

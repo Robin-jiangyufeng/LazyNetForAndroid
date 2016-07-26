@@ -42,7 +42,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
     /**
      * 下载监听接口
      */
-    private DownloadCallbackInterface downloadListening;
+    private DownloadCallbackInterface downloadCallback;
     
     /**
      * 上一次的时间
@@ -58,20 +58,20 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
      * 创建HttpRequestHandler对象
      * 
      * @param fileBuffer 下载的目标文件缓冲器
-     * @param downloadListening 下载监听器
+     * @param downloadCallback 下载监听器
      */
-    public DownloadHttpResponseHandler(FileBuffer fileBuffer, DownloadCallbackInterface downloadListening)
+    public DownloadHttpResponseHandler(FileBuffer fileBuffer, DownloadCallbackInterface downloadCallback)
     {
         this.fileBuffer = fileBuffer;
-        this.downloadListening = downloadListening;
+        this.downloadCallback = downloadCallback;
     }
     
     @Override
     public void sendStartMessage(int messageId)
     {
-        if (downloadListening != null)
+        if (downloadCallback != null)
         {
-            downloadListening.downloadStart(messageId);
+            downloadCallback.downloadStart(messageId);
         }
         LazyLogger.v("下载现在开始................");
     }
@@ -200,9 +200,9 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
     @Override
     public void readProgressMessage(int messageId, long bytesRead, long bytesTotal)
     {
-        if (downloadListening != null)
+        if (downloadCallback != null)
         {
-            downloadListening.downloadProgress(messageId, bytesRead, bytesTotal);
+            downloadCallback.downloadProgress(messageId, bytesRead, bytesTotal);
             
             // 下面是计算下载速度的
             long curTime = System.currentTimeMillis();
@@ -212,7 +212,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
                 double speed = (bytesRead - lastDownloadByte) / runTime;
                 lastTime = curTime;
                 lastDownloadByte = bytesRead;
-                downloadListening.downloadSpeed(messageId, (long)(speed * 1000));
+                downloadCallback.downloadSpeed(messageId, (long)(speed * 1000));
                 
                 // 没有下载完成保存临时下载信息，以便断点续传
                 if (tfInfor != null)
@@ -231,9 +231,9 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
     public void sendSuccessMessage(int messageId, Map<String,List<String>> headers,byte[] responseByteData)
     {
         LazyLogger.v("下载成功................");
-        if (downloadListening != null)
+        if (downloadCallback != null)
         {
-            downloadListening.downloadSuccess(messageId);
+            downloadCallback.downloadSuccess(messageId);
         }
         super.sendSuccessMessage(messageId, headers, responseByteData);
     }
@@ -242,9 +242,9 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
     public void sendFailMessage(int messageId, int statusCode, Map<String,List<String>> headers, byte[] responseErrorByteData)
     {
         LazyLogger.e("下载失败:下载文件報文" + messageId + ";返回状态" + statusCode + HttpError.getMessageByStatusCode(statusCode));
-        if (downloadListening != null)
+        if (downloadCallback != null)
         {
-            downloadListening.downloadFail(messageId, statusCode);
+            downloadCallback.downloadFail(messageId, statusCode);
         }
         super.sendFailMessage(messageId, statusCode, headers, responseErrorByteData);
     }
@@ -261,18 +261,18 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
         {
             tfInfor = null;
         }
-        downloadListening = null;
+        downloadCallback = null;
     }
     
     /**
      * 设置下载监听接口
      * 
-     * @param downloadListening 下监听接口
+     * @param downloadCallback 下监听接口
      * @see [类、类#方法、类#成员]
      */
-    public void setDownloadListening(DownloadCallbackInterface downloadListening)
+    public void setDownloadCallback(DownloadCallbackInterface downloadCallback)
     {
-        this.downloadListening = downloadListening;
+        this.downloadCallback = downloadCallback;
     }
     
     /**

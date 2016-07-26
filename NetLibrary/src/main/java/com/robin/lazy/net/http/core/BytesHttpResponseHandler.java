@@ -20,22 +20,22 @@ public class BytesHttpResponseHandler extends HttpResponseHandler
     /**
      * 服务器反馈监听
      */
-    private BytesResponseCallback responseListening;
+    private BytesResponseCallback responseCallback;
     
     /**
      * 创建TextHttpResponseHandler对象
      */
-    public BytesHttpResponseHandler(BytesResponseCallback responseListening)
+    public BytesHttpResponseHandler(BytesResponseCallback responseCallback)
     {
-        this.responseListening = responseListening;
+        this.responseCallback = responseCallback;
     }
     
     @Override
     public void sendStartMessage(int messageId)
     {
-        if (responseListening != null)
+        if (responseCallback != null)
         {
-            responseListening.sendStartMessage(messageId);
+            responseCallback.sendStartMessage(messageId);
         }
     }
     
@@ -60,9 +60,9 @@ public class BytesHttpResponseHandler extends HttpResponseHandler
     @Override
     public void sendSuccessMessage(int messageId, Map<String,List<String>> headers, byte[] responseByteData)
     {
-        if (responseListening != null)
+        if (responseCallback != null)
         {
-            responseListening.sendSuccessMessage(messageId, headers,responseByteData);
+            responseCallback.sendSuccessMessage(messageId, headers,responseByteData);
         }
         super.sendSuccessMessage(messageId, headers, responseByteData);
     }
@@ -70,9 +70,9 @@ public class BytesHttpResponseHandler extends HttpResponseHandler
     @Override
     public void sendFailMessage(int messageId, int statusCode, Map<String,List<String>> headers, byte[] responseErrorByteData)
     {
-        if (responseListening != null)
+        if (responseCallback != null)
         {
-            responseListening.sendFailMessage(messageId, statusCode, headers, responseErrorByteData);
+            responseCallback.sendFailMessage(messageId, statusCode, headers, responseErrorByteData);
         }
         super.sendFailMessage(messageId, statusCode, headers, responseErrorByteData);
     }
@@ -80,7 +80,7 @@ public class BytesHttpResponseHandler extends HttpResponseHandler
     @Override
     public void clean()
     {
-    	responseListening = null;
+    	responseCallback = null;
     }
 
 }

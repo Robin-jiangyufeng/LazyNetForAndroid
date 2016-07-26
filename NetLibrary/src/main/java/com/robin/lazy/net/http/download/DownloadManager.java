@@ -10,7 +10,6 @@ import com.robin.lazy.net.http.core.FileBuffer;
 import com.robin.lazy.net.http.core.RequestParam;
 import com.robin.lazy.util.StringUtils;
 
-import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -169,7 +168,7 @@ public class DownloadManager extends AsyncHttpClient {
             if (isExistTask(param.getMessageId())) {
                 CustomDownloadHttpResponseHandler dhr =
                         (CustomDownloadHttpResponseHandler) getHttpResponseHandler(param.getMessageId());
-                dhr.setDownloadListening(new DownloadCallback(listener));
+                dhr.setDownloadCallback(new DownloadCallback(listener));
             } else if (!StringUtils.isEmpty(param.getUrl())) {
                 if (StringUtils.isEmpty(fileName)) {
                     new NullPointerException("要设置的下载文件名不能为空");

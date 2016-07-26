@@ -18,11 +18,13 @@ import com.robin.lazy.cache.memory.MemoryCache;
 import com.robin.lazy.cache.util.MemoryCacheUtils;
 import com.robin.lazy.net.http.cache.CacheHttpResponeHandlerBase;
 import com.robin.lazy.net.http.cache.CacheHttpThread;
+import com.robin.lazy.net.http.cache.CacheResponseListener;
+import com.robin.lazy.net.http.cache.CacheTextResponseListener;
 import com.robin.lazy.net.http.cache.HttpCacheLoadType;
 import com.robin.lazy.net.http.cache.HttpCacheLoaderManager;
 import com.robin.lazy.net.http.cache.SizeOfHttpCacheCalculator;
-import com.robin.lazy.net.http.cache.callback.CacheAsyncJsonResponseCallback;
-import com.robin.lazy.net.http.cache.callback.CacheAsyncTextResponseCallback;
+import com.robin.lazy.net.http.cache.callback.AsyncCacheJsonResponseCallback;
+import com.robin.lazy.net.http.cache.callback.AsyncCacheTextResponseCallback;
 import com.robin.lazy.net.http.core.AsyncHttpClient;
 import com.robin.lazy.net.http.core.HttpRequestMethod;
 import com.robin.lazy.net.http.core.HttpResponseHandlerBase;
@@ -112,7 +114,7 @@ public class HttpRequestManager extends AsyncHttpClient {
     public void sendCacheHttpGetRequest(
             RequestLifecycleContext requestContext,
             RequestParam requestParam, LoadingViewInterface loadingView,
-            TextResponseListener listener, HttpCacheLoadType cacheLoadType) {
+            CacheTextResponseListener listener, HttpCacheLoadType cacheLoadType) {
         sendCacheHttpGetRequest(requestContext, requestParam,
                 loadingView, listener, cacheLoadType, -1);
     }
@@ -130,7 +132,7 @@ public class HttpRequestManager extends AsyncHttpClient {
     public void sendCacheHttpGetRequest(
             RequestLifecycleContext requestContext,
             RequestParam requestParam, LoadingViewInterface loadingView,
-            TextResponseListener listener, HttpCacheLoadType cacheLoadType,
+            CacheTextResponseListener listener, HttpCacheLoadType cacheLoadType,
             long maxCacheAge) {
         boolean isSuccess = doCacheTextHttpRequest(HttpRequestMethod.HTTP_GET, requestContext,
                 requestParam, loadingView, listener, cacheLoadType, maxCacheAge);
@@ -171,7 +173,7 @@ public class HttpRequestManager extends AsyncHttpClient {
     public <E extends Serializable, T extends Serializable> void sendCacheHttpGetRequest(
             RequestLifecycleContext requestContext,
             RequestParam requestParam, LoadingViewInterface loadingView,
-            ResponseListener<T, E> listener, HttpCacheLoadType cacheLoadType) {
+            CacheResponseListener<T, E> listener, HttpCacheLoadType cacheLoadType) {
         sendCacheHttpGetRequest(requestContext, requestParam, loadingView, listener, cacheLoadType, -1);
     }
 
@@ -189,7 +191,7 @@ public class HttpRequestManager extends AsyncHttpClient {
     public <E extends Serializable, T extends Serializable> void sendCacheHttpGetRequest(
             RequestLifecycleContext requestContext,
             RequestParam requestParam, LoadingViewInterface loadingView,
-            ResponseListener<T, E> listener, HttpCacheLoadType cacheLoadType,
+            CacheResponseListener<T, E> listener, HttpCacheLoadType cacheLoadType,
             long maxCacheAge) {
         boolean isSuccess = doCacheJSONHttpRequest(HttpRequestMethod.HTTP_GET, requestContext,
                 requestParam, loadingView, listener, cacheLoadType, maxCacheAge);
@@ -211,7 +213,7 @@ public class HttpRequestManager extends AsyncHttpClient {
     public <T extends Serializable, E extends Serializable> void sendHttpGetRequest(
             RequestLifecycleContext requestContext,
             RequestParam requestParam,
-            LoadingViewInterface loadingView, ResponseListener<T, E> listener) {
+            LoadingViewInterface loadingView, CacheResponseListener<T, E> listener) {
         boolean isSuccess = doGet(requestParam, new AsyncJsonResponseCallback<T, E>(listener, loadingView));
         if (isSuccess) {
             addContextRequest(requestContext, requestParam.getMessageId());
@@ -229,7 +231,7 @@ public class HttpRequestManager extends AsyncHttpClient {
      */
     public void sendCacheHttpPostRequest(
             RequestLifecycleContext requestContext, RequestParam requestParam,
-            LoadingViewInterface loadingView, TextResponseListener listener,
+            LoadingViewInterface loadingView, CacheTextResponseListener listener,
             HttpCacheLoadType cacheLoadType) {
         sendCacheHttpPostRequest(requestContext, requestParam, loadingView, listener, cacheLoadType, -1);
     }
@@ -246,7 +248,7 @@ public class HttpRequestManager extends AsyncHttpClient {
      */
     public void sendCacheHttpPostRequest(
             RequestLifecycleContext requestContext, RequestParam requestParam,
-            LoadingViewInterface loadingView, TextResponseListener listener, HttpCacheLoadType cacheLoadType,
+            LoadingViewInterface loadingView, CacheTextResponseListener listener, HttpCacheLoadType cacheLoadType,
             long maxCacheAge) {
         boolean isSuccess = doCacheTextHttpRequest(HttpRequestMethod.HTTP_POST, requestContext,
                 requestParam, loadingView, listener, cacheLoadType, maxCacheAge);
@@ -287,7 +289,7 @@ public class HttpRequestManager extends AsyncHttpClient {
     public <T extends Serializable, E extends Serializable> void sendCacheHttpPostRequest(
             RequestLifecycleContext requestContext,
             RequestParam requestParam, LoadingViewInterface loadingView,
-            ResponseListener<T, E> listener,
+            CacheResponseListener<T, E> listener,
             HttpCacheLoadType cacheLoadType) {
         sendCacheHttpPostRequest(requestContext, requestParam, loadingView, listener, cacheLoadType, -1);
     }
@@ -307,7 +309,7 @@ public class HttpRequestManager extends AsyncHttpClient {
     public <T extends Serializable, E extends Serializable> void sendCacheHttpPostRequest(
             RequestLifecycleContext requestContext,
             RequestParam requestParam, LoadingViewInterface loadingView,
-            ResponseListener<T, E> listener,
+            CacheResponseListener<T, E> listener,
             HttpCacheLoadType cacheLoadType, long maxCacheAge) {
         boolean isSuccess = doCacheJSONHttpRequest(HttpRequestMethod.HTTP_POST, requestContext,
                 requestParam, loadingView, listener, cacheLoadType, maxCacheAge);
@@ -380,29 +382,29 @@ public class HttpRequestManager extends AsyncHttpClient {
      */
     protected <T extends Serializable, E extends Serializable> boolean doCacheJSONHttpRequest(
             HttpRequestMethod httpMethod, RequestLifecycleContext requestContext,
-            RequestParam requestParam, LoadingViewInterface loadingView, ResponseListener<T, E> listener, HttpCacheLoadType cacheLoadType,
+            RequestParam requestParam, LoadingViewInterface loadingView, CacheResponseListener<T, E> listener, HttpCacheLoadType cacheLoadType,
             long maxCacheAge) {
         boolean isSuccess = false;
         ResponseCallbackInterface<T, E> callbackInterface = null;
         if (cacheLoadType != null) {
             if (maxCacheAge > 0) {
-                callbackInterface = new CacheAsyncJsonResponseCallback<T, E>(listener,
+                callbackInterface = new AsyncCacheJsonResponseCallback<T, E>(listener,
                         loadingView, httpCacheLoaderManager,
                         cacheLoadType, maxCacheAge);
             } else {
-                callbackInterface = new CacheAsyncJsonResponseCallback<T, E>(listener,
+                callbackInterface = new AsyncCacheJsonResponseCallback<T, E>(listener,
                         loadingView, httpCacheLoaderManager,
                         cacheLoadType);
             }
         } else {
             if (maxCacheAge > 0) {
-                callbackInterface = new CacheAsyncJsonResponseCallback<T, E>(listener,
+                callbackInterface = new AsyncCacheJsonResponseCallback<T, E>(listener,
                         loadingView, httpCacheLoaderManager,
-                        HttpCacheLoadType.USE_CACHE_UPLOAD_CACHE, maxCacheAge);
+                        HttpCacheLoadType.USE_CACHE_UPDATE_CACHE, maxCacheAge);
             } else {
-                callbackInterface = new CacheAsyncJsonResponseCallback<T, E>(listener,
+                callbackInterface = new AsyncCacheJsonResponseCallback<T, E>(listener,
                         loadingView, httpCacheLoaderManager,
-                        HttpCacheLoadType.USE_CACHE_UPLOAD_CACHE);
+                        HttpCacheLoadType.USE_CACHE_UPDATE_CACHE);
             }
         }
         if (httpMethod == HttpRequestMethod.HTTP_GET) {
@@ -430,29 +432,30 @@ public class HttpRequestManager extends AsyncHttpClient {
      */
     protected boolean doCacheTextHttpRequest(
             HttpRequestMethod httpMethod, RequestLifecycleContext requestContext,
-            RequestParam requestParam, LoadingViewInterface loadingView, TextResponseListener listener, HttpCacheLoadType cacheLoadType,
+            RequestParam requestParam, LoadingViewInterface loadingView,
+            CacheTextResponseListener listener, HttpCacheLoadType cacheLoadType,
             long maxCacheAge) {
         boolean isSuccess = false;
         ResponseCallbackInterface<String, String> callbackInterface = null;
         if (cacheLoadType != null) {
             if (maxCacheAge > 0) {
-                callbackInterface = new CacheAsyncTextResponseCallback(listener,
+                callbackInterface = new AsyncCacheTextResponseCallback(listener,
                         loadingView, httpCacheLoaderManager,
                         cacheLoadType, maxCacheAge);
             } else {
-                callbackInterface = new CacheAsyncTextResponseCallback(listener,
+                callbackInterface = new AsyncCacheTextResponseCallback(listener,
                         loadingView, httpCacheLoaderManager,
                         cacheLoadType);
             }
         } else {
             if (maxCacheAge > 0) {
-                callbackInterface = new CacheAsyncTextResponseCallback(listener,
+                callbackInterface = new AsyncCacheTextResponseCallback(listener,
                         loadingView, httpCacheLoaderManager,
-                        HttpCacheLoadType.USE_CACHE_UPLOAD_CACHE, maxCacheAge);
+                        HttpCacheLoadType.USE_CACHE_UPDATE_CACHE, maxCacheAge);
             } else {
-                callbackInterface = new CacheAsyncTextResponseCallback(listener,
+                callbackInterface = new AsyncCacheTextResponseCallback(listener,
                         loadingView, httpCacheLoaderManager,
-                        HttpCacheLoadType.USE_CACHE_UPLOAD_CACHE);
+                        HttpCacheLoadType.USE_CACHE_UPDATE_CACHE);
             }
         }
         if (httpMethod == HttpRequestMethod.HTTP_GET) {

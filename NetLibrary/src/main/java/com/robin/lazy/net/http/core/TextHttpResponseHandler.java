@@ -22,22 +22,22 @@ public class TextHttpResponseHandler extends HttpResponseHandler
     /**
      * 服务器反馈监听
      */
-    private TextResponseCallback responseListening;
+    private TextResponseCallback responseCallback;
     
     /**
      * 创建TextHttpResponseHandler对象
      */
-    public TextHttpResponseHandler(TextResponseCallback responseListening)
+    public TextHttpResponseHandler(TextResponseCallback responseCallback)
     {
-        this.responseListening = responseListening;
+        this.responseCallback = responseCallback;
     }
     
     @Override
     public void sendStartMessage(int messageId)
     {
-        if (responseListening != null)
+        if (responseCallback != null)
         {
-            responseListening.sendStartMessage(messageId);
+            responseCallback.sendStartMessage(messageId);
         }
     }
     
@@ -63,11 +63,11 @@ public class TextHttpResponseHandler extends HttpResponseHandler
     @Override
     public void sendSuccessMessage(int messageId, Map<String,List<String>> headers, byte[] responseByteData)
     {
-        if (responseListening != null)
+        if (responseCallback != null)
         {
         	String data = getResponseString(responseByteData, getResponseCharset());
         	LazyLogger.i("報文==" + messageId + " ;;成功返回数据==" + data);
-            responseListening.sendSuccessMessage(messageId, headers, data);
+            responseCallback.sendSuccessMessage(messageId, headers, data);
         }
         super.sendSuccessMessage(messageId, headers, responseByteData);
     }
@@ -75,17 +75,17 @@ public class TextHttpResponseHandler extends HttpResponseHandler
     @Override
     public void sendFailMessage(int messageId, int statusCode, Map<String,List<String>> headers, byte[] responseErrorByteData)
     {
-        if (responseListening != null)
+        if (responseCallback != null)
         {
         	String errorData = getResponseString(responseErrorByteData, getResponseCharset());
         	LazyLogger.e("報文==" + messageId + " ;;返回错误数据==" + errorData + " ;;返回状态==" 
         			+ statusCode+":" + HttpError.getMessageByStatusCode(statusCode));
-            responseListening.sendFailMessage(messageId, statusCode, headers, errorData);
+            responseCallback.sendFailMessage(messageId, statusCode, headers, errorData);
         }
         super.sendFailMessage(messageId, statusCode, headers, responseErrorByteData);
     }
     
-    public String getResponseString(byte[] stringBytes, String charset)
+    protected String getResponseString(byte[] stringBytes, String charset)
     {
         try
         {
@@ -108,7 +108,7 @@ public class TextHttpResponseHandler extends HttpResponseHandler
     @Override
     public void clean()
     {
-    	responseListening = null;
+    	responseCallback = null;
     }
 
 }

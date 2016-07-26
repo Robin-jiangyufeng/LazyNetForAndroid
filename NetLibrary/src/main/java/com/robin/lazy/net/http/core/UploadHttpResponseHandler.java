@@ -72,7 +72,7 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
     /**
      * 文件上传监听
      */
-    private UploadCallbackInterface listening;
+    private UploadCallbackInterface uploadCallback;
     
     /** 文件文件上传零件集合 */
     private List<FilePart> fileParts;
@@ -99,12 +99,12 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
     /**
      * 创建HttpRequestHandler对象
      * 
-     * @param responseListening 下载监听器
+     * @param responseCallback 下载监听器
      * <默认构造函数>
      */
-    public UploadHttpResponseHandler(UploadCallbackInterface responseListening)
+    public UploadHttpResponseHandler(UploadCallbackInterface responseCallback)
     {
-        this.listening = responseListening;
+        this.uploadCallback = responseCallback;
         tempOut = new ByteArrayOutputStream();
         fileParts = new ArrayList<FilePart>();
     }
@@ -112,9 +112,9 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
     @Override
     public void sendStartMessage(int messageId)
     {
-        if (listening != null)
+        if (uploadCallback != null)
         {
-            listening.startUpload(messageId);
+            uploadCallback.startUpload(messageId);
         }
     }
     
@@ -225,15 +225,15 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
     {
         writtenSize += bytesWritten;
         LazyLogger.i("上传的总字节数:" + bytesTotal + ";上传了" + writtenSize + "字节");
-        if (listening != null)
+        if (uploadCallback != null)
         {
-            listening.uploadProgress(messageId, writtenSize, bytesTotal);
+            uploadCallback.uploadProgress(messageId, writtenSize, bytesTotal);
             // 下面是计算上传速度的
             long curTime = System.currentTimeMillis();
             if (curTime - lastTime >= 1000)
             {
                 double speed = (writtenSize - lastBytesWritten) / (curTime - lastTime);
-                listening.uploadSpeed(messageId, (long)(speed * 1000));
+                uploadCallback.uploadSpeed(messageId, (long)(speed * 1000));
                 lastTime = curTime;
                 lastBytesWritten = writtenSize;
             }
@@ -249,9 +249,9 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
     @Override
     public void sendSuccessMessage(int messageId,Map<String,List<String>> headers, byte[] responseByteData)
     {
-        if (listening != null)
+        if (uploadCallback != null)
         {
-            listening.uploadSuccess(messageId, responseByteData);
+            uploadCallback.uploadSuccess(messageId, responseByteData);
         }
         super.sendSuccessMessage(messageId, headers, responseByteData);
     }
@@ -260,9 +260,9 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
     public void sendFailMessage(int messageId, int statusCode, Map<String,List<String>> headers, byte[] responseErrorByteData)
     {
     	LazyLogger.e("上传失败:報文" + messageId + "返回状态" + statusCode + HttpError.getMessageByStatusCode(statusCode));
-        if (listening != null)
+        if (uploadCallback != null)
         {
-            listening.uploadFail(messageId, statusCode, responseErrorByteData);
+            uploadCallback.uploadFail(messageId, statusCode, responseErrorByteData);
         }
         super.sendFailMessage(messageId, statusCode, headers, responseErrorByteData);
     }
@@ -270,9 +270,9 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
     @Override
     public void clean()
     {
-        if (listening != null)
+        if (uploadCallback != null)
         {
-            listening = null;
+            uploadCallback = null;
         }
         if (fileParts != null)
         {
@@ -517,12 +517,12 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
     /**
      * 设置 上传监听接口
      * 
-     * @param listening 上传监听接口
+     * @param uploadCallback 上传监听接口
      * @see [类、类#方法、类#成员]
      */
-    public void setListening(UploadCallbackInterface listening)
+    public void setUploadCallback(UploadCallbackInterface uploadCallback)
     {
-        this.listening = listening;
+        this.uploadCallback = uploadCallback;
     }
     
     /**

@@ -27,7 +27,7 @@ public class JSONHttpResponseHandler<T extends Serializable,E extends Serializab
     /**
      * 服务器反馈监听
      */
-    private JSONResponseCallback<T,E> responseListening;
+    private JSONResponseCallback<T,E> responseCallback;
 
 	/**成功返回的数据的类型*/
 	private Class<T> successClass;
@@ -38,24 +38,24 @@ public class JSONHttpResponseHandler<T extends Serializable,E extends Serializab
     /**
      * 创建JSONHttpResponseHandler对象
      */
-    public JSONHttpResponseHandler(JSONResponseCallback<T,E> responseListening)
+    public JSONHttpResponseHandler(JSONResponseCallback<T,E> responseCallback)
     {
-        this.responseListening = responseListening;
+        this.responseCallback = responseCallback;
     }
 
 	@SuppressWarnings("unchecked")
 	@Override
     public void sendStartMessage(int messageId)
     {
-        if (responseListening != null)
+        if (responseCallback != null)
         {
         	try {
-        		successClass=(Class<T>) responseListening.getGenricType(0);
-        		failClass=(Class<E>) responseListening.getGenricType(1);
+        		successClass=(Class<T>) responseCallback.getGenricType(0);
+        		failClass=(Class<E>) responseCallback.getGenricType(1);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}finally{
-				responseListening.sendStartMessage(messageId);
+				responseCallback.sendStartMessage(messageId);
 			}
         }
     }
@@ -125,7 +125,7 @@ public class JSONHttpResponseHandler<T extends Serializable,E extends Serializab
     @Override
     public void sendSuccessMessage(int messageId, Map<String,List<String>> headers, byte[] responseByteData)
     {
-        if (responseListening != null)
+        if (responseCallback != null)
         {
         	String data = getResponseString(responseByteData, getResponseCharset());
         	LazyLogger.i("報文==" + messageId + " ;;请求成功返回的数据==");
@@ -138,11 +138,11 @@ public class JSONHttpResponseHandler<T extends Serializable,E extends Serializab
             }
         	if (jsonObject == null)
             {
-            	responseListening.sendFailMessage(messageId, HttpError.DATA_CONVERT_EXCEPTION, headers, null);
+            	responseCallback.sendFailMessage(messageId, HttpError.DATA_CONVERT_EXCEPTION, headers, null);
             }
             else
             {
-            	responseListening.sendSuccessMessage(messageId, headers, jsonObject);
+            	responseCallback.sendSuccessMessage(messageId, headers, jsonObject);
             }
         }
         super.sendSuccessMessage(messageId, headers, responseByteData);
@@ -151,7 +151,7 @@ public class JSONHttpResponseHandler<T extends Serializable,E extends Serializab
     @Override
     public void sendFailMessage(int messageId, int statusCode, Map<String,List<String>> headers, byte[] responseErrorByteData)
     {
-        if (responseListening != null)
+        if (responseCallback != null)
         {
         	String data = getResponseString(responseErrorByteData, getResponseCharset());
             LazyLogger.e("報文==" + messageId + " ;;请求失败返回的数据==" + data + " ;;返回状态=="
@@ -162,7 +162,7 @@ public class JSONHttpResponseHandler<T extends Serializable,E extends Serializab
             }else{
                 jsonObject = JSONUtil.fromJSON(data, failClass);
             }
-        	responseListening.sendFailMessage(messageId, statusCode, headers, jsonObject);
+        	responseCallback.sendFailMessage(messageId, statusCode, headers, jsonObject);
         }
         super.sendFailMessage(messageId, statusCode, headers, responseErrorByteData);
     }
@@ -173,7 +173,7 @@ public class JSONHttpResponseHandler<T extends Serializable,E extends Serializab
      * @param charset
      * @return
      */
-    public String getResponseString(byte[] stringBytes, String charset)
+    protected String getResponseString(byte[] stringBytes, String charset)
     {
         try
         {
@@ -191,10 +191,18 @@ public class JSONHttpResponseHandler<T extends Serializable,E extends Serializab
         }
     }
 
+    /**
+     * 获取到成功返回的数据的类型
+     * @return
+     */
+    protected Class<T> getSuccessClass() {
+        return successClass;
+    }
+
     @Override
     public void clean()
     {
-    	responseListening = null;
+    	responseCallback = null;
     }
 
 }

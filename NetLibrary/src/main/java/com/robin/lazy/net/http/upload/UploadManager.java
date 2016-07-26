@@ -88,7 +88,7 @@ public class UploadManager extends AsyncHttpClient implements UploadCallbackInte
                 {
                     UploadHttpResponseHandler uhr =
                         (UploadHttpResponseHandler)getHttpResponseHandler(param.getMessageId());
-                    uhr.setListening(this);
+                    uhr.setUploadCallback(this);
                 }
                 if (!StringUtils.isEmpty(param.getUrl()))
                 {

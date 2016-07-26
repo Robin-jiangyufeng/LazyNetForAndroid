@@ -22,7 +22,6 @@ import com.robin.lazy.net.http.core.callback.UploadCallbackInterface;
 import com.robin.lazy.net.state.NetChangeObserver;
 import com.robin.lazy.net.state.NetWorkUtil;
 import com.robin.lazy.net.state.NetworkStateReceiver;
-import com.robin.lazy.util.StringUtils;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -139,10 +138,10 @@ public class AsyncHttpClient implements NetChangeObserver {
 	 */
 	protected <T, E> boolean doGet(@NonNull RequestParam param,
 								   @NonNull ResponseCallbackInterface<T, E> callbackInterface) {
-		if (!StringUtils.isEmpty(param.getSendData())) {
+		if (!param.isEmptyForData()) {
 			param.setUrl(param.getUrl() + param.getSendData());// 把要发送的数据拼接到url链接后面
 		}
-		param.cleanWithPsaram();// 清理掉数据，次数据是用于post下发送的，程序会自动检测,不清理会抛错
+		param.cleanWithPsaram();// 清理掉数据，此数据是用于post下发送的，程序会自动检测,不清理会抛错
 		return startSendRequest(HttpRequestMethod.HTTP_GET, param,
 				callbackInterface.getHttpResponseHandler());
 	}

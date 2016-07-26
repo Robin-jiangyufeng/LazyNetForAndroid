@@ -22,13 +22,15 @@ public enum HttpCacheLoadType {
 	/** 不使用缓存,不管缓存中有无数据,直接从网络中加载,不更新缓存 */
 	NOT_USE_CACHE,
 	/** 不使用缓存,只使用网络加载,加载成功后更新缓存(要更新缓存,这种情况需要设置缓存过期时间) */
-	NOT_USE_CACHE_UPLOAD_CACHE,
+	NOT_USE_CACHE_UPDATE_CACHE,
 	/** 强制使用缓存,不管缓存中是否有数据,都不会继续进行网络请求,没有就返回空 */
 	COERCE_USE_CACHE,
 	/** 如果有缓存则使用缓存,没有缓存则请求网络,并且更新缓存(要更新缓存,这种情况需要设置缓存过期时间) */
-	USE_CACHE_UPLOAD_CACHE,
+	USE_CACHE_UPDATE_CACHE,
 	/** 如果有缓存则使用缓存,没有缓存则请求网络,不更新缓存 */
 	USE_CACHE,
 	/** 先使用网络请求加载,请求失败后从缓存加载*/
 	USE_CACHE_ON_FAIL,
+	/**使用缓存,有缓存就会加载出缓存,并且同时使用网络请求,请求到数据后更新缓存*/
+	USE_CACHE_AND_NET_UPDATE_CHCHE,
 }
