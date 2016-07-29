@@ -120,6 +120,10 @@ public class HttpThread implements Runnable {
 			onAfterProcessRequest();
 		} catch (Exception e) {
            LazyLogger.e(e, "http请求错误");
+			if (httpRequestHandler != null) {
+				httpRequestHandler.sendFailMessage(getMessageId(),
+						HttpError.UNKNOW_HTTP_ERROR,null,null);
+			}
 		} finally {
 			if (httpClient != null) {
 				httpClient.removeTask(getMessageId());
@@ -257,8 +261,10 @@ public class HttpThread implements Runnable {
 			errorCode = HttpError.UNKNOW_HTTP_ERROR;
 			e.printStackTrace();
 		}
-		httpRequestHandler.sendFailMessage(getMessageId(), errorCode,
-				urlConnection.getHeaderFields(), null);
+		if(httpRequestHandler!=null){
+			httpRequestHandler.sendFailMessage(getMessageId(), errorCode,
+					urlConnection.getHeaderFields(), null);
+		}
 		return null;
 	}
 

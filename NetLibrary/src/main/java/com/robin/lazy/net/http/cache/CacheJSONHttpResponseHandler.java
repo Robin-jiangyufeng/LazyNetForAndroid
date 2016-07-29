@@ -24,8 +24,8 @@ public class CacheJSONHttpResponseHandler<T extends Serializable, E extends Seri
         JSONHttpResponseHandler<T, E>
         implements
         CacheHttpResponeHandlerBase {
-    /**发送的数据*/
-    private String sendData;
+    /**请求标识*/
+    private String requestUnique;
     /**
      * 带缓存功能的数据监听反馈
      */
@@ -66,7 +66,7 @@ public class CacheJSONHttpResponseHandler<T extends Serializable, E extends Seri
 
     @Override
     public boolean sendResponseMessage(HttpURLConnection urlConnection, RequestParam request) {
-        sendData=request.getSendData();
+        requestUnique=request.getUnique();
         return super.sendResponseMessage(urlConnection, request);
     }
 
@@ -77,7 +77,7 @@ public class CacheJSONHttpResponseHandler<T extends Serializable, E extends Seri
         LazyLogger.json(cacheData);
         T jsonObject;
         if (String.class.equals(getSuccessClass())) {
-            jsonObject = (T) data;
+            jsonObject = (T) cacheData;
         } else {
             jsonObject = JSONUtil.fromJSON(cacheData, getSuccessClass());
         }
@@ -93,8 +93,8 @@ public class CacheJSONHttpResponseHandler<T extends Serializable, E extends Seri
                 && (httpCacheLoadType == HttpCacheLoadType.NOT_USE_CACHE_UPDATE_CACHE
                 || httpCacheLoadType == HttpCacheLoadType.USE_CACHE_UPDATE_CACHE
                 || httpCacheLoadType == HttpCacheLoadType.USE_CACHE_AND_NET_UPDATE_CHCHE)) {
-            String cacheKey=new StringBuffer(String.valueOf(messageId))
-                    .append(sendData).toString();
+            String cacheKey=new StringBuilder(String.valueOf(messageId))
+                    .append(requestUnique).toString();
             if (maxCacheAge > 0) {
                 httpCacheLoader.insert(cacheKey,
                         new CacheResponseEntity(responseByteData, headers),
@@ -112,8 +112,8 @@ public class CacheJSONHttpResponseHandler<T extends Serializable, E extends Seri
                                 Map<String, List<String>> headers, byte[] responseErrorByteData) {
         if (httpCacheLoader != null
                 && httpCacheLoadType == HttpCacheLoadType.USE_CACHE_ON_FAIL) {
-            String cacheKey=new StringBuffer(String.valueOf(messageId))
-                    .append(sendData).toString();
+            String cacheKey=new StringBuilder(String.valueOf(messageId))
+                    .append(requestUnique).toString();
             CacheResponseEntity cacheData = httpCacheLoader.query(cacheKey);
             if (cacheData != null) {
                 sendSuccessMessage(messageId, cacheData.getHeaders(),
@@ -127,7 +127,7 @@ public class CacheJSONHttpResponseHandler<T extends Serializable, E extends Seri
     @Override
     public void clean() {
         super.clean();
-        sendData=null;
+        requestUnique=null;
         httpCacheLoadType = null;
         httpCacheLoader = null;
         cacheJsonResponseCallback=null;

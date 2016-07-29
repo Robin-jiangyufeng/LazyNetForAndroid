@@ -24,8 +24,7 @@ public class CacheBytesHttpResponseHandler extends BytesHttpResponseHandler
      * 反馈
      */
     private CacheBytesResponseCallback cacheBytesResponseCallback;
-    /**发送的数据*/
-    private String sendData;
+
     /**
      * byte数组类型缓存加载管理者
      */
@@ -35,7 +34,8 @@ public class CacheBytesHttpResponseHandler extends BytesHttpResponseHandler
      * 缓存最大的有效时间
      */
     private long maxCacheAge;
-
+    /**请求标识*/
+    private String requestUnique;
     /**
      * 创建CacheBytesHttpResponseHandler对象
      */
@@ -62,7 +62,7 @@ public class CacheBytesHttpResponseHandler extends BytesHttpResponseHandler
 
     @Override
     public boolean sendResponseMessage(HttpURLConnection urlConnection, RequestParam request) {
-        sendData=request.getSendData();
+        requestUnique=request.getSendData();
         return super.sendResponseMessage(urlConnection, request);
     }
 
@@ -80,12 +80,14 @@ public class CacheBytesHttpResponseHandler extends BytesHttpResponseHandler
                 && (httpCacheLoadType == HttpCacheLoadType.NOT_USE_CACHE_UPDATE_CACHE
                 || httpCacheLoadType == HttpCacheLoadType.USE_CACHE_UPDATE_CACHE
                 || httpCacheLoadType == HttpCacheLoadType.USE_CACHE_AND_NET_UPDATE_CHCHE)) {
+            String cacheKey=new StringBuilder(String.valueOf(messageId))
+                    .append(requestUnique).toString();
             if (maxCacheAge > 0) {
-                httpCacheLoader.insert(String.valueOf(messageId),
+                httpCacheLoader.insert(cacheKey,
                         new CacheResponseEntity(responseByteData, headers),
                         maxCacheAge);
             } else {
-                httpCacheLoader.insert(String.valueOf(messageId),
+                httpCacheLoader.insert(cacheKey,
                         new CacheResponseEntity(responseByteData, headers));
             }
         }
@@ -97,8 +99,9 @@ public class CacheBytesHttpResponseHandler extends BytesHttpResponseHandler
                                 Map<String, List<String>> headers, byte[] responseErrorByteData) {
         if (httpCacheLoader != null
                 && httpCacheLoadType == HttpCacheLoadType.USE_CACHE_ON_FAIL) {
-            CacheResponseEntity cacheData = httpCacheLoader.query(String
-                    .valueOf(messageId));
+            String cacheKey=new StringBuilder(String.valueOf(messageId))
+                    .append(requestUnique).toString();
+            CacheResponseEntity cacheData = httpCacheLoader.query(cacheKey);
             if (cacheData != null) {
                 sendSuccessMessage(messageId, cacheData.getHeaders(),
                         cacheData.getResultData());
@@ -111,6 +114,7 @@ public class CacheBytesHttpResponseHandler extends BytesHttpResponseHandler
     @Override
     public void clean() {
         super.clean();
+        requestUnique=null;
         httpCacheLoadType = null;
         httpCacheLoader = null;
         cacheBytesResponseCallback=null;

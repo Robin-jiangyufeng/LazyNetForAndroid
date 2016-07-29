@@ -314,7 +314,15 @@ public class RequestParam
         }
         return true;
     }
-    
+
+    /***
+     * 得到当前请求的唯一标识
+     * @return
+     */
+    public String getUnique(){
+        return "";
+    }
+
     /**
      * 解析组合要发送的数据
      * 

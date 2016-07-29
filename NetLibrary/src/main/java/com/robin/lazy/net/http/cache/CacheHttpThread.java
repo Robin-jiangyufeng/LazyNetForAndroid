@@ -66,8 +66,8 @@ public class CacheHttpThread extends HttpThread {
             // 不使用缓存加载的情况
             return true;
         }
-        String cacheKey=new StringBuffer(String.valueOf(getMessageId()))
-                .append(getRequest().getSendData()).toString();
+        String cacheKey=new StringBuilder(String.valueOf(getMessageId()))
+                .append(getRequest().getUnique()).toString();
         CacheResponseEntity cacheData = httpCacheLoader.query(cacheKey);
         switch (type) {
             case COERCE_USE_CACHE:

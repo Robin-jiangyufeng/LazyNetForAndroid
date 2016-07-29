@@ -21,8 +21,8 @@ public class CacheTextHttpResponseHandler extends TextHttpResponseHandler
         implements
         CacheHttpResponeHandlerBase {
     private CacheTextResponseCallback cacheTextResponseCallback;
-    /**发送的数据*/
-    private String sendData;
+    /**请求标识*/
+    private String requestUnique;
     /**
      * http缓存加载管理者
      */
@@ -57,7 +57,7 @@ public class CacheTextHttpResponseHandler extends TextHttpResponseHandler
 
     @Override
     public boolean sendResponseMessage(HttpURLConnection urlConnection, RequestParam request) {
-        sendData=request.getSendData();
+        requestUnique=request.getSendData();
         return super.sendResponseMessage(urlConnection, request);
     }
 
@@ -78,8 +78,8 @@ public class CacheTextHttpResponseHandler extends TextHttpResponseHandler
                 && (httpCacheLoadType == HttpCacheLoadType.NOT_USE_CACHE_UPDATE_CACHE
                 || httpCacheLoadType == HttpCacheLoadType.USE_CACHE_UPDATE_CACHE
                 || httpCacheLoadType == HttpCacheLoadType.USE_CACHE_AND_NET_UPDATE_CHCHE)) {
-            String cacheKey=new StringBuffer(String.valueOf(messageId))
-                    .append(sendData).toString();
+            String cacheKey=new StringBuilder(String.valueOf(messageId))
+                    .append(requestUnique).toString();
             if (maxCacheAge > 0) {
                 httpCacheLoader.insert(cacheKey,
                         new CacheResponseEntity(responseByteData, headers),
@@ -97,8 +97,8 @@ public class CacheTextHttpResponseHandler extends TextHttpResponseHandler
                                 Map<String, List<String>> headers, byte[] responseErrorByteData) {
         if (httpCacheLoader != null
                 && httpCacheLoadType == HttpCacheLoadType.USE_CACHE_ON_FAIL) {
-            String cacheKey=new StringBuffer(String.valueOf(messageId))
-                    .append(sendData).toString();
+            String cacheKey=new StringBuilder(String.valueOf(messageId))
+                    .append(requestUnique).toString();
             CacheResponseEntity cacheData = httpCacheLoader.query(cacheKey);
             if (cacheData != null) {
                 sendSuccessMessage(messageId, cacheData.getHeaders(),
@@ -112,7 +112,7 @@ public class CacheTextHttpResponseHandler extends TextHttpResponseHandler
     @Override
     public void clean() {
         super.clean();
-        sendData=null;
+        requestUnique=null;
         httpCacheLoadType = null;
         httpCacheLoader = null;
         cacheTextResponseCallback=null;
