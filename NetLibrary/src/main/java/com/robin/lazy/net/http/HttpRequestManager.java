@@ -95,6 +95,7 @@ public class HttpRequestManager extends AsyncHttpClient {
 
     /**
      * 获取http缓存管理者
+     *
      * @return
      */
     protected HttpCacheLoaderManager getHttpCacheLoaderManager() {
@@ -339,33 +340,6 @@ public class HttpRequestManager extends AsyncHttpClient {
     }
 
     /**
-     * 把一个添加成功的请求添加到对应的context队列中
-     *
-     * @param requestContext 当前上下文
-     * @param messageId      报文id
-     * @throws
-     * @see [类、类#方法、类#成员]
-     */
-    protected void addContextRequest(RequestLifecycleContext requestContext,
-                                   int messageId) {
-        if (contextRequests != null) {
-            if (contextRequests.containsKey(requestContext)) {
-                List<String> list = contextRequests.get(requestContext);
-                if (list != null) {
-                    list.add(String.valueOf(messageId));
-                } else {
-                    list = new ArrayList<String>();
-                    list.add(String.valueOf(messageId));
-                }
-            } else {
-                List<String> list = new ArrayList<String>();
-                list.add(String.valueOf(messageId));
-                contextRequests.put(requestContext, list);
-            }
-        }
-    }
-
-    /**
      * http带缓存功能的请求(请求返回的是json数据)
      *
      * @param httpMethod     请求类型
@@ -479,6 +453,34 @@ public class HttpRequestManager extends AsyncHttpClient {
     }
 
     /**
+     * 把一个添加成功的请求添加到对应的context队列中
+     *
+     * @param requestContext 当前上下文
+     * @param messageId      报文id
+     * @throws
+     * @see [类、类#方法、类#成员]
+     */
+    protected void addContextRequest(RequestLifecycleContext requestContext,
+                                     int messageId) {
+        if (requestContext == null) return;
+        if (contextRequests != null) {
+            if (contextRequests.containsKey(requestContext)) {
+                List<String> list = contextRequests.get(requestContext);
+                if (list != null) {
+                    list.add(String.valueOf(messageId));
+                } else {
+                    list = new ArrayList<String>();
+                    list.add(String.valueOf(messageId));
+                }
+            } else {
+                List<String> list = new ArrayList<String>();
+                list.add(String.valueOf(messageId));
+                contextRequests.put(requestContext, list);
+            }
+        }
+    }
+
+    /**
      * 删除Context请求队列中的请求
      *
      * @param messageId 请求id
@@ -517,6 +519,7 @@ public class HttpRequestManager extends AsyncHttpClient {
      * @see [类、类#方法、类#成员]
      */
     public void cancelConetxtRequest(RequestLifecycleContext requestContext) {
+        if (requestContext == null) return;
         if (contextRequests != null
                 && contextRequests.containsKey(requestContext)) {
             List<String> list = contextRequests.get(requestContext);
