@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 144
-        versionName "1.4.4"
+        versionCode 145
+        versionName "1.4.5"
     }
     buildTypes {
         release {
@@ -22,7 +22,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.robin.lazy.cache:CacheLibrary:1.0.1'
+    compile 'com.robin.lazy.cache:CacheLibrary:1.0.2'
     compile 'com.robin.lazy.json:JsonParseLibrary:1.0.1'
     compile 'com.robin.lazy.util:UtilLibrary:1.1.1'
     testCompile 'junit:junit:4.12'
@@ -41,7 +41,7 @@ ext {
     siteUrl = 'https://github.com/Robin-jiangyufeng/LazyNetForAndroid'
     gitUrl = 'https://github.com/Robin-jiangyufeng/LazyNetForAndroid.git'
 
-    libraryVersion = '1.4.4'
+    libraryVersion = '1.4.5'
 
     developerId = 'jiangyufeng'
     developerName = 'jiangyufeng'
