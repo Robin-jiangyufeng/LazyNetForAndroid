@@ -109,7 +109,7 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
     }
 
     @Override
-    public synchronized void sendSuccessMessage(int messageId, Map<String, List<String>> headers, byte[] responseByteData) {
+    public void sendSuccessMessage(int messageId, Map<String, List<String>> headers, byte[] responseByteData) {
         if (responseCallback != null) {
             String data = getResponseString(responseByteData, getResponseCharset());
             LazyLogger.i("報文==" + messageId + " ;;请求成功返回的数据==");
@@ -130,7 +130,7 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
     }
 
     @Override
-    public synchronized void sendFailMessage(int messageId, int statusCode, Map<String, List<String>> headers, byte[] responseErrorByteData) {
+    public void sendFailMessage(int messageId, int statusCode, Map<String, List<String>> headers, byte[] responseErrorByteData) {
         if (responseCallback != null) {
             String data = getResponseString(responseErrorByteData, getResponseCharset());
             LazyLogger.e("報文==" + messageId + " ;;请求失败返回的数据==" + data + " ;;返回状态=="
