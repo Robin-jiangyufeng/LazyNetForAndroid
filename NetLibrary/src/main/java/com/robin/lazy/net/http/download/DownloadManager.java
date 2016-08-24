@@ -299,6 +299,13 @@ public class DownloadManager extends AsyncHttpClient {
 
     /**
      * 设置下载目录
+     */
+    public void setDownPath(String dirPathName, String pathName) {
+        sdcardPath = dirPathName + pathName + "/";
+    }
+
+    /**
+     * 设置下载目录
      *
      * @param pathName 目录名称
      * @see [类、类#方法、类#成员]
