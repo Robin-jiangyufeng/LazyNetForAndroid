@@ -214,7 +214,7 @@ public class HttpRequestManager extends AsyncHttpClient {
     public <T extends Serializable, E extends Serializable> void sendHttpGetRequest(
             RequestLifecycleContext requestContext,
             RequestParam requestParam,
-            LoadingViewInterface loadingView, CacheResponseListener<T, E> listener) {
+            LoadingViewInterface loadingView, ResponseListener<T, E> listener) {
         boolean isSuccess = doGet(requestParam, new AsyncJsonResponseCallback<T, E>(listener, loadingView));
         if (isSuccess) {
             addContextRequest(requestContext, requestParam.getMessageId());
