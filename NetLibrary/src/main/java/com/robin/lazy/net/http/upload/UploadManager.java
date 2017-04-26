@@ -79,7 +79,7 @@ public class UploadManager extends AsyncHttpClient implements UploadCallbackInte
             {
                 if (uploadCb != null)
                 {
-                    uploadCb.sendFailureMessage(param.getMessageId(), "任务列表已满");
+                    uploadCb.sendFailureMessage(param.getMessageId(), HttpError.REQUEST_TASK_FULL,null);
                 }
             }
             else
@@ -98,7 +98,7 @@ public class UploadManager extends AsyncHttpClient implements UploadCallbackInte
                 {
                     if (uploadCb != null)
                     {
-                        uploadCb.sendFailureMessage(param.getMessageId(), "下载地址是空的");
+                        uploadCb.sendFailureMessage(param.getMessageId(), HttpError.URL_ERROR,null);
                     }
                 }
             }
@@ -148,7 +148,7 @@ public class UploadManager extends AsyncHttpClient implements UploadCallbackInte
     {
         if (uploadCb != null)
         {
-            uploadCb.sendSuccessMessage(messageId);
+            uploadCb.sendSuccessMessage(messageId,responseData);
         }
     }
 
@@ -163,7 +163,7 @@ public class UploadManager extends AsyncHttpClient implements UploadCallbackInte
             }
             else
             {
-                uploadCb.sendFailureMessage(messageId, HttpError.getMessageByStatusCode(statusCode));
+                uploadCb.sendFailureMessage(messageId, statusCode,responseData);
             }
         }
     }

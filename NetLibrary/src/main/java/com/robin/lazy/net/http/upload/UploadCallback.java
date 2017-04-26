@@ -3,6 +3,12 @@ package com.robin.lazy.net.http.upload;
 import android.os.Handler;
 import android.os.Message;
 
+import com.robin.lazy.net.http.ResponseListener;
+import com.robin.lazy.util.ReflectUtils;
+import com.robin.lazy.util.TypeUtils;
+
+import java.lang.reflect.Type;
+
 /**
  * 
  * 上传文件反馈监听
@@ -12,7 +18,7 @@ import android.os.Message;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public class UploadCallback extends Handler
+public class UploadCallback<T,E> extends Handler
 {
     protected static final int START_MESSAGE = 0;
     
@@ -25,6 +31,35 @@ public class UploadCallback extends Handler
     protected static final int FAILURE_MESSAGE = 4;
     
     protected static final int CANCEL_MESSAGE = 5;
+
+    private UploadListener<T,E> uploadListener;
+    /**
+     * 成功返回的数据的类型
+     */
+    private Class<T> successClass;
+    /**
+     * 失败返回的数据类型
+     */
+    private Class<E> failClass;
+    /**
+     * 监听器的实际类型
+     */
+    private Type listenerType;
+
+    public UploadCallback(UploadListener<T, E> listener) {
+        this.uploadListener = listener;
+        if (this.uploadListener != null) {
+            listenerType = TypeUtils.getSupertype(null,
+                    this.uploadListener.getClass(), ResponseListener.class);
+            try {
+                successClass = (Class<T>) getGenricType(0);
+                failClass = (Class<E>) getGenricType(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+            }
+        }
+    }
     
     /**
      * 开始
@@ -32,9 +67,11 @@ public class UploadCallback extends Handler
      * @param messageId 下载id
      * @see [类、类#方法、类#成员]
      */
-    public void onStart(int messageId)
+    protected void onStart(int messageId)
     {
-        
+        if(uploadListener!=null){
+            uploadListener.onStart(messageId);
+        }
     }
     
     /**
@@ -45,9 +82,11 @@ public class UploadCallback extends Handler
      * @param currentSize 当前上传的字节数
      * @see [类、类#方法、类#成员]
      */
-    public void onLoading(int messageId, long totalSize, long currentSize)
+    protected void onLoading(int messageId, long totalSize, long currentSize)
     {
-        
+        if(uploadListener!=null){
+            uploadListener.onProgress(messageId,currentSize,totalSize);
+        }
     }
     
     /**
@@ -57,9 +96,11 @@ public class UploadCallback extends Handler
      * @param speed 网速(字节每秒)
      * @see [类、类#方法、类#成员]
      */
-    public void onSpeed(int messageId, long speed)
+    protected void onSpeed(int messageId, long speed)
     {
-        
+        if(uploadListener!=null){
+            uploadListener.onSpeed(messageId,speed);
+        }
     }
     
     /**
@@ -68,21 +109,25 @@ public class UploadCallback extends Handler
      * @param messageId
      * @see [类、类#方法、类#成员]
      */
-    public void onSuccess(int messageId)
+    protected void onSuccess(int messageId, byte[] responseData)
     {
-        
+        if(uploadListener!=null){
+            uploadListener.onSuccess(messageId,(T)responseData);
+        }
     }
     
     /**
      * 上传失败
      * 
      * @param messageId
-     * @param message
+     * @param statusCode 状态码
      * @see [类、类#方法、类#成员]
      */
-    public void onFailure(int messageId, String message)
+    protected void onFailure(int messageId, int statusCode,byte[] responseData)
     {
-        
+        if(uploadListener!=null){
+            uploadListener.onFail(messageId,statusCode,(E)responseData);
+        }
     }
     
     /**
@@ -91,9 +136,11 @@ public class UploadCallback extends Handler
      * @param messageId 下载id
      * @see [类、类#方法、类#成员]
      */
-    public void onCancel(int messageId)
+    protected void onCancel(int messageId)
     {
-        
+        if(uploadListener!=null){
+            uploadListener.onCancel(messageId);
+        }
     }
     
     @Override
@@ -115,10 +162,10 @@ public class UploadCallback extends Handler
                 onSpeed(messageId, (Long)response[1]);
                 break;
             case SUCCESS_MESSAGE:
-                onSuccess(messageId);
+                onSuccess(messageId,(byte[]) response[1]);
                 break;
             case FAILURE_MESSAGE:
-                onFailure(messageId, (String)response[1]);
+                onFailure(messageId, (Integer)response[1],(byte[]) response[1]);
                 break;
             case CANCEL_MESSAGE:
                 onCancel(messageId);
@@ -143,19 +190,37 @@ public class UploadCallback extends Handler
         sendMessage(obtainMessage(SPEED_MESSAGE, new Object[] {messageId, speed}));
     }
     
-    protected void sendSuccessMessage(int messageId)
+    protected void sendSuccessMessage(int messageId,byte[] responseData)
     {
-        sendMessage(obtainMessage(SUCCESS_MESSAGE, new Object[] {messageId}));
+        sendMessage(obtainMessage(SUCCESS_MESSAGE, new Object[] {messageId,responseData}));
     }
     
-    protected void sendFailureMessage(int messageId, String strMsg)
+    protected void sendFailureMessage(int messageId, int statusCode,byte[] responseData)
     {
-        sendMessage(obtainMessage(FAILURE_MESSAGE, new Object[] {messageId, strMsg}));
+        sendMessage(obtainMessage(FAILURE_MESSAGE, new Object[] {messageId,statusCode, responseData}));
     }
     
     protected void sendCancelMessage(int messageId)
     {
         sendMessage(obtainMessage(CANCEL_MESSAGE, new Object[] {messageId}));
     }
-    
+
+    private Class<?> getGenricType(int index) {
+        if (uploadListener != null) {
+            return ReflectUtils.getInterfacesGenricType(listenerType, index);
+        }
+        return ReflectUtils.getSuperClassGenricType(getClass(), index);
+    }
+
+    public Class<E> getFailClass() {
+        return failClass;
+    }
+
+    public Class<T> getSuccessClass() {
+        return successClass;
+    }
+
+    public UploadListener<T, E> getUploadListener() {
+        return uploadListener;
+    }
 }
