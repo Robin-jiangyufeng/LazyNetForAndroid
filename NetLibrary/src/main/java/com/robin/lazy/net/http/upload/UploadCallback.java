@@ -3,7 +3,6 @@ package com.robin.lazy.net.http.upload;
 import android.os.Handler;
 import android.os.Message;
 
-import com.robin.lazy.net.http.ResponseListener;
 import com.robin.lazy.util.ReflectUtils;
 import com.robin.lazy.util.TypeUtils;
 
@@ -50,7 +49,7 @@ public class UploadCallback<T,E> extends Handler
         this.uploadListener = listener;
         if (this.uploadListener != null) {
             listenerType = TypeUtils.getSupertype(null,
-                    this.uploadListener.getClass(), ResponseListener.class);
+                    this.uploadListener.getClass(), UploadListener.class);
             try {
                 successClass = (Class<T>) getGenricType(0);
                 failClass = (Class<E>) getGenricType(1);
