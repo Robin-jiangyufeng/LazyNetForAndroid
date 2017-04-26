@@ -308,11 +308,7 @@ public class RequestParam
      */
     public boolean isEmptyForData()
     {
-        if (urlWithPsaram != null && !urlWithPsaram.isEmpty())
-        {
-            return false;
-        }
-        return true;
+        return urlWithPsaram==null||urlWithPsaram.isEmpty();
     }
 
     /***

@@ -386,7 +386,7 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
             out = new DataOutputStream(httpOut);
             if (!request.isEmptyForData())
             {
-                tempOut.write(getTextData(request.getSendHeaderMap()));// 要上传的文本临时自己流
+                tempOut.write(getTextData(request.getUrlWithPsaram()));// 要上传的文本临时自己流
                 LazyLogger.i("上传的文件的键" + request.getSendData());
             }
             setFileParts(request.getFileParams());
@@ -430,7 +430,7 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
      * @throws IOException
      * @see [类、类#方法、类#成员]
      */
-    private byte[] getTextData(ConcurrentHashMap<String, String> sendDataMap)
+    private byte[] getTextData(ConcurrentHashMap<String, Object> sendDataMap)
     {
         StringBuffer sb = new StringBuffer();
         for (String key : sendDataMap.keySet())
