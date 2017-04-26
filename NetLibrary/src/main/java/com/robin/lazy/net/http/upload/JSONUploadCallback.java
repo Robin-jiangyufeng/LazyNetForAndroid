@@ -33,14 +33,6 @@ public class JSONUploadCallback<T extends Serializable, E extends Serializable> 
      * 编码类型
      */
     private String responseCharset = DEFAULT_CHARSET;
-    /**
-     * 成功返回的数据的类型
-     */
-    private Class<T> successClass;
-    /**
-     * 失败返回的数据类型
-     */
-    private Class<E> failClass;
 
     public JSONUploadCallback(UploadListener<T, E> listener) {
         super(listener);
@@ -53,10 +45,10 @@ public class JSONUploadCallback<T extends Serializable, E extends Serializable> 
             LazyLogger.i("報文==" + messageId + " ;;请求成功返回的数据==");
             LazyLogger.json(data);
             T jsonObject;
-            if (String.class.equals(successClass)) {
+            if (String.class.equals(getSuccessClass())) {
                 jsonObject = (T) data;
             } else {
-                jsonObject = JSONUtil.fromJSON(data, successClass);
+                jsonObject = JSONUtil.fromJSON(data, getSuccessClass());
             }
             if (jsonObject == null) {
                 getUploadListener().onFail(messageId, HttpError.DATA_CONVERT_EXCEPTION,null);
@@ -74,10 +66,10 @@ public class JSONUploadCallback<T extends Serializable, E extends Serializable> 
             LazyLogger.e("報文==" + messageId + " ;;请求失败返回的数据==" + data + " ;;返回状态=="
                     + statusCode + ":" + HttpError.getMessageByStatusCode(statusCode));
             E jsonObject;
-            if (String.class.equals(failClass)) {
+            if (String.class.equals(getFailClass())) {
                 jsonObject = (E) data;
             } else {
-                jsonObject = JSONUtil.fromJSON(data, failClass);
+                jsonObject = JSONUtil.fromJSON(data, getFailClass());
             }
             getUploadListener().onFail(messageId, statusCode, jsonObject);
         }
