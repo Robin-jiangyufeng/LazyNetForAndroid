@@ -1,5 +1,6 @@
 package com.robin.lazy.net.http.core;
 
+import com.robin.lazy.json.JSONUtil;
 import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.util.StringUtils;
 
@@ -97,7 +98,7 @@ public class HttpThread implements Runnable {
 	 * @see [类、类#方法、类#成员]
 	 */
 	protected void onBeforeProcessRequest() {
-
+		logout();
 	}
 
 	/**
@@ -131,6 +132,19 @@ public class HttpThread implements Runnable {
 			}
 			isFinished = true;
 		}
+	}
+
+	/***
+	 * 请求日志输出
+	 */
+	private void logout(){
+		if(request==null)return;
+		LazyLogger.d("報文==" + request.getMessageId() + ";;请求URL=="
+				+ request.getUrl());
+		LazyLogger.d("请求headers==");
+		LazyLogger.json(request.getSendHeaderMap()==null?"": JSONUtil.toJSON(request.getSendHeaderMap()));
+		LazyLogger.d("请求headers==");
+		LazyLogger.json(request.getUrlWithPsaram()==null?"":JSONUtil.toJSON(request.getUrlWithPsaram()));
 	}
 
 	/**

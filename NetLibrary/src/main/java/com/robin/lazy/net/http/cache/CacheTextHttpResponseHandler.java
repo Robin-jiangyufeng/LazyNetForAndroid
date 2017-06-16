@@ -64,7 +64,7 @@ public class CacheTextHttpResponseHandler extends TextHttpResponseHandler
     @Override
     public void loadCache(int messageId, Map<String, List<String>> headers, byte[] data) {
         String cacheData = getResponseString(data, getResponseCharset());
-        LazyLogger.i("報文==" + messageId + " ;;获取到本地缓存的数据==" + cacheData);
+        LazyLogger.d("報文==" + messageId + " ;;获取到本地缓存的数据==" + cacheData);
         if (cacheTextResponseCallback != null)
         {
             cacheTextResponseCallback.onLoadCache(messageId, headers, cacheData);

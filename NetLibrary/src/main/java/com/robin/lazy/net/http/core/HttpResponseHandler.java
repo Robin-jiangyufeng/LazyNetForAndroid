@@ -1,8 +1,5 @@
 package com.robin.lazy.net.http.core;
 
-import com.robin.lazy.json.JSONUtil;
-import com.robin.lazy.logger.LazyLogger;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
@@ -79,12 +76,6 @@ public abstract class HttpResponseHandler implements HttpResponseHandlerBase {
 	@Override
 	public boolean sendResponseMessage(HttpURLConnection urlConnection,
 			RequestParam request) {
-		LazyLogger.d("報文==" + request.getMessageId() + ";;请求URL=="
-				+ request.getUrl());
-		LazyLogger.d("请求headers==");
-		LazyLogger.json(request.getSendHeaderMap()==null?"":JSONUtil.toJSON(request.getSendHeaderMap()));
-		LazyLogger.d("请求headers==");
-		LazyLogger.json(request.getUrlWithPsaram()==null?"":JSONUtil.toJSON(request.getUrlWithPsaram()));
 		if (urlConnection != null && request != null) {
 			int responseCode = 0;
 			byte[] data = null;
