@@ -122,7 +122,9 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
     public void setConnectProperty(HttpURLConnection urlConnection, ConcurrentHashMap<String, String> sendHeaderMap)
     {
         urlConnection.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)");
-        urlConnection.setRequestProperty("Content-Type", CONTENT_TYPE + ";boundary=" + BOUNDARY);
+        if(sendHeaderMap!=null&&!sendHeaderMap.containsKey("Content-Type")){
+            urlConnection.setRequestProperty("Content-Type", CONTENT_TYPE + ";boundary=" + BOUNDARY);
+        }
         super.setConnectProperty(urlConnection, sendHeaderMap);
     }
     

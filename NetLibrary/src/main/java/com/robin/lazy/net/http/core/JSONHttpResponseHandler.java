@@ -94,7 +94,9 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
 
     @Override
     public void setConnectProperty(HttpURLConnection urlConnection, ConcurrentHashMap<String, String> sendHeaderMap) {
-        urlConnection.setRequestProperty("Content-Type", "application/json");
+        if(sendHeaderMap!=null&&!sendHeaderMap.containsKey("Content-Type")){
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+        }
         super.setConnectProperty(urlConnection, sendHeaderMap);
     }
 

@@ -39,7 +39,9 @@ public class TextHttpResponseHandler extends HttpResponseHandler {
 
     @Override
     public void setConnectProperty(HttpURLConnection urlConnection, ConcurrentHashMap<String, String> sendHeaderMap) {
-        urlConnection.setRequestProperty("Content-Type", "text/xml");
+        if(sendHeaderMap!=null&&!sendHeaderMap.containsKey("Content-Type")){
+            urlConnection.setRequestProperty("Content-Type", "text/xml");
+        }
         super.setConnectProperty(urlConnection, sendHeaderMap);
     }
 
