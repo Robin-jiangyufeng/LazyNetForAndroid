@@ -139,11 +139,11 @@ public class HttpThread implements Runnable {
 	 */
 	private void logout(){
 		if(request==null)return;
-		LazyLogger.d("報文==" + request.getMessageId() + ";;请求URL=="
-				+ request.getUrl());
+		LazyLogger.d("请求id==" + request.getMessageId());
+		LazyLogger.d("请求url=="+request.getUrl());
 		LazyLogger.d("请求headers==");
 		LazyLogger.json(request.getSendHeaderMap()==null?"": JSONUtil.toJSON(request.getSendHeaderMap()));
-		LazyLogger.d("请求headers==");
+		LazyLogger.d("请求params==");
 		LazyLogger.json(request.getUrlWithPsaram()==null?"":JSONUtil.toJSON(request.getUrlWithPsaram()));
 	}
 

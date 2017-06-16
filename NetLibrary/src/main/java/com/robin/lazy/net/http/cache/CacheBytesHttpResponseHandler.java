@@ -76,21 +76,7 @@ public class CacheBytesHttpResponseHandler extends BytesHttpResponseHandler
     @Override
     public void sendSuccessMessage(int messageId,
                                    Map<String, List<String>> headers, byte[] responseByteData) {
-        if (httpCacheLoader != null
-                && (httpCacheLoadType == HttpCacheLoadType.NOT_USE_CACHE_UPDATE_CACHE
-                || httpCacheLoadType == HttpCacheLoadType.USE_CACHE_UPDATE_CACHE
-                || httpCacheLoadType == HttpCacheLoadType.USE_CACHE_AND_NET_UPDATE_CHCHE)) {
-            String cacheKey=new StringBuilder(String.valueOf(messageId))
-                    .append(requestUnique).toString();
-            if (maxCacheAge > 0) {
-                httpCacheLoader.insert(cacheKey,
-                        new CacheResponseEntity(responseByteData, headers),
-                        maxCacheAge);
-            } else {
-                httpCacheLoader.insert(cacheKey,
-                        new CacheResponseEntity(responseByteData, headers));
-            }
-        }
+        saveCache(messageId,headers,responseByteData);
         super.sendSuccessMessage(messageId, headers, responseByteData);
     }
 
@@ -109,6 +95,31 @@ public class CacheBytesHttpResponseHandler extends BytesHttpResponseHandler
             }
         }
         super.sendFailMessage(messageId, statusCode, headers, responseErrorByteData);
+    }
+
+    /***
+     * 保存缓存
+     * @param messageId
+     * @param headers
+     * @param responseByteData
+     */
+    protected void saveCache(int messageId,
+                             Map<String, List<String>> headers, byte[] responseByteData){
+        if (httpCacheLoader != null
+                && (httpCacheLoadType == HttpCacheLoadType.NOT_USE_CACHE_UPDATE_CACHE
+                || httpCacheLoadType == HttpCacheLoadType.USE_CACHE_UPDATE_CACHE
+                || httpCacheLoadType == HttpCacheLoadType.USE_CACHE_AND_NET_UPDATE_CHCHE)) {
+            String cacheKey=new StringBuilder(String.valueOf(messageId))
+                    .append(requestUnique).toString();
+            if (maxCacheAge > 0) {
+                httpCacheLoader.insert(cacheKey,
+                        new CacheResponseEntity(responseByteData, headers),
+                        maxCacheAge);
+            } else {
+                httpCacheLoader.insert(cacheKey,
+                        new CacheResponseEntity(responseByteData, headers));
+            }
+        }
     }
 
     @Override

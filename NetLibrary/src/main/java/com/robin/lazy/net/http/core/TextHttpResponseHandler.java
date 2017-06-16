@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static android.R.attr.data;
+
 /**
  * http网络请求文本数据管理者(返回的数据类型为String)
  *
@@ -57,9 +59,11 @@ public class TextHttpResponseHandler extends HttpResponseHandler {
 
     @Override
     public void sendSuccessMessage(int messageId, Map<String, List<String>> headers, byte[] responseByteData) {
+        String data = getResponseString(responseByteData, getResponseCharset());
+        LazyLogger.d("请求成功,请求id==" + messageId );
+        LazyLogger.d("返回的response==");
+        LazyLogger.d(data);
         if (responseCallback != null) {
-            String data = getResponseString(responseByteData, getResponseCharset());
-            LazyLogger.d("報文==" + messageId + " ;;成功返回数据==" + data);
             responseCallback.sendSuccessMessage(messageId, headers, data);
         }
         super.sendSuccessMessage(messageId, headers, responseByteData);
@@ -67,10 +71,12 @@ public class TextHttpResponseHandler extends HttpResponseHandler {
 
     @Override
     public void sendFailMessage(int messageId, int statusCode, Map<String, List<String>> headers, byte[] responseErrorByteData) {
+        String errorData = getResponseString(responseErrorByteData, getResponseCharset());
+        LazyLogger.e("请求失败,请求id==" + messageId );
+        LazyLogger.e("请求返回的statusCode==" + statusCode );
+        LazyLogger.e("请求失败的原因==" + HttpError.getMessageByStatusCode(statusCode) );
+        LazyLogger.e("请求失败数据=="+data);
         if (responseCallback != null) {
-            String errorData = getResponseString(responseErrorByteData, getResponseCharset());
-            LazyLogger.e("報文==" + messageId + " ;;返回错误数据==" + errorData + " ;;返回状态=="
-                    + statusCode + ":" + HttpError.getMessageByStatusCode(statusCode));
             responseCallback.sendFailMessage(messageId, statusCode, headers, errorData);
         }
         super.sendFailMessage(messageId, statusCode, headers, responseErrorByteData);

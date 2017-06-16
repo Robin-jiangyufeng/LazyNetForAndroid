@@ -112,10 +112,11 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
 
     @Override
     public void sendSuccessMessage(int messageId, Map<String, List<String>> headers, byte[] responseByteData) {
+        String data = getResponseString(responseByteData, getResponseCharset());
+        LazyLogger.d("请求成功,请求id==" + messageId );
+        LazyLogger.d("返回的response==");
+        LazyLogger.json(data);
         if (responseCallback != null) {
-            String data = getResponseString(responseByteData, getResponseCharset());
-            LazyLogger.d("報文==" + messageId + " ;;请求成功返回的数据==");
-            LazyLogger.json(data);
             T jsonObject;
             if (String.class.equals(successClass)) {
                 jsonObject = (T) data;
@@ -133,10 +134,12 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
 
     @Override
     public void sendFailMessage(int messageId, int statusCode, Map<String, List<String>> headers, byte[] responseErrorByteData) {
+        String data = getResponseString(responseErrorByteData, getResponseCharset());
+        LazyLogger.e("请求失败,请求id==" + messageId );
+        LazyLogger.e("请求返回的statusCode==" + statusCode );
+        LazyLogger.e("请求失败的原因==" + HttpError.getMessageByStatusCode(statusCode) );
+        LazyLogger.e("请求失败数据=="+data);
         if (responseCallback != null) {
-            String data = getResponseString(responseErrorByteData, getResponseCharset());
-            LazyLogger.e("報文==" + messageId + " ;;请求失败返回的数据==" + data + " ;;返回状态=="
-                    + statusCode + ":" + HttpError.getMessageByStatusCode(statusCode));
             E jsonObject;
             if (String.class.equals(failClass)) {
                 jsonObject = (E) data;
