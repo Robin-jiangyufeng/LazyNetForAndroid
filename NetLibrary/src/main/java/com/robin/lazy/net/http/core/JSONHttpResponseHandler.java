@@ -114,7 +114,7 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
     public void sendSuccessMessage(int messageId, Map<String, List<String>> headers, byte[] responseByteData) {
         if (responseCallback != null) {
             String data = getResponseString(responseByteData, getResponseCharset());
-            LazyLogger.i("報文==" + messageId + " ;;请求成功返回的数据==");
+            LazyLogger.d("報文==" + messageId + " ;;请求成功返回的数据==");
             LazyLogger.json(data);
             T jsonObject;
             if (String.class.equals(successClass)) {

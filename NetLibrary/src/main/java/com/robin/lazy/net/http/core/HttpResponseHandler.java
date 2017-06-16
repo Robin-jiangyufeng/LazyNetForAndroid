@@ -79,10 +79,12 @@ public abstract class HttpResponseHandler implements HttpResponseHandlerBase {
 	@Override
 	public boolean sendResponseMessage(HttpURLConnection urlConnection,
 			RequestParam request) {
-		LazyLogger.i("報文==" + request.getMessageId() + ";;请求URL=="
+		LazyLogger.d("報文==" + request.getMessageId() + ";;请求URL=="
 				+ request.getUrl());
-		LazyLogger.i("请求headers==" + request.getSendHeaderMap()==null?"":JSONUtil.toJSON(request.getSendHeaderMap()));
-		LazyLogger.i("请求params==" + request.getUrlWithPsaram()==null?"":JSONUtil.toJSON(request.getUrlWithPsaram()));
+		LazyLogger.d("请求headers==");
+		LazyLogger.json(request.getSendHeaderMap()==null?"":JSONUtil.toJSON(request.getSendHeaderMap()));
+		LazyLogger.d("请求headers==");
+		LazyLogger.json(request.getUrlWithPsaram()==null?"":JSONUtil.toJSON(request.getUrlWithPsaram()));
 		if (urlConnection != null && request != null) {
 			int responseCode = 0;
 			byte[] data = null;

@@ -59,7 +59,7 @@ public class TextHttpResponseHandler extends HttpResponseHandler {
     public void sendSuccessMessage(int messageId, Map<String, List<String>> headers, byte[] responseByteData) {
         if (responseCallback != null) {
             String data = getResponseString(responseByteData, getResponseCharset());
-            LazyLogger.i("報文==" + messageId + " ;;成功返回数据==" + data);
+            LazyLogger.d("報文==" + messageId + " ;;成功返回数据==" + data);
             responseCallback.sendSuccessMessage(messageId, headers, data);
         }
         super.sendSuccessMessage(messageId, headers, responseByteData);
