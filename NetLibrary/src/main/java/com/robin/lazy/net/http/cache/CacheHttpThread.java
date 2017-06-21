@@ -28,6 +28,9 @@ import com.robin.lazy.net.http.core.RequestParam;
  */
 public class CacheHttpThread extends HttpThread {
 
+    /**是否网络请求*/
+    private boolean isLoadNetwork;
+
     /**
      * byte数组类型缓存加载任务
      */
@@ -44,8 +47,14 @@ public class CacheHttpThread extends HttpThread {
     }
 
     @Override
+    protected void onBeforeProcessRequest() {
+        super.onBeforeProcessRequest();
+        makeCacheRequest(httpCacheLoadType);
+    }
+
+    @Override
     protected void onPostProcessRequest() {
-        if (makeCacheRequest(httpCacheLoadType)) {
+        if (isLoadNetwork) {
             super.onPostProcessRequest();
         }
     }
@@ -58,13 +67,13 @@ public class CacheHttpThread extends HttpThread {
      * @throws
      * @see [类、类#方法、类#成员]
      */
-    private boolean makeCacheRequest(HttpCacheLoadType type) {
+    private void makeCacheRequest(HttpCacheLoadType type) {
+        isLoadNetwork=true;
         if (httpCacheLoader == null || type == HttpCacheLoadType.NOT_USE_CACHE
                 || type == HttpCacheLoadType.NOT_USE_CACHE_UPDATE_CACHE
                 || type == HttpCacheLoadType.USE_CACHE_ON_FAIL
                 || getHttpRequestHandler() == null) {
             // 不使用缓存加载的情况
-            return true;
         }
         String cacheKey=new StringBuilder(String.valueOf(getMessageId()))
                 .append(getRequest().getUnique()).toString();
@@ -78,15 +87,15 @@ public class CacheHttpThread extends HttpThread {
                     getHttpRequestHandler().sendFailMessage(getMessageId(),
                             HttpError.FILE_NOT_FOUND_EXCEPTION, null, null);
                 }
-                return false;
+                isLoadNetwork=false;
+                break;
             case USE_CACHE:
             case USE_CACHE_UPDATE_CACHE:
                 if (cacheData != null) {
                     getHttpRequestHandler().sendSuccessMessage(getMessageId(),
                             cacheData.getHeaders(), cacheData.getResultData());
-                    return false;
+                    isLoadNetwork=false;
                 }
-
                 break;
             case USE_CACHE_AND_NET_UPDATE_CHCHE:
                 if (getHttpRequestHandler() instanceof CacheHttpResponeHandlerBase) {
@@ -105,7 +114,6 @@ public class CacheHttpThread extends HttpThread {
             default:
                 break;
         }
-        return true;
     }
 
     @Override
