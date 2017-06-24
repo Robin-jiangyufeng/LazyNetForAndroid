@@ -11,9 +11,6 @@
 
 package com.robin.lazy.net.http;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * 数据加载时显示的view接口(运行在主线程中的)
  *
@@ -30,6 +27,14 @@ public interface LoadingViewInterface<T> {
      * @param loadId 加载项ID
      */
     void loadStart(int loadId);
+
+    /**
+     * 得到缓存后的回调
+     *
+     * @param loadId 设置的请求ID（用于多个请求回调识别）
+     * @param cacheData 缓存数据
+     */
+    void loadCache(int loadId, T cacheData);
 
     /**
      * 加载成功

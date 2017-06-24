@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 
-import com.robin.lazy.net.http.CacheLoadingViewInterface;
 import com.robin.lazy.net.http.LoadingViewInterface;
 import com.robin.lazy.net.http.cache.CacheTextResponseListener;
 import com.robin.lazy.net.http.cache.HttpCacheLoadType;
@@ -98,8 +97,8 @@ public class AsyncCacheTextResponseCallback extends CacheTextResponseCallback {
                 Object[] objects=(Object[])msg.obj;
                 Map<String,List<String>> headers=(Map<String,List<String>>)objects[0];
                 String response=(String) objects[1];
-                if(loadingView!=null&&loadingView instanceof CacheLoadingViewInterface){
-                    ((CacheLoadingViewInterface) loadingView).loadCache(messageId,response);
+                if(loadingView!=null){
+                    loadingView.loadCache(messageId,response);
                 }
                 if (listener != null) {
                     listener.onLoadCache(messageId, headers, response);
