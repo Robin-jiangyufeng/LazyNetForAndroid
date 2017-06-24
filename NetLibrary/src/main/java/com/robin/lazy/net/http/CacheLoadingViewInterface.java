@@ -24,9 +24,9 @@ public interface CacheLoadingViewInterface<T> extends LoadingViewInterface<T>{
     /**
      * 得到缓存后的回调
      *
-     * @param messageId 设置的请求ID（用于多个请求回调识别）
+     * @param loadId 设置的请求ID（用于多个请求回调识别）
      * @param cacheData 缓存数据
      */
-    void loadCache(int messageId, T cacheData);
+    void loadCache(int loadId, T cacheData);
 
 }
