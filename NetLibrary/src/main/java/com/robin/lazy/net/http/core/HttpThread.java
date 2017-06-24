@@ -99,6 +99,9 @@ public class HttpThread implements Runnable {
 	 */
 	protected void onBeforeProcessRequest() {
 		logout();
+		if (httpRequestHandler != null) {
+			httpRequestHandler.sendStartMessage(getMessageId());// 发送开始准备
+		}
 	}
 
 	/**
@@ -114,9 +117,6 @@ public class HttpThread implements Runnable {
 	public void run() {
 		try {
 			onBeforeProcessRequest();
-			if (httpRequestHandler != null) {
-				httpRequestHandler.sendStartMessage(getMessageId());// 发送开始准备
-			}
 			onPostProcessRequest();
 			onAfterProcessRequest();
 		} catch (Exception e) {

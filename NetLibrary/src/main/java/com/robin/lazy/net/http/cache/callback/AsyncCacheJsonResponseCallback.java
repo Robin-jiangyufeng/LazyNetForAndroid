@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 
+import com.robin.lazy.net.http.CacheLoadingViewInterface;
 import com.robin.lazy.net.http.LoadingViewInterface;
 import com.robin.lazy.net.http.ResponseListener;
 import com.robin.lazy.net.http.cache.CacheResponseListener;
@@ -122,8 +123,8 @@ public class AsyncCacheJsonResponseCallback<T extends Serializable, E extends Se
                 Object[] objects=(Object[])msg.obj;
                 Map<String,List<String>> headers=(Map<String,List<String>>)objects[0];
                 T response=(T) objects[1];
-                if(loadingView!=null){
-                    loadingView.loadCache(messageId,response);
+                if(loadingView!=null&&loadingView instanceof CacheLoadingViewInterface){
+                    ((CacheLoadingViewInterface)loadingView).loadCache(messageId,response);
                 }
                 if (listener != null) {
                     listener.onLoadCache(messageId, headers,response);

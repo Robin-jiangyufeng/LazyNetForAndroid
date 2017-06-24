@@ -29,14 +29,6 @@ public interface LoadingViewInterface<T> {
     void loadStart(int loadId);
 
     /**
-     * 得到缓存后的回调
-     *
-     * @param loadId 设置的请求ID（用于多个请求回调识别）
-     * @param cacheData 缓存数据
-     */
-    void loadCache(int loadId, T cacheData);
-
-    /**
      * 加载成功
      *
      * @param loadId
