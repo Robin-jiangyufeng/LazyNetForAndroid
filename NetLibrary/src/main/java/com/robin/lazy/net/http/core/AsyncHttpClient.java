@@ -114,7 +114,7 @@ public class AsyncHttpClient implements NetChangeObserver {
 		if (requestMap == null) {
 			requestMap = new ConcurrentHashMap<Integer, RequestHandle>();
 		}
-		proxy = getProxy();
+		proxy = getDefaultProxy();
 
 		sslSocketFactory = (MySSLSocketFactory) MySSLSocketFactory
 				.getFixedSocketFactory();
@@ -293,7 +293,7 @@ public class AsyncHttpClient implements NetChangeObserver {
 	 * 
 	 * @return 代理
 	 */
-	private Proxy getProxy() {
+	private Proxy getDefaultProxy() {
 		String proxyHost = System.getProperty("http.proxyHost");
 		String proxyPort = System.getProperty("http.proxyPort");
 		if (!TextUtils.isEmpty(proxyHost) && !TextUtils.isEmpty(proxyPort)) {
@@ -301,6 +301,14 @@ public class AsyncHttpClient implements NetChangeObserver {
 					Integer.valueOf(proxyPort)));
 		}
 		return null;
+	}
+
+	/***
+	 * 设置代理
+	 * @param proxy
+	 */
+	protected void setProxy(Proxy proxy) {
+		this.proxy = proxy;
 	}
 
 	/**
