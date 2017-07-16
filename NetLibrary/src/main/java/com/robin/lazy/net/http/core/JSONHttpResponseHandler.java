@@ -180,6 +180,30 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
         return successClass;
     }
 
+    /***
+     * 设置成功返回数据的类型
+     * @param successClass
+     */
+    protected void setSuccessClass(Class<T> successClass) {
+        this.successClass = successClass;
+    }
+
+    /**
+     * 获取失败返回数据的类型
+     * @return
+     */
+    protected Class<E> getFailClass() {
+        return failClass;
+    }
+
+    /**
+     * 设置失败返回的数据的类型
+     * @param failClass
+     */
+    protected void setFailClass(Class<E> failClass) {
+        this.failClass = failClass;
+    }
+
     @Override
     public void clean() {
         responseCallback = null;
