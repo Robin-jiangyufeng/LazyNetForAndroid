@@ -45,7 +45,7 @@ public abstract class HttpResponseHandler implements HttpResponseHandlerBase {
 	private boolean isCancel;
 
 	@Override
-	public void init() {
+	public void resetRequestData() {
 		isCancel = false;
 	}
 

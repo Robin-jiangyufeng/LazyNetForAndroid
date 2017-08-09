@@ -77,9 +77,9 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
     }
     
     @Override
-    public void init()
+    public void resetRequestData()
     {
-        super.init();
+        super.resetRequestData();
         tfInfor = null;
         tfInfor = fileBuffer.getTempFileInfor();
     }

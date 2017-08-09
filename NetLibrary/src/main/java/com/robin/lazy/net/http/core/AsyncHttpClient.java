@@ -229,7 +229,10 @@ public class AsyncHttpClient implements NetChangeObserver {
 						.getHttpThread());
 				isSuccess = true;
 			} else {
-				LazyLogger.e("此任务已在下载队列中");
+				if(httpRequestHandler!=null){
+					httpRequestHandler.sendStartMessage(request.getMessageId());
+					httpRequestHandler.sendFailMessage(request.getMessageId(),HttpError.REQUEST_EXIST,null,null);
+				}
 			}
 			LazyLogger.i("当前任务数量requestMap.size=" + requestMap.size());
 			LazyLogger.v("threadPool.getActiveCount()="

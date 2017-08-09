@@ -169,7 +169,7 @@ public class HttpThread implements Runnable {
 			HttpURLConnection urlConnection = createHttpConnect(httpMethod,
 					request);
 			if (httpRequestHandler != null) {
-				httpRequestHandler.init();
+				httpRequestHandler.resetRequestData();
 			}
 
 			boolean isSuccess = makeRequest(urlConnection, request);

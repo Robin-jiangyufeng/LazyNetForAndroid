@@ -36,11 +36,11 @@ public interface HttpResponseHandlerBase
     void sendStartMessage(int messageId);
     
     /**
-     * 请求数据初始化
+     * 重置请求数据
      * 
      * @see [类、类#方法、类#成员]
      */
-    void init();
+    void resetRequestData();
     
     /**
      * 设置连接参数

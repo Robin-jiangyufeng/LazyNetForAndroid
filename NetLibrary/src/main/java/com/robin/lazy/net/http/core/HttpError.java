@@ -106,6 +106,11 @@ public class HttpError implements Serializable {
     public static final int REQUEST_TASK_FULL = 18;
 
     /**
+     * 反馈状态:相同id的请求已存在
+     */
+    public static final int REQUEST_EXIST = 19;
+
+    /**
      * (成功)服务器已成功处理了请求
      */
     public static final int RESPONSE_CODE_200 = 200;
@@ -306,6 +311,8 @@ public class HttpError implements Serializable {
                 return "数据转换错误";
             case REQUEST_TASK_FULL:
                 return "任务列表已满";
+            case REQUEST_EXIST:
+                return "相同id的请求已存在";
             case RESPONSE_CODE_200:
                 return "(成功)服务器已成功处理了请求";
             case RESPONSE_CODE_201:
