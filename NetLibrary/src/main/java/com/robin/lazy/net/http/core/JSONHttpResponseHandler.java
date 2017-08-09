@@ -115,7 +115,7 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
         String data = getResponseString(responseByteData, getResponseCharset());
         LazyLogger.d("请求成功,请求id==" + messageId );
         LazyLogger.d("返回的response==");
-        if(data!=null&&data.length()>0&&("{".equals(data.substring(0,1))||"[".equals(data.substring(0,1)))){
+        if(data!=null&&data.length()>0&&(data.startsWith("{")||data.startsWith("["))){
             LazyLogger.json(data);
         }else{
             LazyLogger.d(data);
