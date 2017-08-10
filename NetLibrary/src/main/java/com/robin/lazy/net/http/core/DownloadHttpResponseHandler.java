@@ -1,5 +1,7 @@
 package com.robin.lazy.net.http.core;
 
+import android.util.Log;
+
 import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.core.callback.DownloadCallbackInterface;
 
@@ -213,7 +215,6 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
                 lastTime = curTime;
                 lastDownloadByte = bytesRead;
                 downloadCallback.downloadSpeed(messageId, (long)(speed * 1000));
-                
                 // 没有下载完成保存临时下载信息，以便断点续传
                 if (tfInfor != null)
                 {

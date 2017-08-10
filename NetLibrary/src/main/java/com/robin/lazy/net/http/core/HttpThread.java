@@ -166,12 +166,11 @@ public class HttpThread implements Runnable {
 		boolean retry = false;// 是否失败重试
 		int retryNumber = request.getRetryNumber();// 重试次数
 		do {
-			HttpURLConnection urlConnection = createHttpConnect(httpMethod,
-					request);
 			if (httpRequestHandler != null) {
 				httpRequestHandler.resetRequestData();
 			}
-
+			HttpURLConnection urlConnection = createHttpConnect(httpMethod,
+					request);
 			boolean isSuccess = makeRequest(urlConnection, request);
 
 			if (urlConnection != null) {

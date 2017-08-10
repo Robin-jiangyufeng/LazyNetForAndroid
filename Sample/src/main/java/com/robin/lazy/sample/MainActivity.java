@@ -1,5 +1,6 @@
 package com.robin.lazy.sample;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -58,6 +59,13 @@ public class MainActivity extends AppCompatActivity implements NetChangeObserver
             case R.id.button4:
                 break;
             case R.id.button5:
+                DialogUtil.getAlertDialog(this, "版本更新", "更新信息", "更新", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AppDownAndInstall versionDown = new AppDownAndInstall(MainActivity.this);
+                        versionDown.downApp(getExternalCacheDir().getAbsolutePath());
+                    }
+                }).show();
                 break;
             case R.id.button6:
                 break;
