@@ -17,29 +17,29 @@ import com.robin.lazy.net.http.core.FileBuffer;
 import com.robin.lazy.net.http.core.HttpResponseHandler;
 
 /**
- * 自定义的downloadcallback
+ * 带有状态操作功能的的downloadcallback
  * 
  * @author  江钰锋 00501
  * @version  [版本号, 2016年3月30日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class CustomDownloadCallback extends DownloadCallback{
+public class StatefulDownloadCallback extends DownloadCallback{
 
 	private DownloadManager downloadManager;
-	public CustomDownloadCallback(DownLoadListening downloadListening,DownloadManager downloadManager) {
+	public StatefulDownloadCallback(DownLoadListening downloadListening, DownloadManager downloadManager) {
 		super(downloadListening);
 		this.downloadManager=downloadManager;
 	}
 	
-	public CustomDownloadCallback(Context context, Intent intent,
-			DownLoadListening downloadListening,DownloadManager downloadManager) {
+	public StatefulDownloadCallback(Context context, Intent intent,
+                                    DownLoadListening downloadListening, DownloadManager downloadManager) {
 		super(context, intent, downloadListening);
 		this.downloadManager=downloadManager;
 	}
 	
 	@Override
 	public HttpResponseHandler getHttpResponseHandler(FileBuffer fileBuff) {
-		return new CustomDownloadHttpResponseHandler(fileBuff, this,downloadManager);
+		return new StatefulDownloadHttpResponseHandler(fileBuff, this,downloadManager);
 	}
 }

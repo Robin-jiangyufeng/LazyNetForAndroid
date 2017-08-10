@@ -220,7 +220,7 @@ public class FileBuffer
                 props.setProperty("lenght", String.valueOf(lenght));
                 // 以适合使用 load 方法加载到 Properties 表中的格式，
                 // 将此 Properties 表中的属性列表（键和元素对）写入输出流
-                props.store(dfOut.get(), "author: shixing_11@sina.com");
+                props.store(dfOut.get(), "author: robin-jiang@qq.com");
             }
         }
         catch (FileNotFoundException e)

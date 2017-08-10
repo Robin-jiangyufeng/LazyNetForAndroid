@@ -20,18 +20,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  http网络下载核心类
+ *  带有状态操作的http网络下载核心类
  * 
  * @author  jiangyufeng
  * @version  [版本号, 2015年8月6日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
  */
-public class CustomDownloadHttpResponseHandler extends DownloadHttpResponseHandler {
+public class StatefulDownloadHttpResponseHandler extends DownloadHttpResponseHandler {
 
 	private DownloadManager downloadManager;
-	public CustomDownloadHttpResponseHandler(FileBuffer fileBuffer,
-			DownloadCallbackInterface downloadListening,DownloadManager downloadManager) {
+	public StatefulDownloadHttpResponseHandler(FileBuffer fileBuffer,
+                                               DownloadCallbackInterface downloadListening, DownloadManager downloadManager) {
 		super(fileBuffer, downloadListening);
 		this.downloadManager=downloadManager;
 	}

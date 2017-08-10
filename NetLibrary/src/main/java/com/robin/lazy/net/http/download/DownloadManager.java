@@ -166,9 +166,9 @@ public class DownloadManager extends AsyncHttpClient {
             LazyLogger.e("任务列表已满,不能添加下载请求");
         } else {
             if (isExistTask(param.getMessageId())) {
-                CustomDownloadHttpResponseHandler dhr =
-                        (CustomDownloadHttpResponseHandler) getHttpResponseHandler(param.getMessageId());
-                dhr.setDownloadCallback(new DownloadCallback(listener));
+                StatefulDownloadHttpResponseHandler dhr =
+                        (StatefulDownloadHttpResponseHandler) getHttpResponseHandler(param.getMessageId());
+                dhr.setDownloadCallback(new StatefulDownloadCallback(listener,this));
             } else if (!StringUtils.isEmpty(param.getUrl())) {
                 if (StringUtils.isEmpty(fileName)) {
                     new NullPointerException("要设置的下载文件名不能为空");
@@ -179,7 +179,7 @@ public class DownloadManager extends AsyncHttpClient {
                                 .setFileName(fileName)
                                 .setDownloadState(DownloadState.DOWNLOAD_WAIT)
                                 .build());
-                doGetDownloadFile(param, new FileBuffer(sdcardPath, fileName), new CustomDownloadCallback(listener, this));
+                doGetDownloadFile(param, new FileBuffer(sdcardPath, fileName), new StatefulDownloadCallback(listener, this));
             } else {
                 LazyLogger.e("下载地址是空的");
             }
@@ -225,7 +225,7 @@ public class DownloadManager extends AsyncHttpClient {
         if (dData != null && dData.getDownloadState() == DownloadState.DOWNLOAD_PAUSE) {
             dData.setDownloadState(DownloadState.DOWNLOAD_WAIT);
             RequestParam param = new RequestParam(dData.getMessageId(), dData.getUrl());
-            doGetDownloadFile(param, new FileBuffer(dData.getSavePath(), dData.getFileName()), new DownloadCallback(listener));
+            doGetDownloadFile(param, new FileBuffer(dData.getSavePath(), dData.getFileName()), new StatefulDownloadCallback(listener, this));
         } else {
             LazyLogger.e("继续下载失败,因为本下载不是暂停状态");
         }
