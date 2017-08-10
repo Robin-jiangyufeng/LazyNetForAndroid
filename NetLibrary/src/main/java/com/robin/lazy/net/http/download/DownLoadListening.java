@@ -19,7 +19,7 @@ public interface DownLoadListening
      * @param messageId 下载id
      * @see [类、类#方法、类#成员]
      */
-    public abstract void onStart(int messageId);
+    void onStart(int messageId);
     
     /**
      * 下载进度
@@ -29,7 +29,7 @@ public interface DownLoadListening
      * @param currentSize 当前下载的字节数
      * @see [类、类#方法、类#成员]
      */
-    public abstract void onLoading(int messageId, long totalSize, long currentSize);
+    void onLoading(int messageId, long totalSize, long currentSize);
     
     /**
      * 下载速率(字节每秒)
@@ -38,7 +38,7 @@ public interface DownLoadListening
      * @param speed 网速(字节每秒)
      * @see [类、类#方法、类#成员]
      */
-    public abstract void onSpeed(int messageId, long speed);
+    void onSpeed(int messageId, long speed);
     
     /**
      * 下载成功
@@ -46,7 +46,7 @@ public interface DownLoadListening
      * @param messageId
      * @see [类、类#方法、类#成员]
      */
-    public abstract void onSuccess(int messageId);
+    void onSuccess(int messageId);
     
     /**
      * 下载失败
@@ -56,7 +56,7 @@ public interface DownLoadListening
      * @param message 错误信息
      * @see [类、类#方法、类#成员]
      */
-    public abstract void onFailure(int messageId, int statusCode,String message);
+    void onFailure(int messageId, int statusCode,String message);
     
     /**
      * 用户取消下载回调
@@ -64,6 +64,6 @@ public interface DownLoadListening
      * @param messageId 下载id
      * @see [类、类#方法、类#成员]
      */
-    public abstract void onCancel(int messageId);
+    void onCancel(int messageId);
     
 }
