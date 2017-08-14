@@ -1,7 +1,5 @@
 package com.robin.lazy.net.http.core;
 
-import android.util.Log;
-
 import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.core.callback.DownloadCallbackInterface;
 
@@ -107,7 +105,9 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
             try
             {
                 sendhttpRequest(urlConnection, request);
-                readProgressMessage(0, urlConnection.getContentLength(), request.getMessageId());
+                if(tfInfor==null){
+                    readProgressMessage(request.getMessageId(),0, urlConnection.getContentLength());
+                }
                 responseCode = urlConnection.getResponseCode();
                 isSuccess = readResponseData(urlConnection, request.getMessageId());
                 headers = urlConnection.getHeaderFields();
