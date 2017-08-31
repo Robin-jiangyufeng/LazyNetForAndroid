@@ -1,1 +1,1 @@
-include ':NetLibrary', ':Sample'
+include ':LazyNet', ':Sample'

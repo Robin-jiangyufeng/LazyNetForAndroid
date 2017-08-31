@@ -4,6 +4,7 @@ buildscript {
     repositories {
         jcenter()
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
         //自动上传至Bintray平台插件
@@ -19,5 +20,6 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {url 'https://dl.bintray.com/jiangyufeng/maven/'}
     }
 }
