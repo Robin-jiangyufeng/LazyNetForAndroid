@@ -276,7 +276,7 @@ public class HttpThread implements Runnable {
 		}
 		if(httpRequestHandler!=null){
 			httpRequestHandler.sendFailMessage(getMessageId(), errorCode,
-					urlConnection.getHeaderFields(), null);
+					null, null);
 		}
 		return null;
 	}
