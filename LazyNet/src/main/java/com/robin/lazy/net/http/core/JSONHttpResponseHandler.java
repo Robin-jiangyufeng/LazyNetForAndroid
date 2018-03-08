@@ -139,10 +139,14 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
     @Override
     public void sendFailMessage(int messageId, int statusCode, Map<String, List<String>> headers, byte[] responseErrorByteData) {
         String data = getResponseString(responseErrorByteData, getResponseCharset());
-        LazyLogger.e("请求失败,请求id==" + messageId );
-        LazyLogger.e("请求返回的statusCode==" + statusCode );
-        LazyLogger.e("请求失败的原因==" + HttpError.getMessageByStatusCode(statusCode) );
-        LazyLogger.e("请求失败数据=="+data);
+        StringBuilder failLog=new StringBuilder("请求失败,请求id==").append(messageId)
+                .append("\n")
+                .append("请求返回的statusCode==").append(statusCode)
+                .append("\n")
+                .append("请求失败的原因==").append(HttpError.getMessageByStatusCode(statusCode))
+                .append("\n")
+                .append("请求失败数据==").append(data);
+        LazyLogger.e(failLog.toString());
         if (responseCallback != null) {
             E jsonObject;
             if (String.class.equals(failClass)) {
