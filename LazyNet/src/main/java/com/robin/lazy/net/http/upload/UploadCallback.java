@@ -161,10 +161,10 @@ public class UploadCallback<T,E> extends Handler
                 onSpeed(messageId, (Long)response[1]);
                 break;
             case SUCCESS_MESSAGE:
-                onSuccess(messageId,(byte[]) response[1]);
+                onSuccess(messageId,response.length>=2?(byte[]) response[1]:null);
                 break;
             case FAILURE_MESSAGE:
-                onFailure(messageId, (Integer)response[1],(byte[]) response[1]);
+                onFailure(messageId, (Integer)response[1],response.length>=3?(byte[]) response[2]:null);
                 break;
             case CANCEL_MESSAGE:
                 onCancel(messageId);
