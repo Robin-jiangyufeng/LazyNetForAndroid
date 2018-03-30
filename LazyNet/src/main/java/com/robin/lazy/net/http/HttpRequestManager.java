@@ -58,7 +58,7 @@ public class HttpRequestManager extends AsyncHttpClient {
     /**
      * 每个context中的请求
      */
-    private Map<RequestLifecycleContext, List<String>> contextRequests;
+    private Map<RequestLifecycleContext, List<Integer>> contextRequests;
 
     /**
      * 是否显示dialogHandle(默认显示)
@@ -71,7 +71,7 @@ public class HttpRequestManager extends AsyncHttpClient {
     public HttpRequestManager(Context context) {
         super();
         initHttpCache(context);
-        contextRequests = new ConcurrentHashMap<RequestLifecycleContext, List<String>>();
+        contextRequests = new ConcurrentHashMap<RequestLifecycleContext, List<Integer>>();
         isVisibleDialog = true;
     }
 
@@ -465,16 +465,16 @@ public class HttpRequestManager extends AsyncHttpClient {
         if (requestContext == null) return;
         if (contextRequests != null) {
             if (contextRequests.containsKey(requestContext)) {
-                List<String> list = contextRequests.get(requestContext);
+                List<Integer> list = contextRequests.get(requestContext);
                 if (list != null) {
-                    list.add(String.valueOf(messageId));
+                    list.add(messageId);
                 } else {
-                    list = new ArrayList<String>();
-                    list.add(String.valueOf(messageId));
+                    list = new ArrayList<Integer>();
+                    list.add(messageId);
                 }
             } else {
-                List<String> list = new ArrayList<String>();
-                list.add(String.valueOf(messageId));
+                List<Integer> list = new ArrayList<Integer>();
+                list.add(messageId);
                 contextRequests.put(requestContext, list);
             }
         }
@@ -488,15 +488,15 @@ public class HttpRequestManager extends AsyncHttpClient {
      * @see [类、类#方法、类#成员]
      */
     private void removeContextRequest(int messageId) {
-        Iterator<Map.Entry<RequestLifecycleContext, List<String>>> it = contextRequests
+        Iterator<Map.Entry<RequestLifecycleContext, List<Integer>>> it = contextRequests
                 .entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<RequestLifecycleContext, List<String>> item = it.next();
-            List<String> list = item.getValue();
+            Map.Entry<RequestLifecycleContext, List<Integer>> item = it.next();
+            List<Integer> list = item.getValue();
             if (list == null || list.isEmpty()) {
                 it.remove();
-            } else if (list.contains(String.valueOf(messageId))) {
-                list.remove(String.valueOf(messageId));
+            } else if (list.contains(messageId)) {
+                list.remove(messageId);
                 if (list.isEmpty()) {
                     list = null;
                     it.remove();
@@ -522,11 +522,11 @@ public class HttpRequestManager extends AsyncHttpClient {
         if (requestContext == null) return;
         if (contextRequests != null
                 && contextRequests.containsKey(requestContext)) {
-            List<String> list = contextRequests.get(requestContext);
+            List<Integer> list = contextRequests.get(requestContext);
             if (list != null) {
-                for (String messageId : list) {
-                    if (isExistTask(Integer.parseInt(messageId))) {
-                        cancelRequestNow(Integer.parseInt(messageId), true);
+                for (Integer messageId : list) {
+                    if (isExistTask(messageId)) {
+                        cancelRequestNow(messageId, true);
                     }
                 }
                 list.clear();
@@ -558,7 +558,7 @@ public class HttpRequestManager extends AsyncHttpClient {
         }
         if (contextRequests != null) {
             for (RequestLifecycleContext key : contextRequests.keySet()) {
-                List<String> list = contextRequests.get(key);
+                List<Integer> list = contextRequests.get(key);
                 if (list != null) {
                     list.clear();
                     list = null;
