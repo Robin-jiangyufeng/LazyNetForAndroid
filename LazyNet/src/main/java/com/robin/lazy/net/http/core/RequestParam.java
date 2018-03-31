@@ -337,45 +337,6 @@ public class RequestParam
         return param.toString().substring(1);
     }
     
-    /**
-     * 清理跟随的数据(既是要发送的数据)
-     * 
-     * @see [类、类#方法、类#成员]
-     */
-    public void cleanWithPsaram()
-    {
-        if (urlWithPsaram != null)
-        {
-            urlWithPsaram.clear();
-            urlWithPsaram = null;
-        }
-    }
-    
-    /**
-     * 清理数据
-     * 
-     * @see [类、类#方法、类#成员]
-     */
-    public void clean()
-    {
-        url = null;
-        if (sendHeaderMap != null)
-        {
-            sendHeaderMap.clear();
-            sendHeaderMap = null;
-        }
-        if (urlWithPsaram != null)
-        {
-            urlWithPsaram.clear();
-            urlWithPsaram = null;
-        }
-        if (fileParams != null)
-        {
-            fileParams.clear();
-            fileParams = null;
-        }
-    }
-    
     public int getConnectTimeOut()
     {
         return connectTimeOut;
@@ -450,7 +411,45 @@ public class RequestParam
     {
         return fileParams;
     }
-    
+
+    /**
+     * 清理跟随的数据(既是要发送的数据)
+     *
+     * @see [类、类#方法、类#成员]
+     */
+    public void cleanWithPsaram()
+    {
+        if (urlWithPsaram != null)
+        {
+            urlWithPsaram.clear();
+            urlWithPsaram = null;
+        }
+    }
+
+    /**
+     * 清理数据
+     *
+     * @see [类、类#方法、类#成员]
+     */
+    public void clean()
+    {
+        if (sendHeaderMap != null)
+        {
+            sendHeaderMap.clear();
+            sendHeaderMap = null;
+        }
+        if (urlWithPsaram != null)
+        {
+            urlWithPsaram.clear();
+            urlWithPsaram = null;
+        }
+        if (fileParams != null)
+        {
+            fileParams.clear();
+            fileParams = null;
+        }
+    }
+
     /**
      * 要上传的文件封装
      * 
