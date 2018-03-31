@@ -358,7 +358,6 @@ public class RequestParam
      */
     public void clean()
     {
-        messageId = 0;
         url = null;
         if (sendHeaderMap != null)
         {
