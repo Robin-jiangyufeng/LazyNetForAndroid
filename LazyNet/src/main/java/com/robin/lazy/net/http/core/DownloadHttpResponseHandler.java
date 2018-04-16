@@ -357,6 +357,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
             {
                 if (isCancelRequest())
                 {
+                    isSuccess = false;
                     break;
                 }
                 downloadSize += byteread;// 计算当前下载的字节数
@@ -364,10 +365,12 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
                 readProgressMessage(messageId, downloadSize, bytetotal);
                 if (bytetotal>0&&downloadSize >= bytetotal)
                 {
+                    isSuccess = true;
                     break;
+                }else if(bytetotal<=0&&!isSuccess){
+                    isSuccess=true;
                 }
             }
-            isSuccess = true;
         }
         catch (FileNotFoundException e1)
         {
