@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 25
-        versionCode 185
-        versionName "1.8.5"
+        versionCode 186
+        versionName "1.8.6"
     }
     buildTypes {
         release {
@@ -42,7 +42,7 @@ ext {
     siteUrl = 'https://github.com/Robin-jiangyufeng/LazyNetForAndroid'
     gitUrl = 'https://github.com/Robin-jiangyufeng/LazyNetForAndroid.git'
 
-    libraryVersion = '1.8.5'
+    libraryVersion = '1.8.6'
 
     developerId = 'jiangyufeng'
     developerName = 'jiangyufeng'

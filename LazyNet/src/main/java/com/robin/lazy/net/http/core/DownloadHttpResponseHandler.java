@@ -336,6 +336,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
     private boolean saveDownloadFile(InputStream is, long bytetotal, int messageId)
     {
         boolean isSuccess = false;// 把流写入文件是否成功
+        boolean isCancel = false;// 是否执行了取消
         long downloadSize = 0;// 下载的总字节数
         int byteread = 0;// 一次循环下载的字节数
         BufferedInputStream in = null;// 输入缓冲流
@@ -357,7 +358,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
             {
                 if (isCancelRequest())
                 {
-                    isSuccess = false;
+                    isCancel=true;
                     break;
                 }
                 downloadSize += byteread;// 计算当前下载的字节数
@@ -365,11 +366,11 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
                 readProgressMessage(messageId, downloadSize, bytetotal);
                 if (bytetotal>0&&downloadSize >= bytetotal)
                 {
-                    isSuccess = true;
                     break;
-                }else if(bytetotal<=0&&!isSuccess){
-                    isSuccess=true;
                 }
+            }
+            if(!isCancel){
+                isSuccess=true;
             }
         }
         catch (FileNotFoundException e1)
