@@ -362,12 +362,12 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
                 downloadSize += byteread;// 计算当前下载的字节数
                 out.write(buffer, 0, byteread);// 把数据流写入本地文件
                 readProgressMessage(messageId, downloadSize, bytetotal);
-                if (downloadSize >= bytetotal)
+                if (bytetotal>0&&downloadSize >= bytetotal)
                 {
-                    isSuccess = true;
                     break;
                 }
             }
+            isSuccess = true;
         }
         catch (FileNotFoundException e1)
         {
