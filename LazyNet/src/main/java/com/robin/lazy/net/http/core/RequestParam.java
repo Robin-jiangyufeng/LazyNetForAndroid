@@ -333,7 +333,8 @@ public class RequestParam
             Map.Entry<String, Object> e = it.next();
             param.append("&").append(e.getKey()).append("=").append(e.getValue());
         }
-        LazyLogger.i("当前请求Url:" + url + "发送的数据:" + param);
+        LazyLogger.i("当前请求Url:" + url);
+        LazyLogger.i("发送的数据:" + param);
         return param.toString().substring(1);
     }
     
