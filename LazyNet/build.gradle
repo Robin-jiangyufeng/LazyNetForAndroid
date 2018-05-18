@@ -42,7 +42,7 @@ ext {
     siteUrl = 'https://github.com/Robin-jiangyufeng/LazyNetForAndroid'
     gitUrl = 'https://github.com/Robin-jiangyufeng/LazyNetForAndroid.git'
 
-    libraryVersion = '1.8.7'
+    libraryVersion = '1.8.8'
 
     developerId = 'jiangyufeng'
     developerName = 'jiangyufeng'
