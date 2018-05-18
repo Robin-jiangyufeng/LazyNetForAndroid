@@ -73,6 +73,11 @@ public class RequestParam
      * 重试次数
      */
     private int retryNumber = DEFAULT_RETRY_NUMBER;
+
+    /**
+     * 延迟加载时间(单位：毫秒)
+     */
+    private long delayTime;
     
     /**
      * 向服务端提交的请求头(标题属性和值)
@@ -386,7 +391,23 @@ public class RequestParam
 		this.retryNumber = retryNumber;
 	}
 
-	public ConcurrentHashMap<String, String> getSendHeaderMap()
+    /**
+     * 获取延迟加载时间(单位：毫秒)
+     * @return
+     */
+    public long getDelayTime() {
+        return delayTime;
+    }
+
+    /**
+     * 设置延迟加载时间(单位：毫秒)
+     * @param delayTime
+     */
+    public void setDelayTime(long delayTime) {
+        this.delayTime = delayTime;
+    }
+
+    public ConcurrentHashMap<String, String> getSendHeaderMap()
     {
         return sendHeaderMap;
     }
