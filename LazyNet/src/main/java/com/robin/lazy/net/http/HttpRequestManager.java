@@ -462,7 +462,7 @@ public class HttpRequestManager extends AsyncHttpClient {
      */
     protected void addContextRequest(RequestLifecycleContext requestContext,
                                      Integer messageId) {
-        if (requestContext == null) return;
+        if (requestContext == null||messageId == null) return;
         if (contextRequests != null) {
             if (contextRequests.containsKey(requestContext)) {
                 List<Integer> list = contextRequests.get(requestContext);
@@ -488,6 +488,7 @@ public class HttpRequestManager extends AsyncHttpClient {
      * @see [类、类#方法、类#成员]
      */
     private void removeContextRequest(Integer messageId) {
+        if(messageId==null)return;
         Iterator<Map.Entry<RequestLifecycleContext, List<Integer>>> it = contextRequests
                 .entrySet().iterator();
         while (it.hasNext()) {
@@ -525,7 +526,7 @@ public class HttpRequestManager extends AsyncHttpClient {
             List<Integer> list = contextRequests.get(requestContext);
             if (list != null) {
                 for (Integer messageId : list) {
-                    if (isExistTask(messageId)) {
+                    if (messageId!=null&&isExistTask(messageId)) {
                         cancelRequestNow(messageId, true);
                     }
                 }
