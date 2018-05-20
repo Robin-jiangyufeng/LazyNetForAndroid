@@ -202,6 +202,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
     @Override
     public void readProgressMessage(int messageId, long bytesRead, long bytesTotal)
     {
+        LazyLogger.i("下载的总字节数:" + bytesTotal + ";上传了" + bytesRead + "字节");
         if (downloadCallback != null)
         {
             downloadCallback.downloadProgress(messageId, bytesRead, bytesTotal);
