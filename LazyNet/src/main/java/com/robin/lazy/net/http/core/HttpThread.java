@@ -224,7 +224,7 @@ public class HttpThread implements Runnable {
      */
     private HttpURLConnection createHttpConnect(HttpRequestMethod httpMethod,
                                                 RequestParam request) {
-        int errorCode;
+        int responseCode;
         HttpURLConnection urlConnection = null;
         try {
             urlConnection = safeURLConnection(request.getUrl());
@@ -243,46 +243,76 @@ public class HttpThread implements Runnable {
                         request.getSendHeaderMap());
             }
             urlConnection.connect();
+            responseCode = urlConnection.getResponseCode();
+            if (responseCode != HttpError.RESPONSE_CODE_200) {
+                return errorCodeHandle(httpMethod,request,responseCode, urlConnection);
+            }
             return urlConnection;
         } catch (UnknownHostException e) {
-            errorCode = HttpError.DNS_PARSE_ERROR;
+            responseCode = HttpError.DNS_PARSE_ERROR;
             e.printStackTrace();
         } catch (UnknownServiceException e) {
-            errorCode = HttpError.UNKNOW_SERVICE_ERROR;
+            responseCode = HttpError.UNKNOW_SERVICE_ERROR;
             e.printStackTrace();
         } catch (MalformedURLException e) {
-            errorCode = HttpError.URL_ERROR;
+            responseCode = HttpError.URL_ERROR;
             e.printStackTrace();
         } catch (BindException e) {
-            errorCode = HttpError.BIND_ERROR;
+            responseCode = HttpError.BIND_ERROR;
             e.printStackTrace();
         } catch (ProtocolException e) {
-            errorCode = HttpError.PROTOCOL_EXCEPTION;
+            responseCode = HttpError.PROTOCOL_EXCEPTION;
             e.printStackTrace();
         } catch (ConnectException e) {
-            errorCode = HttpError.CONNECT_ERROR;
+            responseCode = HttpError.CONNECT_ERROR;
             e.printStackTrace();
         } catch (SocketTimeoutException e) {
-            errorCode = HttpError.CONNECT_TIME_OUT;
+            responseCode = HttpError.CONNECT_TIME_OUT;
             e.printStackTrace();
         } catch (SocketException e) {
-            errorCode = HttpError.CONNECT_ERROR;
+            responseCode = HttpError.CONNECT_ERROR;
             e.printStackTrace();
         } catch (SSLException e) {
-            errorCode = HttpError.SSL_EXCEPTION;
+            responseCode = HttpError.SSL_EXCEPTION;
             e.printStackTrace();
         } catch (IOException e) {
-            errorCode = HttpError.UNKNOW_HTTP_ERROR;
+            responseCode = HttpError.UNKNOW_HTTP_ERROR;
             e.printStackTrace();
         } catch (Exception e) {
-            errorCode = HttpError.UNKNOW_HTTP_ERROR;
+            responseCode = HttpError.UNKNOW_HTTP_ERROR;
             e.printStackTrace();
         }
         if (httpRequestHandler != null) {
-            httpRequestHandler.sendFailMessage(getMessageId(), errorCode,
+            httpRequestHandler.sendFailMessage(getMessageId(), responseCode,
                     null, null);
         }
         return null;
+    }
+
+    /**
+     * responseCode不等与200的处理
+     * @param httpMethod
+     * @param request
+     * @param responseCode
+     * @param urlConnection
+     * @return
+     */
+    private HttpURLConnection errorCodeHandle(HttpRequestMethod httpMethod,
+                                              RequestParam request,int responseCode, HttpURLConnection urlConnection) {
+        if (responseCode == HttpError.RESPONSE_CODE_302) {
+            String url=null;
+            if(urlConnection!=null){
+                url = urlConnection.getHeaderField("Location");
+                urlConnection.disconnect();
+                urlConnection=null;
+            }
+            if (httpRequestHandler != null) {
+                httpRequestHandler.resetRequestData();
+            }
+            request.setUrl(url);
+            return createHttpConnect(httpMethod,request);
+        }
+        return urlConnection;
     }
 
     /**

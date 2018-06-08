@@ -55,9 +55,9 @@ public class AppDownAndInstall implements DownLoadListening, DialogInterface.OnK
     public void downApp(String sDownPath) {
         if (this.mContext == null) return;
         LazyLogger.e("sDownPath=" + sDownPath);
-        String downUrl = "https://down.tf56.com/10/07/01/01/2017070301/pay_TransfarWallet_V3.0.0_00_2017070301.apk";
+        String downUrl = "http://www.chuanjs.com/attachFiles/webfile/pl_Web_Show_Materials/sl_smallloan_project/43522281354/20180524113410510.pdf";//;"https://down.tf56.com/10/07/01/01/2017070301/pay_TransfarWallet_V3.0.0_00_2017070301.apk";
         mDownloadManager.setDownPath(sDownPath, "down");
-        fileName = "transfarwallet_1.0.0"  + ".apk";
+        fileName = "transfarwallet_1.0.0"  + ".pdf";
         File file = new File(mDownloadManager.getDownPath(), fileName);
         try {
             if (file != null && file.exists()) {
