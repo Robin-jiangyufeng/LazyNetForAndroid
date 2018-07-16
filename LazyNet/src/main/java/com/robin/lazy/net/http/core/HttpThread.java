@@ -243,10 +243,10 @@ public class HttpThread implements Runnable {
                         request.getSendHeaderMap());
             }
             urlConnection.connect();
-            responseCode = urlConnection.getResponseCode();
-            if (responseCode != HttpError.RESPONSE_CODE_200) {
-                return errorCodeHandle(httpMethod,request,responseCode, urlConnection);
-            }
+//            responseCode = urlConnection.getResponseCode();
+//            if (responseCode != HttpError.RESPONSE_CODE_200) {
+//                return errorCodeHandle(httpMethod,request,responseCode, urlConnection);
+//            }
             return urlConnection;
         } catch (UnknownHostException e) {
             responseCode = HttpError.DNS_PARSE_ERROR;

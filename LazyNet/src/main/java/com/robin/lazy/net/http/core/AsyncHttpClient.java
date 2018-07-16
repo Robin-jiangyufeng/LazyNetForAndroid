@@ -137,7 +137,7 @@ public class AsyncHttpClient implements NetChangeObserver {
             param.setUrl(new StringBuffer(param.getUrl()).append("?").toString());
         }
         if (!param.isEmptyForData()) {
-            param.setUrl(new StringBuffer(param.getUrl()).append(param.getSendData()).toString());// 把要发送的数据拼接到url链接后面
+            param.setUrl(new StringBuffer(param.getUrl()).append(param.getRequestUrl()).toString());// 把要发送的数据拼接到url链接后面
         }
         param.cleanWithPsaram();// 清理掉数据，此数据是用于post下发送的，程序会自动检测,不清理会抛错
         return startSendRequest(HttpRequestMethod.HTTP_GET, param,
