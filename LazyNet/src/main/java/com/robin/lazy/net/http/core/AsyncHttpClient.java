@@ -33,6 +33,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.SSLSocketFactory;
+
 /**
  * 同步http网络连接客户端 （初始化后进行相关网络操作）
  *
@@ -86,7 +88,7 @@ public class AsyncHttpClient implements NetChangeObserver {
     /**
      * 安全套接字工程
      */
-    private MySSLSocketFactory sslSocketFactory;
+    private SSLSocketFactory sslSocketFactory;
 
     /**
      * 创建同步httpcliean客户端
@@ -114,9 +116,9 @@ public class AsyncHttpClient implements NetChangeObserver {
             requestMap = new ConcurrentHashMap<Integer, RequestHandle>();
         }
         loadDefaultProxy();
-        sslSocketFactory = (MySSLSocketFactory) MySSLSocketFactory
+        sslSocketFactory = MySSLSocketFactory
                 .getFixedSocketFactory();
-        sslSocketFactory.fixHttpsURLConnection();
+        ((MySSLSocketFactory)sslSocketFactory).fixHttpsURLConnection();
 
         LazyLogger.i("当前活动线程数量=" + Thread.activeCount());
     }
@@ -515,6 +517,14 @@ public class AsyncHttpClient implements NetChangeObserver {
             requestHandle.cancel();
             // requestHandle.clean();
         }
+    }
+
+    /**
+     * 设置SSL或者TLS协议的安全套接字
+     * @param sslSocketFactory
+     */
+    public void setSslSocketFactory(SSLSocketFactory sslSocketFactory) {
+        this.sslSocketFactory = sslSocketFactory;
     }
 
     /**

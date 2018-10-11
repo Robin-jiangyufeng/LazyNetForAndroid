@@ -101,7 +101,7 @@ public class MySSLSocketFactory extends SSLSocketFactory
      */
     public static KeyStore getKeystoreOfCA(InputStream cert)
     {
-        
+
         // Load CAs from an InputStream
         InputStream caInput = null;
         Certificate ca = null;
@@ -167,7 +167,7 @@ public class MySSLSocketFactory extends SSLSocketFactory
     }
     
     /**
-     * 返回一个有所有信任证书的 SSlSocketFactory
+     * 返回一个信任所有证书的 SSlSocketFactory
      *
      * @return SSLSocketFactory
      */
