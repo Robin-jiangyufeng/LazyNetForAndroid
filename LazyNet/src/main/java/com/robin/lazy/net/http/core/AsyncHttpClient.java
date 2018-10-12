@@ -28,8 +28,8 @@ import java.net.Proxy;
 import java.net.Proxy.Type;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -117,8 +117,8 @@ public class AsyncHttpClient implements NetChangeObserver {
         if (threadPool == null) {
             threadPool = new ThreadPoolExecutor(CORE_POOL_SIZE,
                     MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, TimeUnit.SECONDS,
-                    new ArrayBlockingQueue<Runnable>(DEQUE_SIZE),
-                    new ThreadPoolExecutor.CallerRunsPolicy());
+                    new LinkedBlockingQueue<Runnable>(queueSize),
+                    new ThreadPoolExecutor.DiscardOldestPolicy());
             allowCoreThreadTimeOut(true);
         }
         if (requestMap == null) {
