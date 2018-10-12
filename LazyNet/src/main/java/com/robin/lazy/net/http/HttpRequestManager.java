@@ -67,9 +67,19 @@ public class HttpRequestManager extends AsyncHttpClient {
 
     /**
      * 默认构造函数
+     * @param context
      */
     public HttpRequestManager(Context context) {
-        super();
+        this(4,context);
+    }
+
+    /**
+     * 默认构造函数
+     * @param queueSize 等待的线程队列大小
+     * @param context
+     */
+    public HttpRequestManager(int queueSize,Context context) {
+        super(queueSize);
         initHttpCache(context);
         contextRequests = new ConcurrentHashMap<RequestLifecycleContext, List<Integer>>();
         isVisibleDialog = true;
@@ -82,6 +92,9 @@ public class HttpRequestManager extends AsyncHttpClient {
      * @see [类、类#方法、类#成员]
      */
     private void initHttpCache(Context context) {
+        if(context==null){
+            throw new NullPointerException("context cannot be empty!");
+        }
         httpCacheLoaderManager = new HttpCacheLoaderManager();
         MemoryCache memoryCache = MemoryCacheUtils.createMemoryCache(
                 context, 0.1f,

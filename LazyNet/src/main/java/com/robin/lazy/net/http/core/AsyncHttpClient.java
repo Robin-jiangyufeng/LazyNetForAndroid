@@ -94,17 +94,26 @@ public class AsyncHttpClient implements NetChangeObserver {
      * 创建同步httpcliean客户端
      */
     public AsyncHttpClient() {
-        init();
+        this(DEQUE_SIZE);
+    }
+
+    /**
+     * 创建同步httpcliean客户端
+     *
+     * @param queueSize 等待的线程队列大小
+     */
+    public AsyncHttpClient(int queueSize) {
+        init(queueSize);
         lastNetType = NetworkStateReceiver.getNetType();
         NetworkStateReceiver.registerObserver(this);// 注册网络状态观察者
     }
 
     /**
      * 初始化
-     *
+     * @param queueSize 等待的线程队列大小
      * @see [类、类#方法、类#成员]
      */
-    private void init() {
+    private void init(int queueSize) {
         if (threadPool == null) {
             threadPool = new ThreadPoolExecutor(CORE_POOL_SIZE,
                     MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, TimeUnit.SECONDS,
@@ -536,7 +545,6 @@ public class AsyncHttpClient implements NetChangeObserver {
     public void setKeepAliveTime(int keepAliveTime) {
         if (threadPool != null) {
             threadPool.setKeepAliveTime(keepAliveTime, TimeUnit.SECONDS);
-
         }
     }
 
