@@ -48,7 +48,7 @@ import javax.net.ssl.X509TrustManager;
  * </p>
  * Warning! This omits SSL certificate validation on every device, use with caution
  */
-public class MySSLSocketFactory extends SSLSocketFactory
+public class DefaultSSLSocketFactory extends SSLSocketFactory
 {
     SSLContext sslContext = SSLContext.getInstance("TLS");
     
@@ -61,7 +61,7 @@ public class MySSLSocketFactory extends SSLSocketFactory
      * @throws KeyStoreException KeyStoreException
      * @throws UnrecoverableKeyException UnrecoverableKeyException
      */
-    public MySSLSocketFactory(KeyStore truststore)
+    public DefaultSSLSocketFactory(KeyStore truststore)
         throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException
     {
         
@@ -176,7 +176,7 @@ public class MySSLSocketFactory extends SSLSocketFactory
         SSLSocketFactory socketFactory;
         try
         {
-            socketFactory = new MySSLSocketFactory(getKeystore());
+            socketFactory = new DefaultSSLSocketFactory(getKeystore());
         }
         catch (Throwable t)
         {

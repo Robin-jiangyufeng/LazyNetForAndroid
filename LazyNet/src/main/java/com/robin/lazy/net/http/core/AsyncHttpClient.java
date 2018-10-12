@@ -125,9 +125,9 @@ public class AsyncHttpClient implements NetChangeObserver {
             requestMap = new ConcurrentHashMap<Integer, RequestHandle>();
         }
         loadDefaultProxy();
-        sslSocketFactory = MySSLSocketFactory
+        sslSocketFactory = DefaultSSLSocketFactory
                 .getFixedSocketFactory();
-        ((MySSLSocketFactory)sslSocketFactory).fixHttpsURLConnection();
+        ((DefaultSSLSocketFactory)sslSocketFactory).fixHttpsURLConnection();
 
         LazyLogger.i("当前活动线程数量=" + Thread.activeCount());
     }
