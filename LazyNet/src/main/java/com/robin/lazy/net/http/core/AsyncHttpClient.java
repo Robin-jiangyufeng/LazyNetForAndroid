@@ -47,18 +47,18 @@ public class AsyncHttpClient implements NetChangeObserver {
     /**
      * 线程队列大小(当池子大小等于corePoolSize，把请求放入workQueue中，池子里的空闲线程就去从workQueue中取任务并处理)
      */
-    private final static int DEQUE_SIZE = 1;
+    private final static int DEQUE_SIZE = 10;
 
     /**
      * 线程池中工作线程的最大数量(当workQueue放不下新入的任务时，新建线程入池，并处理请求，
      * 如果池子大小撑到了maximumPoolSize就用RejectedExecutionHandler来做拒绝处理)
      */
-    private final static int MAXIMUM_POOL_SIZE = 1;
+    private final static int MAXIMUM_POOL_SIZE = 4;
 
     /**
      * 线程池中工作线程的核心数量(当池子大小小于corePoolSize就新建线程，并处理请求)
      */
-    private final static int CORE_POOL_SIZE = 1;
+    private final static int CORE_POOL_SIZE = 2;
 
     /**
      * 线程池维护线程所允许的空闲时间 (以秒为单位)

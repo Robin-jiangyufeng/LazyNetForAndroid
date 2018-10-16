@@ -16,6 +16,7 @@ import com.robin.lazy.net.http.core.RequestParam;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class GetActivity extends AppCompatActivity implements RequestLifecycleContext,CacheTextResponseListener {
 
@@ -37,18 +38,20 @@ public class GetActivity extends AppCompatActivity implements RequestLifecycleCo
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestParam param=new RequestParam(101,editText.getText().toString());
-                param.setDelayTime(200);
-                param.addSendData("key", "03222bd3467ec2aa045aef63cd134a9e");
-                if(isUseCache){
-                    httpRequestManager.sendCacheHttpGetRequest(GetActivity.this,param,
-                            new DefaultLoadingView(getCurrContext()),
-                            GetActivity.this,
-                            HttpCacheLoadType.USE_CACHE_UPDATE_CACHE);
-                }else{
-                    httpRequestManager.sendHttpGetRequest(GetActivity.this,param,new DefaultLoadingView(getCurrContext()),GetActivity.this);
+                for(int i=0;i<100;i++){
+                    RequestParam param=new RequestParam(new Random().nextInt(),editText.getText().toString());
+                    param.setDelayTime(200);
+                    param.addSendData("key", "03222bd3467ec2aa045aef63cd134a9e");
+                    if(isUseCache){
+                        httpRequestManager.sendCacheHttpGetRequest(GetActivity.this,param,
+                                new DefaultLoadingView(getCurrContext()),
+                                GetActivity.this,
+                                HttpCacheLoadType.USE_CACHE_UPDATE_CACHE);
+                    }else{
+                        httpRequestManager.sendHttpGetRequest(GetActivity.this,param,new DefaultLoadingView(getCurrContext()),GetActivity.this);
+                    }
+                    lastTime=System.currentTimeMillis();
                 }
-                lastTime=System.currentTimeMillis();
             }
         });
     }
