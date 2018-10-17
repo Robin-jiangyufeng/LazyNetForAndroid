@@ -12,8 +12,8 @@
 package com.robin.lazy.net.http.upload;
 
 import com.robin.lazy.json.JSONUtil;
-import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.core.HttpError;
+import com.robin.lazy.net.http.log.NetLog;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
  * @since [产品/模块版本]
  */
 public class JSONUploadCallback<T extends Serializable, E extends Serializable> extends UploadCallback<T,E>{
+    private final static String LOG_TAG=JSONUploadCallback.class.getName();
     public final String DEFAULT_CHARSET = "UTF-8";
     public final String UTF8_BOM = "\uFEFF";
     /**
@@ -42,8 +43,8 @@ public class JSONUploadCallback<T extends Serializable, E extends Serializable> 
     protected void onSuccess(int messageId, byte[] responseData) {
         if (getUploadListener() != null) {
             String data = getResponseString(responseData, getResponseCharset());
-            LazyLogger.i("報文==" + messageId + " ;;请求成功返回的数据==");
-            LazyLogger.json(data);
+            NetLog.i(LOG_TAG,"報文==" + messageId + " ;;请求成功返回的数据==");
+            NetLog.json(LOG_TAG,data);
             T jsonObject;
             if (String.class.equals(getSuccessClass())) {
                 jsonObject = (T) data;
@@ -63,7 +64,7 @@ public class JSONUploadCallback<T extends Serializable, E extends Serializable> 
     protected void onFailure(int messageId, int statusCode, byte[] responseData) {
         if (getUploadListener() != null) {
             String data = getResponseString(responseData, getResponseCharset());
-            LazyLogger.e("報文==" + messageId + " ;;请求失败返回的数据==" + data + " ;;返回状态=="
+            NetLog.e(LOG_TAG,"報文==" + messageId + " ;;请求失败返回的数据==" + data + " ;;返回状态=="
                     + statusCode + ":" + HttpError.getMessageByStatusCode(statusCode));
             E jsonObject;
             if (String.class.equals(getFailClass())) {
@@ -90,7 +91,7 @@ public class JSONUploadCallback<T extends Serializable, E extends Serializable> 
                 toReturn = toReturn.substring(1);
             }
         } catch (UnsupportedEncodingException e) {
-            LazyLogger.e("Encoding response into string failed", e);
+            NetLog.e(LOG_TAG,"Encoding response into string failed", e);
         }
         return toReturn;
     }

@@ -1,7 +1,7 @@
 package com.robin.lazy.net.http.core;
 
-import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.core.callback.DownloadCallbackInterface;
+import com.robin.lazy.net.http.log.NetLog;
 
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
@@ -28,7 +28,7 @@ import java.util.zip.GZIPInputStream;
  */
 public class DownloadHttpResponseHandler extends HttpResponseHandler
 {
-    
+    private final static String LOG_TAG=DownloadHttpResponseHandler.class.getName();
     /**
      * 文件缓冲器(其中目标文件是要保存的文件)
      */
@@ -73,7 +73,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
         {
             downloadCallback.downloadStart(messageId);
         }
-        LazyLogger.v("下载现在开始................");
+        NetLog.v(LOG_TAG,"下载现在开始................");
     }
     
     @Override
@@ -188,7 +188,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
         else
         {
             sendFailMessage(request.getMessageId(), HttpError.UNKNOW_HTTP_ERROR, null, null);
-            LazyLogger.e("urlConnection为空,或者request为空");
+            NetLog.e(LOG_TAG,"urlConnection为空,或者request为空");
         }
         return false;
     }
@@ -202,7 +202,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
     @Override
     public void readProgressMessage(int messageId, long bytesRead, long bytesTotal)
     {
-        LazyLogger.i("下载的总字节数:" + bytesTotal + ";下载了" + bytesRead + "字节");
+        NetLog.i(LOG_TAG,"下载的总字节数:" + bytesTotal + ";下载了" + bytesRead + "字节");
         if (downloadCallback != null)
         {
             downloadCallback.downloadProgress(messageId, bytesRead, bytesTotal);
@@ -232,7 +232,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
     @Override
     public void sendSuccessMessage(int messageId, Map<String,List<String>> headers,byte[] responseByteData)
     {
-        LazyLogger.v("下载成功................");
+        NetLog.v(LOG_TAG,"下载成功................");
         if (downloadCallback != null)
         {
             downloadCallback.downloadSuccess(messageId);
@@ -243,7 +243,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
     @Override
     public void sendFailMessage(int messageId, int statusCode, Map<String,List<String>> headers, byte[] responseErrorByteData)
     {
-        LazyLogger.e("下载失败:下载文件報文" + messageId + ";返回状态" + statusCode + HttpError.getMessageByStatusCode(statusCode));
+        NetLog.e(LOG_TAG,"下载失败:下载文件報文" + messageId + ";返回状态" + statusCode + HttpError.getMessageByStatusCode(statusCode));
         if (downloadCallback != null)
         {
             downloadCallback.downloadFail(messageId, statusCode);
@@ -377,7 +377,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler
         catch (FileNotFoundException e1)
         {
             e1.printStackTrace();
-            LazyLogger.e("文件没有创建,找不到这个文件", e1);
+            NetLog.e(LOG_TAG,"文件没有创建,找不到这个文件", e1);
         }
         catch (SocketException e)
         {

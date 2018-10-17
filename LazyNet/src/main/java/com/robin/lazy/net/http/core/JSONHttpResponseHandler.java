@@ -1,8 +1,8 @@
 package com.robin.lazy.net.http.core;
 
 import com.robin.lazy.json.JSONUtil;
-import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.core.callback.JSONResponseCallback;
+import com.robin.lazy.net.http.log.NetLog;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since [产品/模块版本]
  */
 public class JSONHttpResponseHandler<T extends Serializable, E extends Serializable> extends HttpResponseHandler {
+    private final static String LOG_TAG=JSONHttpResponseHandler.class.getName();
     /**
      * 服务器反馈监听
      */
@@ -113,12 +114,12 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
     @Override
     public void sendSuccessMessage(int messageId, Map<String, List<String>> headers, byte[] responseByteData) {
         String data = getResponseString(responseByteData, getResponseCharset());
-        LazyLogger.d("请求成功,请求id==" + messageId );
-        LazyLogger.d("返回的response==");
+        NetLog.d(LOG_TAG,"请求成功,请求id==" + messageId );
+        NetLog.d(LOG_TAG,"返回的response==");
         if(data!=null&&data.length()>0&&(data.startsWith("{")||data.startsWith("["))){
-            LazyLogger.json(data);
+            NetLog.json(LOG_TAG,data);
         }else{
-            LazyLogger.d(data);
+            NetLog.d(LOG_TAG,data);
         }
         if (responseCallback != null) {
             T jsonObject;
@@ -146,7 +147,7 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
                 .append("请求失败的原因==").append(HttpError.getMessageByStatusCode(statusCode))
                 .append("\n")
                 .append("请求失败数据==").append(data);
-        LazyLogger.e(failLog.toString());
+        NetLog.e(LOG_TAG,failLog.toString());
         if (responseCallback != null) {
             E jsonObject;
             if (String.class.equals(failClass)) {
@@ -174,7 +175,7 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
                 toReturn = toReturn.substring(1);
             }
         } catch (UnsupportedEncodingException e) {
-            LazyLogger.e("Encoding response into string failed", e);
+            NetLog.e(LOG_TAG,"Encoding response into string failed", e);
         }
         return toReturn;
     }

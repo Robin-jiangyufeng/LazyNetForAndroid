@@ -1,10 +1,10 @@
 package com.robin.lazy.net.http.cache;
 
 import com.robin.lazy.json.JSONUtil;
-import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.cache.callback.CacheJSONResponseCallback;
 import com.robin.lazy.net.http.core.JSONHttpResponseHandler;
 import com.robin.lazy.net.http.core.RequestParam;
+import com.robin.lazy.net.http.log.NetLog;
 
 import java.io.Serializable;
 import java.net.HttpURLConnection;
@@ -24,6 +24,7 @@ public class CacheJSONHttpResponseHandler<T extends Serializable, E extends Seri
         JSONHttpResponseHandler<T, E>
         implements
         CacheHttpResponeHandlerBase {
+    private final static String LOG_TAG=CacheJSONHttpResponseHandler.class.getName();
     /**请求标识*/
     private String requestUnique;
     /**
@@ -73,9 +74,9 @@ public class CacheJSONHttpResponseHandler<T extends Serializable, E extends Seri
     @Override
     public void loadCache(int messageId, Map<String, List<String>> headers, byte[] data) {
         String cacheData = getResponseString(data, getResponseCharset());
-        LazyLogger.d("获取请求的缓存成功,请求id==" + messageId );
-        LazyLogger.d("缓存的response==");
-        LazyLogger.json(cacheData);
+        NetLog.d(LOG_TAG,"获取请求的缓存成功,请求id==" + messageId );
+        NetLog.d(LOG_TAG,"缓存的response==");
+        NetLog.json(LOG_TAG,cacheData);
         T jsonObject;
         if (String.class.equals(getSuccessClass())) {
             jsonObject = (T) cacheData;

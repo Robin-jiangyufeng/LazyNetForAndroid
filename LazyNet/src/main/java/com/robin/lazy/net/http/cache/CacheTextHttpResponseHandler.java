@@ -1,9 +1,9 @@
 package com.robin.lazy.net.http.cache;
 
-import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.cache.callback.CacheTextResponseCallback;
 import com.robin.lazy.net.http.core.RequestParam;
 import com.robin.lazy.net.http.core.TextHttpResponseHandler;
+import com.robin.lazy.net.http.log.NetLog;
 
 import java.net.HttpURLConnection;
 import java.util.List;
@@ -20,6 +20,7 @@ import java.util.Map;
 public class CacheTextHttpResponseHandler extends TextHttpResponseHandler
         implements
         CacheHttpResponeHandlerBase {
+    private final static String LOG_TAG=CacheTextHttpResponseHandler.class.getName();
     private CacheTextResponseCallback cacheTextResponseCallback;
     /**请求标识*/
     private String requestUnique;
@@ -64,9 +65,9 @@ public class CacheTextHttpResponseHandler extends TextHttpResponseHandler
     @Override
     public void loadCache(int messageId, Map<String, List<String>> headers, byte[] data) {
         String cacheData = getResponseString(data, getResponseCharset());
-        LazyLogger.d("获取请求的缓存成功,请求id==" + messageId );
-        LazyLogger.d("缓存的response==");
-        LazyLogger.d(cacheData);
+        NetLog.d(LOG_TAG,"获取请求的缓存成功,请求id==" + messageId );
+        NetLog.d(LOG_TAG,"缓存的response==");
+        NetLog.d(LOG_TAG,cacheData);
         if (cacheTextResponseCallback != null)
         {
             cacheTextResponseCallback.onLoadCache(messageId, headers, cacheData);

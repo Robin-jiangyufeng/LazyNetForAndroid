@@ -1,7 +1,7 @@
 package com.robin.lazy.net.http.core;
 
 import com.robin.lazy.json.JSONUtil;
-import com.robin.lazy.logger.LazyLogger;
+import com.robin.lazy.net.http.log.NetLog;
 import com.robin.lazy.util.StringUtils;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ import javax.net.ssl.SSLSocketFactory;
  * @author Administrator 江钰锋
  */
 public class HttpThread implements Runnable {
-
+    private final static String LOG_TAG=HttpThread.class.getName();
     /**
      * http请求客户端
      */
@@ -120,7 +120,7 @@ public class HttpThread implements Runnable {
             onPostProcessRequest();
             onAfterProcessRequest();
         } catch (Exception e) {
-            LazyLogger.e(e, "http请求错误");
+            NetLog.e(LOG_TAG, "http请求错误",e);
             if (httpRequestHandler != null) {
                 httpRequestHandler.sendFailMessage(getMessageId(),
                         HttpError.UNKNOW_HTTP_ERROR, null, null);
@@ -139,12 +139,12 @@ public class HttpThread implements Runnable {
      */
     private void logout() {
         if (request == null) return;
-        LazyLogger.d("请求id==" + request.getMessageId());
-        LazyLogger.d("请求url==" + request.getUrl());
-        LazyLogger.d("请求headers==");
-        LazyLogger.json(request.getSendHeaderMap() == null ? "" : JSONUtil.toJSON(request.getSendHeaderMap()));
-        LazyLogger.d("请求params==");
-        LazyLogger.json(request.getUrlWithPsaram() == null ? "" : JSONUtil.toJSON(request.getUrlWithPsaram()));
+        NetLog.d(LOG_TAG,"请求id==" + request.getMessageId());
+        NetLog.d(LOG_TAG,"请求url==" + request.getUrl());
+        NetLog.d(LOG_TAG,"请求headers==");
+        NetLog.json(LOG_TAG,request.getSendHeaderMap() == null ? "" : JSONUtil.toJSON(request.getSendHeaderMap()));
+        NetLog.d(LOG_TAG,"请求params==");
+        NetLog.json(LOG_TAG,request.getUrlWithPsaram() == null ? "" : JSONUtil.toJSON(request.getUrlWithPsaram()));
     }
 
     /**
@@ -159,7 +159,7 @@ public class HttpThread implements Runnable {
                 Thread.sleep(request.getDelayTime());
             }
         } catch (InterruptedException e) {
-            LazyLogger.e(e, "设置延迟加载失败");
+            NetLog.e(LOG_TAG, "设置延迟加载失败",e);
         }
         makeRequestWithRetries();
     }
@@ -328,7 +328,7 @@ public class HttpThread implements Runnable {
     private HttpURLConnection safeURLConnection(String urlSt)
             throws MalformedURLException, IOException {
         if (StringUtils.isHttpsUrl(urlSt)) {
-            LazyLogger.i("安全连接===" + urlSt);
+            NetLog.i(LOG_TAG,"安全连接===" + urlSt);
             HttpsURLConnection urlConnection = (HttpsURLConnection) getProxyURLConnection(urlSt);
             if (sslSocketFactory != null) {
                 urlConnection.setSSLSocketFactory(sslSocketFactory);

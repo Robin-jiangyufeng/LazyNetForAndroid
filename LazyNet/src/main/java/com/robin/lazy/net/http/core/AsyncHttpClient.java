@@ -15,10 +15,10 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.core.callback.DownloadCallbackInterface;
 import com.robin.lazy.net.http.core.callback.ResponseCallbackInterface;
 import com.robin.lazy.net.http.core.callback.UploadCallbackInterface;
+import com.robin.lazy.net.http.log.NetLog;
 import com.robin.lazy.net.state.NetChangeObserver;
 import com.robin.lazy.net.state.NetWorkUtil;
 import com.robin.lazy.net.state.NetworkStateReceiver;
@@ -44,6 +44,9 @@ import javax.net.ssl.SSLSocketFactory;
  * @since [产品/模块版本]
  */
 public class AsyncHttpClient implements NetChangeObserver {
+
+    private final static String LOG_TAG=AsyncHttpClient.class.getName();
+
     /**
      * 线程队列大小(当池子大小等于corePoolSize，把请求放入workQueue中，池子里的空闲线程就去从workQueue中取任务并处理)
      */
@@ -129,7 +132,7 @@ public class AsyncHttpClient implements NetChangeObserver {
                 .getFixedSocketFactory();
         ((DefaultSSLSocketFactory)sslSocketFactory).fixHttpsURLConnection();
 
-        LazyLogger.i("当前活动线程数量=" + Thread.activeCount());
+        NetLog.i(LOG_TAG,"当前活动线程数量=" + Thread.activeCount());
     }
 
     /**
@@ -233,10 +236,10 @@ public class AsyncHttpClient implements NetChangeObserver {
                     httpRequestHandler.sendFailMessage(request.getMessageId(), HttpError.REQUEST_EXIST, null, null);
                 }
             }
-            LazyLogger.i("当前任务数量requestMap.size=" + requestMap.size());
-            LazyLogger.v("threadPool.getActiveCount()="
+            NetLog.i(LOG_TAG,"当前任务数量requestMap.size=" + requestMap.size());
+            NetLog.v(LOG_TAG,"threadPool.getActiveCount()="
                     + threadPool.getActiveCount());
-            LazyLogger.e("当前活动线程数量=" + Thread.activeCount());
+            NetLog.e(LOG_TAG,"当前活动线程数量=" + Thread.activeCount());
         }
         return isSuccess;
     }
@@ -294,7 +297,7 @@ public class AsyncHttpClient implements NetChangeObserver {
                 try {
                     setProxy(getDefaultProxy());
                 } catch (Exception e) {
-                    LazyLogger.e(e,"加载默认的代理配置错误");
+                    NetLog.e(LOG_TAG,"加载默认的代理配置错误",e);
                 }
             }
         }).start();
@@ -338,10 +341,10 @@ public class AsyncHttpClient implements NetChangeObserver {
             if (task != null && task.isFinished()) {
                 task.clean();
                 it.remove();
-                LazyLogger.i("删除一个已完成的任务" + requestMap.size());
+                NetLog.i(LOG_TAG,"删除一个已完成的任务" + requestMap.size());
             }
         }
-        LazyLogger.i("requestMap.size=" + requestMap.size());
+        NetLog.i(LOG_TAG,"requestMap.size=" + requestMap.size());
     }
 
     /**
@@ -422,7 +425,7 @@ public class AsyncHttpClient implements NetChangeObserver {
         RequestHandle requestHandle = getRequestHandle(messageId);
         if (requestHandle != null) {
             boolean isSuccess = requestHandle.resetRequest();
-            LazyLogger.i("重置请求是否成功isSuccess=" + isSuccess);
+            NetLog.i(LOG_TAG,"重置请求是否成功isSuccess=" + isSuccess);
         }
     }
 

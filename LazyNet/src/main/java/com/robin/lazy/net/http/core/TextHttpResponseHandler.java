@@ -1,7 +1,7 @@
 package com.robin.lazy.net.http.core;
 
-import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.core.callback.TextResponseCallback;
+import com.robin.lazy.net.http.log.NetLog;
 
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -20,6 +20,7 @@ import static android.R.attr.data;
  * @since [产品/模块版本]
  */
 public class TextHttpResponseHandler extends HttpResponseHandler {
+    private final static String LOG_TAG=TextHttpResponseHandler.class.getName();
     /**
      * 服务器反馈监听
      */
@@ -60,9 +61,9 @@ public class TextHttpResponseHandler extends HttpResponseHandler {
     @Override
     public void sendSuccessMessage(int messageId, Map<String, List<String>> headers, byte[] responseByteData) {
         String data = getResponseString(responseByteData, getResponseCharset());
-        LazyLogger.d("请求成功,请求id==" + messageId );
-        LazyLogger.d("返回的response==");
-        LazyLogger.d(data);
+        NetLog.d(LOG_TAG,"请求成功,请求id==" + messageId );
+        NetLog.d(LOG_TAG,"返回的response==");
+        NetLog.d(LOG_TAG,data);
         if (responseCallback != null) {
             responseCallback.sendSuccessMessage(messageId, headers, data);
         }
@@ -72,10 +73,10 @@ public class TextHttpResponseHandler extends HttpResponseHandler {
     @Override
     public void sendFailMessage(int messageId, int statusCode, Map<String, List<String>> headers, byte[] responseErrorByteData) {
         String errorData = getResponseString(responseErrorByteData, getResponseCharset());
-        LazyLogger.e("请求失败,请求id==" + messageId );
-        LazyLogger.e("请求返回的statusCode==" + statusCode );
-        LazyLogger.e("请求失败的原因==" + HttpError.getMessageByStatusCode(statusCode) );
-        LazyLogger.e("请求失败数据=="+data);
+        NetLog.e(LOG_TAG,"请求失败,请求id==" + messageId );
+        NetLog.e(LOG_TAG,"请求返回的statusCode==" + statusCode );
+        NetLog.e(LOG_TAG,"请求失败的原因==" + HttpError.getMessageByStatusCode(statusCode) );
+        NetLog.e(LOG_TAG,"请求失败数据=="+data);
         if (responseCallback != null) {
             responseCallback.sendFailMessage(messageId, statusCode, headers, errorData);
         }

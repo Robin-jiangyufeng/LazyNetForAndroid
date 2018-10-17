@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 
-import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.core.AsyncHttpClient;
 import com.robin.lazy.net.http.core.FileBuffer;
 import com.robin.lazy.net.http.core.RequestParam;
+import com.robin.lazy.net.http.log.NetLog;
 import com.robin.lazy.util.StringUtils;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since [产品/模块版本]
  */
 public class DownloadManager extends AsyncHttpClient {
+    private final static String LOG_TAG=DownloadManager.class.getName();
     /**
      * 最大任务队列数
      */
@@ -163,7 +164,7 @@ public class DownloadManager extends AsyncHttpClient {
      */
     private void doDownload(RequestParam param, String fileName, DownLoadListening listener) {
         if (getTaskCount() >= MAX_HANDLER_COUNT) {
-            LazyLogger.e("任务列表已满,不能添加下载请求");
+            NetLog.e(LOG_TAG,"任务列表已满,不能添加下载请求");
         } else {
             if (isExistTask(param.getMessageId())) {
                 StatefulDownloadHttpResponseHandler dhr =
@@ -181,7 +182,7 @@ public class DownloadManager extends AsyncHttpClient {
                                 .build());
                 doGetDownloadFile(param, new FileBuffer(sdcardPath, fileName), new StatefulDownloadCallback(listener, this));
             } else {
-                LazyLogger.e("下载地址是空的");
+                NetLog.e(LOG_TAG,"下载地址是空的");
             }
         }
     }
@@ -198,7 +199,7 @@ public class DownloadManager extends AsyncHttpClient {
             getDownloadingDate(messageId).setDownloadState(DownloadState.DOWNLOAD_PAUSE);
             super.cancelRequest(messageId);
         } else {
-            LazyLogger.e("暂停下载失败,因为本下载不是下载中状态");
+            NetLog.e(LOG_TAG,"暂停下载失败,因为本下载不是下载中状态");
         }
     }
 
@@ -227,7 +228,7 @@ public class DownloadManager extends AsyncHttpClient {
             RequestParam param = new RequestParam(dData.getMessageId(), dData.getUrl());
             doGetDownloadFile(param, new FileBuffer(dData.getSavePath(), dData.getFileName()), new StatefulDownloadCallback(listener, this));
         } else {
-            LazyLogger.e("继续下载失败,因为本下载不是暂停状态");
+            NetLog.e(LOG_TAG,"继续下载失败,因为本下载不是暂停状态");
         }
     }
 
@@ -255,7 +256,7 @@ public class DownloadManager extends AsyncHttpClient {
             super.cancelRequestNow(messageId, true);
             getDownloadingDataList().remove(messageId);
         } else {
-            LazyLogger.e("取消下载失败,此下载项不存在");
+            NetLog.e(LOG_TAG,"取消下载失败,此下载项不存在");
         }
     }
 

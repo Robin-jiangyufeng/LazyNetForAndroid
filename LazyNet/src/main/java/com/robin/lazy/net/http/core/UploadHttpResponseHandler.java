@@ -1,7 +1,7 @@
 package com.robin.lazy.net.http.core;
 
-import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.core.callback.UploadCallbackInterface;
+import com.robin.lazy.net.http.log.NetLog;
 import com.robin.lazy.util.StringUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class UploadHttpResponseHandler extends HttpResponseHandler
 {
+    private final static String LOG_TAG=UploadHttpResponseHandler.class.getName();
     /**
      * 边界标识 随机生成
      */
@@ -228,7 +229,7 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
     public void sendProgressMessage(int messageId, long bytesWritten, long bytesTotal)
     {
         writtenSize += bytesWritten;
-        LazyLogger.i("上传的总字节数:" + bytesTotal + ";上传了" + writtenSize + "字节");
+        NetLog.i(LOG_TAG,"上传的总字节数:" + bytesTotal + ";上传了" + writtenSize + "字节");
         if (uploadCallback != null)
         {
             uploadCallback.uploadProgress(messageId, writtenSize, bytesTotal);
@@ -263,7 +264,7 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
     @Override
     public void sendFailMessage(int messageId, int statusCode, Map<String,List<String>> headers, byte[] responseErrorByteData)
     {
-    	LazyLogger.e("上传失败:報文" + messageId + "返回状态" + statusCode + HttpError.getMessageByStatusCode(statusCode));
+    	NetLog.e(LOG_TAG,"上传失败:報文" + messageId + "返回状态" + statusCode + HttpError.getMessageByStatusCode(statusCode));
         if (uploadCallback != null)
         {
             uploadCallback.uploadFail(messageId, statusCode, responseErrorByteData);
@@ -391,7 +392,7 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
             if (!request.isEmptyForData())
             {
                 tempOut.write(getTextData(request.getUrlWithPsaram()));// 要上传的文本临时自己流
-                LazyLogger.i("上传的文件的键" + request.getSendData());
+                NetLog.i(LOG_TAG,"上传的文件的键" + request.getSendData());
             }
             setFileParts(request.getFileParams());
             if (fileParts != null && !fileParts.isEmpty())
@@ -471,7 +472,7 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
             {
                 if (isCancelRequest())
                 {
-                    LazyLogger.i("用户取消了上传" + "下载id：" + messageId);
+                    NetLog.i(LOG_TAG,"用户取消了上传" + "下载id：" + messageId);
                     state = HttpError.USER_CANCEL;
                     break;
                 }
@@ -615,7 +616,7 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
                 {
                     if (isCancelRequest())
                     {
-                        LazyLogger.i("用户取消了上传" + "下载id：" + messageId);
+                        NetLog.i(LOG_TAG,"用户取消了上传" + "下载id：" + messageId);
                         break;
                     }
                     out.write(tmp, 0, l);
@@ -650,7 +651,7 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
             }
             catch (IOException e)
             {
-                LazyLogger.w("Cannot close input stream", e);
+                NetLog.w(LOG_TAG,"Cannot close input stream", e);
             }
             return state;
         }

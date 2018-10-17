@@ -17,7 +17,7 @@ import com.robin.lazy.cache.disk.read.SerializableReadFromDisk;
 import com.robin.lazy.cache.disk.write.SerializableWriteInDisk;
 import com.robin.lazy.cache.entity.CacheGetEntity;
 import com.robin.lazy.cache.entity.CachePutEntity;
-import com.robin.lazy.logger.LazyLogger;
+import com.robin.lazy.net.http.log.NetLog;
 
 /**
  * http缓存加载管理者
@@ -28,7 +28,7 @@ import com.robin.lazy.logger.LazyLogger;
  * @since [产品/模块版本]
  */
 public class HttpCacheLoaderManager {
-
+	private final static String LOG_TAG=HttpCacheLoaderManager.class.getName();
 	private CacheGetEntity<CacheResponseEntity> cacheGetEntity;
 
 	private CachePutEntity<CacheResponseEntity> cachePutEntity;
@@ -77,8 +77,8 @@ public class HttpCacheLoaderManager {
 			long maxAge) {
 		if (cacheTask == null || cachePutEntity == null
 				|| cacheResponse == null) {
-			LazyLogger.e(new NullPointerException(),
-					"cacheTask or cachePutEntity or cacheResponse is null");
+			NetLog.e(LOG_TAG,
+					"cacheTask or cachePutEntity or cacheResponse is null",new NullPointerException());
 			return false;
 		}
 		if (maxAge > 0) {
@@ -97,8 +97,8 @@ public class HttpCacheLoaderManager {
 	 */
 	public CacheResponseEntity query(String key) {
 		if (cacheTask == null || cacheGetEntity == null) {
-			LazyLogger.e(new NullPointerException(),
-					"cacheTask or cacheGetEntity is null");
+			NetLog.e(LOG_TAG,
+					"cacheTask or cacheGetEntity is null",new NullPointerException());
 			return null;
 		}
 		return cacheTask.query(key, cacheGetEntity);
@@ -113,7 +113,7 @@ public class HttpCacheLoaderManager {
 	 */
 	public boolean delete(String key) {
 		if (cacheTask == null) {
-			LazyLogger.e(new NullPointerException(), "diskCache is null");
+			NetLog.e(LOG_TAG, "diskCache is null",new NullPointerException());
 			return false;
 		}
 		return cacheTask.delete(key);

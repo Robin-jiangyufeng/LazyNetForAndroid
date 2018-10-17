@@ -21,7 +21,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 
-import com.robin.lazy.logger.LazyLogger;
+import com.robin.lazy.net.http.log.NetLog;
 
 import java.util.ArrayList;
 
@@ -46,6 +46,8 @@ import java.util.ArrayList;
  * @since [产品/模块版本]
  */
 public class NetworkStateReceiver extends BroadcastReceiver {
+	private final static String LOG_TAG=NetworkStateReceiver.class.getName();
+	
 	private static ArrayList<NetChangeObserver> netChangeObserverArrayList = new ArrayList<NetChangeObserver>();
 
 	public final static String BUTLER_ANDROID_NET_CHANGE_ACTION = "robin.android.net.conn.CONNECTIVITY_CHANGE";
@@ -86,11 +88,11 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 			if (!NetWorkUtil.isNetworkAvailable(context)) {
 				isNetwork = false;
 				netType = NetWorkUtil.NetType.NOT;
-				LazyLogger.i("没有网络连接.");
+				NetLog.i(LOG_TAG,"没有网络连接.");
 			} else {
 				isNetwork = true;
 				netType = NetWorkUtil.getAPNType(context);
-				LazyLogger.i("网络连接成功.");
+				NetLog.i(LOG_TAG,"网络连接成功.");
 			}
 			notifyObserver();
 		}

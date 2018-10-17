@@ -19,10 +19,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.KeyEvent;
 
-import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.core.HttpError;
 import com.robin.lazy.net.http.download.DownLoadListening;
 import com.robin.lazy.net.http.download.DownloadManager;
+import com.robin.lazy.net.http.log.NetLog;
 
 import java.io.File;
 
@@ -36,6 +36,7 @@ import java.io.File;
  * @since [产品/模块版本]
  */
 public class AppDownAndInstall implements DownLoadListening, DialogInterface.OnKeyListener {
+    private final static String LOG_TAG=AppDownAndInstall.class.getName();
     /**
      * 下载id
      */
@@ -54,7 +55,7 @@ public class AppDownAndInstall implements DownLoadListening, DialogInterface.OnK
 
     public void downApp(String sDownPath) {
         if (this.mContext == null) return;
-        LazyLogger.e("sDownPath=" + sDownPath);
+        NetLog.e(LOG_TAG,"sDownPath=" + sDownPath);
         String downUrl = "http://www.chuanjs.com/attachFiles/webfile/pl_Web_Show_Materials/sl_smallloan_project/43522281354/20180524113410510.pdf";//;"https://down.tf56.com/10/07/01/01/2017070301/pay_TransfarWallet_V3.0.0_00_2017070301.apk";
         mDownloadManager.setDownPath(sDownPath, "down");
         fileName = "transfarwallet_1.0.0"  + ".pdf";
@@ -175,7 +176,7 @@ public class AppDownAndInstall implements DownLoadListening, DialogInterface.OnK
      * @param context
      */
     private static void installApk(boolean bMustUpdate, Context context, String fileName) {
-        LazyLogger.e(DownloadManager.getInstance().getDownPath());
+        NetLog.e(LOG_TAG,DownloadManager.getInstance().getDownPath());
         File file = new File(DownloadManager.getInstance().getDownPath(), fileName);
         Intent intent = new Intent();// 执行动作
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

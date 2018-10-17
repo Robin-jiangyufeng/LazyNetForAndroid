@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
-import com.robin.lazy.logger.LazyLogger;
 import com.robin.lazy.net.http.core.HttpError;
+import com.robin.lazy.net.http.log.NetLog;
 
 /**
  * 下载接收者
@@ -19,6 +19,7 @@ import com.robin.lazy.net.http.core.HttpError;
  */
 public class DownloadReceiver extends BroadcastReceiver
 {
+    private final static String LOG_TAG=DownloadReceiver.class.getName();
     /**
      * 下载action
      */
@@ -248,7 +249,7 @@ public class DownloadReceiver extends BroadcastReceiver
             }
             catch (Exception e)
             {
-                LazyLogger.e(e.getMessage());
+                NetLog.e(LOG_TAG,e.getMessage(),e);
             }
         }
         
