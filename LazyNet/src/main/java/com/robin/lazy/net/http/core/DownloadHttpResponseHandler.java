@@ -28,7 +28,7 @@ import java.util.zip.GZIPInputStream;
  */
 public class DownloadHttpResponseHandler extends HttpResponseHandler
 {
-    private final static String LOG_TAG=DownloadHttpResponseHandler.class.getName();
+    private final static String LOG_TAG=DownloadHttpResponseHandler.class.getSimpleName();
     /**
      * 文件缓冲器(其中目标文件是要保存的文件)
      */

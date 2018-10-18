@@ -20,7 +20,7 @@ import java.util.Map;
 public class CacheTextHttpResponseHandler extends TextHttpResponseHandler
         implements
         CacheHttpResponeHandlerBase {
-    private final static String LOG_TAG=CacheTextHttpResponseHandler.class.getName();
+    private final static String LOG_TAG=CacheTextHttpResponseHandler.class.getSimpleName();
     private CacheTextResponseCallback cacheTextResponseCallback;
     /**请求标识*/
     private String requestUnique;

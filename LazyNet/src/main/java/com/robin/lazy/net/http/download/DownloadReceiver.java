@@ -19,7 +19,7 @@ import com.robin.lazy.net.http.log.NetLog;
  */
 public class DownloadReceiver extends BroadcastReceiver
 {
-    private final static String LOG_TAG=DownloadReceiver.class.getName();
+    private final static String LOG_TAG=DownloadReceiver.class.getSimpleName();
     /**
      * 下载action
      */

@@ -36,7 +36,7 @@ import java.io.File;
  * @since [产品/模块版本]
  */
 public class AppDownAndInstall implements DownLoadListening, DialogInterface.OnKeyListener {
-    private final static String LOG_TAG=AppDownAndInstall.class.getName();
+    private final static String LOG_TAG=AppDownAndInstall.class.getSimpleName();
     /**
      * 下载id
      */

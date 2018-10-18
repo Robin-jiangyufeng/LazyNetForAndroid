@@ -28,7 +28,7 @@ import com.robin.lazy.net.http.log.NetLog;
  * @since [产品/模块版本]
  */
 public class HttpCacheLoaderManager {
-	private final static String LOG_TAG=HttpCacheLoaderManager.class.getName();
+	private final static String LOG_TAG=HttpCacheLoaderManager.class.getSimpleName();
 	private CacheGetEntity<CacheResponseEntity> cacheGetEntity;
 
 	private CachePutEntity<CacheResponseEntity> cachePutEntity;

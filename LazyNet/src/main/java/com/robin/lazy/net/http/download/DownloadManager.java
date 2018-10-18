@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since [产品/模块版本]
  */
 public class DownloadManager extends AsyncHttpClient {
-    private final static String LOG_TAG=DownloadManager.class.getName();
+    private final static String LOG_TAG=DownloadManager.class.getSimpleName();
     /**
      * 最大任务队列数
      */

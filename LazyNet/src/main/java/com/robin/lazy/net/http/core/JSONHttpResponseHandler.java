@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since [产品/模块版本]
  */
 public class JSONHttpResponseHandler<T extends Serializable, E extends Serializable> extends HttpResponseHandler {
-    private final static String LOG_TAG=JSONHttpResponseHandler.class.getName();
+    private final static String LOG_TAG=JSONHttpResponseHandler.class.getSimpleName();
     /**
      * 服务器反馈监听
      */

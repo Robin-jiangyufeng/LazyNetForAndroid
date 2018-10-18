@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class UploadHttpResponseHandler extends HttpResponseHandler
 {
-    private final static String LOG_TAG=UploadHttpResponseHandler.class.getName();
+    private final static String LOG_TAG=UploadHttpResponseHandler.class.getSimpleName();
     /**
      * 边界标识 随机生成
      */

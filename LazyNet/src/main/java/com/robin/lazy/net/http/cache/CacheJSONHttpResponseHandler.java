@@ -24,7 +24,7 @@ public class CacheJSONHttpResponseHandler<T extends Serializable, E extends Seri
         JSONHttpResponseHandler<T, E>
         implements
         CacheHttpResponeHandlerBase {
-    private final static String LOG_TAG=CacheJSONHttpResponseHandler.class.getName();
+    private final static String LOG_TAG=CacheJSONHttpResponseHandler.class.getSimpleName();
     /**请求标识*/
     private String requestUnique;
     /**

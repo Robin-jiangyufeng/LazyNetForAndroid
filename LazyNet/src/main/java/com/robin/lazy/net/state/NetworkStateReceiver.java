@@ -46,7 +46,7 @@ import java.util.ArrayList;
  * @since [产品/模块版本]
  */
 public class NetworkStateReceiver extends BroadcastReceiver {
-	private final static String LOG_TAG=NetworkStateReceiver.class.getName();
+	private final static String LOG_TAG=NetworkStateReceiver.class.getSimpleName();
 	
 	private static ArrayList<NetChangeObserver> netChangeObserverArrayList = new ArrayList<NetChangeObserver>();
 

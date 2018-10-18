@@ -13,7 +13,6 @@ package com.robin.lazy.net.http.core;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.robin.lazy.net.http.core.callback.DownloadCallbackInterface;
 import com.robin.lazy.net.http.core.callback.ResponseCallbackInterface;
@@ -45,7 +44,7 @@ import javax.net.ssl.SSLSocketFactory;
  */
 public class AsyncHttpClient implements NetChangeObserver {
 
-    private final static String LOG_TAG=AsyncHttpClient.class.getName();
+    private final static String LOG_TAG=AsyncHttpClient.class.getSimpleName();
 
     /**
      * 线程队列大小(当池子大小等于corePoolSize，把请求放入workQueue中，池子里的空闲线程就去从workQueue中取任务并处理)
@@ -637,7 +636,7 @@ public class AsyncHttpClient implements NetChangeObserver {
     @Override
     public void onConnect(NetWorkUtil.NetType type) {
         if (type != lastNetType) {
-            Log.i(AsyncHttpClient.class.getName(), "onConnect.NetType==" + type);
+            NetLog.i(LOG_TAG, "onConnect.NetType==" + type);
             resetAllRequest();
         }
         lastNetType = type;

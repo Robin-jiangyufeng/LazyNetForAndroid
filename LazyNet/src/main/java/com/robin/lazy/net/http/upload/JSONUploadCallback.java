@@ -27,7 +27,7 @@ import java.io.UnsupportedEncodingException;
  * @since [产品/模块版本]
  */
 public class JSONUploadCallback<T extends Serializable, E extends Serializable> extends UploadCallback<T,E>{
-    private final static String LOG_TAG=JSONUploadCallback.class.getName();
+    private final static String LOG_TAG=JSONUploadCallback.class.getSimpleName();
     public final String DEFAULT_CHARSET = "UTF-8";
     public final String UTF8_BOM = "\uFEFF";
     /**

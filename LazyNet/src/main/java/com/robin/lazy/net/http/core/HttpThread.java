@@ -30,7 +30,7 @@ import javax.net.ssl.SSLSocketFactory;
  * @author Administrator 江钰锋
  */
 public class HttpThread implements Runnable {
-    private final static String LOG_TAG=HttpThread.class.getName();
+    private final static String LOG_TAG=HttpThread.class.getSimpleName();
     /**
      * http请求客户端
      */
