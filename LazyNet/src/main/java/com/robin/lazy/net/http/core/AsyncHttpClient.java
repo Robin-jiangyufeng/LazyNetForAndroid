@@ -321,7 +321,7 @@ public class AsyncHttpClient implements NetChangeObserver {
      * 设置代理
      * @param proxy
      */
-    protected void setProxy(Proxy proxy) {
+    public void setProxy(Proxy proxy) {
         this.proxy = proxy;
     }
 
