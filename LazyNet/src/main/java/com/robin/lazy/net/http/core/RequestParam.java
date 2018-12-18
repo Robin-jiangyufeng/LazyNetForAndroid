@@ -11,8 +11,12 @@
 
 package com.robin.lazy.net.http.core;
 
+import android.support.annotation.NonNull;
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -192,17 +196,6 @@ public class RequestParam {
         urlWithPsaram.putAll(dataGroup);
     }
 
-    /**
-     * 添加要上传的文件
-     *
-     * @param key      文件的key
-     * @param filePath 文件路径
-     * @throws FileNotFoundException
-     */
-    public void addFile(String key, String filePath)
-            throws FileNotFoundException {
-        addFile(key, new File(filePath));
-    }
 
     /**
      * 添加要上传的文件
@@ -220,18 +213,6 @@ public class RequestParam {
     /**
      * 添加要上传的文件
      *
-     * @param key  文件的key
-     * @param file 文件
-     * @throws FileNotFoundException
-     */
-    public void addFile(String key, File file)
-            throws FileNotFoundException {
-        addFile(key, file, null);
-    }
-
-    /**
-     * 添加要上传的文件
-     *
      * @param key
      * @param file
      * @param contentType
@@ -240,14 +221,20 @@ public class RequestParam {
      */
     public void addFile(String key, File file, String contentType)
             throws FileNotFoundException {
+        addFile(key,new FileWrapper(file, contentType));
+    }
+
+    /**
+     * 添加上传文件
+     * @param key
+     * @param fileWrapper
+     */
+    public void addFile(@NonNull String key,@NonNull FileWrapper fileWrapper) {
         if (fileParams == null) {
             fileParams = new ConcurrentHashMap<String, FileWrapper>();
         }
-        if (file == null || !file.exists()) {
-            throw new FileNotFoundException();
-        }
-        if (key != null) {
-            fileParams.put(key, new FileWrapper(file, contentType));
+        if (key != null&&fileWrapper!=null) {
+            fileParams.put(key, fileWrapper);
         }
     }
 
@@ -440,31 +427,64 @@ public class RequestParam {
         private File file;
 
         /**
+         * 输入流
+         */
+        private InputStream inputStream;
+
+        /**
          * 文件类型
          */
         private String contentType;
 
-        public FileWrapper(File file, String contentType) {
+        /**
+         * 内容名称
+         */
+        private String contentName;
+
+        /**
+         * 内容长度
+         */
+        private long contentLength;
+
+        public FileWrapper(@NonNull File file, String contentType) {
             this.file = file;
             this.contentType = contentType;
+            this.contentName=file.getName();
+        }
+
+        public FileWrapper(@NonNull byte[] content, String contentType,String contentName) {
+            this(new ByteArrayInputStream(content),contentType,contentName);
+        }
+
+        public FileWrapper(@NonNull InputStream inputStream, String contentType,String contentName) {
+            this.inputStream = inputStream;
+            this.contentType = contentType;
+            this.contentName = contentName;
         }
 
         public File getFile() {
             return file;
         }
 
-        public void setFile(File file) {
-            this.file = file;
-        }
-
         public String getContentType() {
             return contentType;
         }
 
-        public void setContentType(String contentType) {
-            this.contentType = contentType;
+        public String getContentName() {
+            return contentName;
         }
 
+        public InputStream getInputStream() {
+            return inputStream;
+        }
+
+        public long getContentLength() {
+            return contentLength;
+        }
+
+        public void setContentLength(long contentLength) {
+            this.contentLength = contentLength;
+        }
     }
 
 }

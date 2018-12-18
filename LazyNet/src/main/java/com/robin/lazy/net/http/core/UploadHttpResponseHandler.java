@@ -1,5 +1,7 @@
 package com.robin.lazy.net.http.core;
 
+import android.support.annotation.NonNull;
+
 import com.robin.lazy.net.http.core.callback.UploadCallbackInterface;
 import com.robin.lazy.net.http.log.NetLog;
 import com.robin.lazy.util.StringUtils;
@@ -10,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
@@ -365,9 +368,20 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
             for (String key : fileParams.keySet())
             {
                 RequestParam.FileWrapper fileWrapper = fileParams.get(key);
-                if (isExistFile(fileWrapper.getFile()))
-                {
-                    fileParts.add(new FilePart(key, fileWrapper.getFile(), fileWrapper.getContentType()));
+                if(fileWrapper.getFile()!=null){
+                    if (isExistFile(fileWrapper.getFile()))
+                    {
+                        try {
+                            FilePart filePart = new FilePart(key, fileWrapper.getFile(), fileWrapper.getContentType());
+                            fileParts.add(filePart);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            NetLog.e(LOG_TAG,"要上传的文件不存在",e);
+                        }
+                    }
+                }else {
+                    FilePart filePart = new FilePart(key, fileWrapper.getContentName(), fileWrapper.getContentType(),fileWrapper.getContentLength(),fileWrapper.getInputStream());
+                    fileParts.add(filePart);
                 }
             }
         }
@@ -540,8 +554,19 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
      */
     private class FilePart
     {
-        /** 文件 */
-        public File file;
+        /** 输入流 */
+        public InputStream inputStream;
+        /**长度*/
+        public long length;
+        /**
+         * 文件名称
+         */
+        public String name;
+
+        /**
+         * 文件类型
+         */
+        public String type;
         
         /** 文件头 */
         public byte[] header;
@@ -549,10 +574,21 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
         /**
          * <默认构造函数>
          */
-        public FilePart(String key, File file, String type)
+        public FilePart(@NonNull String key, @NonNull File file,@NonNull String type) throws FileNotFoundException {
+            this(key,file.getName(),type,file.length(),new FileInputStream(file));
+        }
+
+        /**
+         * <默认构造函数>
+         */
+        public FilePart(String key, String name,String type,long length, InputStream inputStream)
         {
-            header = createHeader(key, file.getName(), type);
-            this.file = file;
+            this.name=name;
+            this.type=type;
+            this.length=length;
+            this.inputStream = inputStream;
+            this.header = createHeader(key, this.name, this.type);
+
         }
         
         /**
@@ -590,7 +626,13 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
          */
         public long getTotalLength()
         {
-            long streamLength = file.length() + LINE_END.getBytes().length;
+            long streamLength = 0;
+            try {
+                long contentLength=length>0?length:inputStream.available();
+                streamLength = contentLength + LINE_END.getBytes().length;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return header.length + streamLength;
         }
         
@@ -604,12 +646,10 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
         public int writeTo(OutputStream out, int messageId)
         {
             int state = 0;
-            FileInputStream inputStream = null;
             try
             {
                 out.write(header);
                 sendProgressMessage(messageId, header.length, totalSize);// 监听进度
-                inputStream = new FileInputStream(file);
                 final byte[] tmp = new byte[1024 * 4];
                 int l;
                 while ((l = inputStream.read(tmp)) != -1)
@@ -630,14 +670,17 @@ public class UploadHttpResponseHandler extends HttpResponseHandler
                     state = HttpError.RESPONSE_CODE_200;
                 }
             }
-            catch (FileNotFoundException e1)
+            catch (FileNotFoundException e)
             {
-                e1.printStackTrace();
+                e.printStackTrace();
                 state = HttpError.UPLOAD_FIEL_NOT_EXIST;
             }
-            catch (IOException e1)
+            catch (IOException e)
             {
-                e1.printStackTrace();
+                e.printStackTrace();
+                state = HttpError.UNKNOW_HTTP_ERROR;
+            }catch (Exception e){
+                e.printStackTrace();
                 state = HttpError.UNKNOW_HTTP_ERROR;
             }
             
