@@ -454,6 +454,7 @@ public class RequestParam {
 
         public FileWrapper(@NonNull byte[] content, String contentType,String contentName) {
             this(new ByteArrayInputStream(content),contentType,contentName);
+            setContentLength(content.length);
         }
 
         public FileWrapper(@NonNull InputStream inputStream, String contentType,String contentName) {
