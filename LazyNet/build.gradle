@@ -3,14 +3,13 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 25
-        versionCode 197
-        versionName "1.9.7"
+        targetSdkVersion 28
+        versionCode 198
+        versionName "1.9.8"
     }
     buildTypes {
         release {
@@ -25,12 +24,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.robin.lazy.cache:LazyCache:1.0.8'
-    compile 'com.robin.lazy.json:LazyJsonParse:1.0.5'
-    compile 'com.robin.lazy.util:UtilLibrary:1.1.4'
-    testCompile 'junit:junit:4.12'
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api 'com.android.support:support-v4:28.0.0'
+    api 'com.robin.lazy.cache:LazyCache:1.0.9'
+    api 'com.robin.lazy.json:LazyJsonParse:1.0.6'
+    api 'com.robin.lazy.util:UtilLibrary:1.1.5'
+    testImplementation 'junit:junit:4.12'
 }
 
 ext {
@@ -46,7 +45,7 @@ ext {
     siteUrl = 'https://github.com/Robin-jiangyufeng/LazyNetForAndroid'
     gitUrl = 'https://github.com/Robin-jiangyufeng/LazyNetForAndroid.git'
 
-    libraryVersion = '1.9.7'
+    libraryVersion = '1.9.8'
 
     developerId = 'jiangyufeng'
     developerName = 'jiangyufeng'
