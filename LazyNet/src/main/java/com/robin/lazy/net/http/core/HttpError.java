@@ -109,6 +109,10 @@ public class HttpError implements Serializable {
      * 反馈状态:相同id的请求已存在
      */
     public static final int REQUEST_EXIST = 19;
+    /**
+     * 反馈状态:httpThread弱引用被清空
+     */
+    public static final int REQUEST_CLEANED_UP = 20;
 
     /**
      * (成功)服务器已成功处理了请求

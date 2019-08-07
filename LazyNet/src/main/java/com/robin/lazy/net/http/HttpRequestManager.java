@@ -500,7 +500,7 @@ public class HttpRequestManager extends AsyncHttpClient {
      * @throws
      * @see [类、类#方法、类#成员]
      */
-    private void removeContextRequest(Integer messageId) {
+    private synchronized void removeContextRequest(Integer messageId) {
         if(messageId==null)return;
         Iterator<Map.Entry<RequestLifecycleContext, List<Integer>>> it = contextRequests
                 .entrySet().iterator();

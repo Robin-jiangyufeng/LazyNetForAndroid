@@ -18,7 +18,7 @@ import java.util.zip.GZIPInputStream;
 
 /**
  * http网络请求最基础的数据管理类
- * 
+ *
  * @author 江钰锋
  * @version [版本号, 2015年1月16日]
  * @see [相关类/方法]
@@ -152,7 +152,7 @@ public abstract class HttpResponseHandler implements HttpResponseHandlerBase {
 
 	/**
 	 * 发送http请求
-	 * 
+	 *
 	 * @param urlConnection
 	 *            HttpURLConnection连接
 	 * @param request
@@ -192,7 +192,7 @@ public abstract class HttpResponseHandler implements HttpResponseHandlerBase {
 
 	/**
 	 * 获得服务端反馈数据
-	 * 
+	 *
 	 * @param urlConnection
 	 *            HttpURLConnection连接
 	 * @return

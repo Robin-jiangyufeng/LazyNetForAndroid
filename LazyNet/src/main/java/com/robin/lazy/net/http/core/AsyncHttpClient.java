@@ -265,8 +265,10 @@ public class AsyncHttpClient implements NetChangeObserver {
      * @see [类、类#方法、类#成员]
      */
     protected void addTask(int messageId, HttpThread httpThread) {
-        if (requestMap != null) {
-            requestMap.put(messageId, new RequestHandle(httpThread));
+        synchronized (this) {
+            if (requestMap != null) {
+                requestMap.put(messageId, new RequestHandle(httpThread));
+            }
         }
     }
 

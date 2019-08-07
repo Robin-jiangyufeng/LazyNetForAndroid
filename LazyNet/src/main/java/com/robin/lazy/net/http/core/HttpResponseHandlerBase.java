@@ -108,7 +108,7 @@ public interface HttpResponseHandlerBase
      * @return
      * @see [类、类#方法、类#成员]
      */
-    boolean isCancelRequest();
+     boolean isCancelRequest();
     
     /**
      * 取消当前请求(与isCancelRequest()方法是同步的)
