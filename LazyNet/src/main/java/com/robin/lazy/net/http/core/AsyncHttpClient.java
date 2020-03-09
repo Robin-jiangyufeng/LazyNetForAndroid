@@ -130,7 +130,10 @@ public class AsyncHttpClient implements NetChangeObserver {
         sslSocketFactory = DefaultSSLSocketFactory
                 .getFixedSocketFactory();
         ((DefaultSSLSocketFactory)sslSocketFactory).fixHttpsURLConnection();
-
+//        CookieManager manager = new CookieManager();
+//        //设置cookie策略，只接受与你对话服务器的cookie，而不接收Internet上其它服务器发送的cookie
+//        manager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
+//        CookieHandler.setDefault(manager);
         NetLog.i(LOG_TAG,"当前活动线程数量=" + Thread.activeCount());
     }
 

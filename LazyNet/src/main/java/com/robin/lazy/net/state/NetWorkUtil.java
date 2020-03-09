@@ -64,7 +64,7 @@ public class NetWorkUtil
          */
         noneNet
     }
-    
+
     /**
      * 网络是否可用
      * 

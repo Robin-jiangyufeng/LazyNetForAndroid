@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NetChangeObserver
                 startActivity(new Intent(this,GetActivity.class));
                 break;
             case R.id.button2:
+                startActivity(new Intent(this,PostActivity.class));
                 break;
             case R.id.button3:
                 Intent intent=new Intent(this,GetActivity.class);
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements NetChangeObserver
                 startActivity(intent);
                 break;
             case R.id.button4:
+                intent=new Intent(this,PostActivity.class);
+                intent.putExtra("isUseCache",true);
+                startActivity(intent);
                 break;
             case R.id.button5:
                 DialogUtil.getAlertDialog(this, "版本更新", "更新信息", "更新", new DialogInterface.OnClickListener() {
