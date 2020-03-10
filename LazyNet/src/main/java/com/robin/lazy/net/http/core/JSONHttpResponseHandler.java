@@ -62,7 +62,7 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
     }
 
     @Override
-    protected void sendhttpRequest(HttpURLConnection urlConnection,
+    protected void sendRequestData(HttpURLConnection urlConnection,
                                    RequestParam request) {
         DataOutputStream out = null;
         OutputStream outStream = null;

@@ -66,9 +66,9 @@ public class CacheJSONHttpResponseHandler<T extends Serializable, E extends Seri
     }
 
     @Override
-    public boolean sendResponseMessage(HttpURLConnection urlConnection, RequestParam request) {
+    public int sendRequest(HttpURLConnection urlConnection, RequestParam request) {
         requestUnique=request.getUnique();
-        return super.sendResponseMessage(urlConnection, request);
+        return super.sendRequest(urlConnection, request);
     }
 
     @Override

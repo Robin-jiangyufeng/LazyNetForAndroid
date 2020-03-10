@@ -57,9 +57,9 @@ public class CacheTextHttpResponseHandler extends TextHttpResponseHandler
     }
 
     @Override
-    public boolean sendResponseMessage(HttpURLConnection urlConnection, RequestParam request) {
+    public int sendRequest(HttpURLConnection urlConnection, RequestParam request) {
         requestUnique=request.getSendData();
-        return super.sendResponseMessage(urlConnection, request);
+        return super.sendRequest(urlConnection, request);
     }
 
     @Override

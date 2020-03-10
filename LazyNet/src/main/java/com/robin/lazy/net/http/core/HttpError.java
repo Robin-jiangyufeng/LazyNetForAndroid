@@ -32,87 +32,98 @@ public class HttpError implements Serializable {
     public static final int CONNECT_TIME_OUT = 3;
 
     /**
-     * 反馈状态：服务器响应超时
+     * 反馈状态：发送报文超时
      */
-    public static final int READ_TIME_OUT = 4;
+    public static final int SEND_TIME_OUT = 4;
 
     /**
-     * 反馈状态：未知错误
+     * 反馈状态：服务器响应超时
      */
-    public static final int UNKNOW_HTTP_ERROR = 5;
+    public static final int READ_TIME_OUT = 5;
+
+    /**
+     * 反馈状态：未知错误(此错误看日志)
+     */
+    public static final int UNKNOW_HTTP_ERROR = 6;
 
     /**
      * 反馈状态：用户取消了请求
      */
-    public static final int USER_CANCEL = 6;
+    public static final int USER_CANCEL = 7;
 
     /**
      * 反馈状态：连接地址有误
      */
-    public static final int URL_ERROR = 7;
+    public static final int URL_ERROR = 8;
 
     /**
      * 反馈状态：DNS域名解析错误
      */
-    public static final int DNS_PARSE_ERROR = 8;
+    public static final int DNS_PARSE_ERROR = 9;
 
     /**
      * 反馈状态：请求格式有误
      */
-    public static final int PROTOCOL_EXCEPTION = 9;
+    public static final int PROTOCOL_EXCEPTION = 10;
 
     /**
      * 反馈状态：安全错误
      */
-    public static final int SECURITY_ERROR = 10;
+    public static final int SECURITY_ERROR = 11;
 
     /**
      * Address already in use: JVM_Bind
      */
-    public static final int BIND_ERROR = 11;
+    public static final int BIND_ERROR = 12;
 
     /**
      * 未知的服务器错误
      */
-    public static final int UNKNOW_SERVICE_ERROR = 12;
+    public static final int UNKNOW_SERVICE_ERROR = 13;
 
     /**
      * 反馈状态：你的访问文件不存在
      */
-    public static final int FILE_NOT_FOUND_EXCEPTION = 13;
+    public static final int FILE_NOT_FOUND_EXCEPTION = 14;
 
     /**
      * 反馈状态:文件已存在
      */
-    public static final int FIEL_EXIST = 14;
+    public static final int FIEL_EXIST = 15;
 
     /**
      * 反馈状态:要上传的文件不存在
      */
-    public static final int UPLOAD_FIEL_NOT_EXIST = 15;
+    public static final int UPLOAD_FIEL_NOT_EXIST = 16;
 
     /**
      * 反馈状态:SSL错误(SSLException)
      */
-    public static final int SSL_EXCEPTION = 16;
+    public static final int SSL_EXCEPTION = 17;
 
     /**
      * 反馈状态:数据转换错误(例如string转json对象)
      */
-    public static final int DATA_CONVERT_EXCEPTION = 17;
+    public static final int DATA_CONVERT_EXCEPTION = 18;
     /**
      * 任务列表已满
      */
-    public static final int REQUEST_TASK_FULL = 18;
+    public static final int REQUEST_TASK_FULL = 19;
 
     /**
      * 反馈状态:相同id的请求已存在
      */
-    public static final int REQUEST_EXIST = 19;
+    public static final int REQUEST_EXIST = 20;
     /**
      * 反馈状态:httpThread弱引用被清空
      */
-    public static final int REQUEST_CLEANED_UP = 20;
+    public static final int REQUEST_CLEANED_UP = 21;
+
+    /**请求io流错误*/
+    public static final int SEND_IO_ERROR =22;
+
+    /**读取io流错误*/
+    public static final int READ_IO_ERROR =23;
 
     /**
      * (成功)服务器已成功处理了请求
@@ -285,6 +296,8 @@ public class HttpError implements Serializable {
                 return "连接错误";
             case CONNECT_TIME_OUT:
                 return "连接超时";
+            case SEND_TIME_OUT:
+                return "发送数据超时";
             case READ_TIME_OUT:
                 return "服务器响应超时";
             case UNKNOW_HTTP_ERROR:
@@ -317,6 +330,10 @@ public class HttpError implements Serializable {
                 return "任务列表已满";
             case REQUEST_EXIST:
                 return "相同id的请求已存在";
+            case SEND_IO_ERROR:
+                return "发送数据时IO流错误";
+            case READ_IO_ERROR:
+                return "读取数据时IO流错误";
             case RESPONSE_CODE_200:
                 return "(成功)服务器已成功处理了请求";
             case RESPONSE_CODE_201:

@@ -30,7 +30,7 @@ import javax.net.ssl.SSLSocketFactory;
  * @author Administrator 江钰锋
  */
 public class HttpThread implements Runnable {
-    private final static String LOG_TAG=HttpThread.class.getSimpleName();
+    private final static String LOG_TAG = HttpThread.class.getSimpleName();
     /**
      * http请求客户端
      */
@@ -120,7 +120,7 @@ public class HttpThread implements Runnable {
             onPostProcessRequest();
             onAfterProcessRequest();
         } catch (Exception e) {
-            NetLog.e(LOG_TAG, "http请求错误",e);
+            NetLog.e(LOG_TAG, "http请求错误", e);
             if (httpRequestHandler != null) {
                 httpRequestHandler.sendFailMessage(getMessageId(),
                         HttpError.UNKNOW_HTTP_ERROR, null, null);
@@ -139,12 +139,12 @@ public class HttpThread implements Runnable {
      */
     private void logout() {
         if (request == null) return;
-        NetLog.d(LOG_TAG,"请求id==" + request.getMessageId());
-        NetLog.d(LOG_TAG,"请求url==" + request.getUrl());
-        NetLog.d(LOG_TAG,"请求headers==");
-        NetLog.json(LOG_TAG,request.getSendHeaderMap() == null ? "" : JSONUtil.toJSON(request.getSendHeaderMap()));
-        NetLog.d(LOG_TAG,"请求params==");
-        NetLog.json(LOG_TAG,request.getUrlWithPsaram() == null ? "" : JSONUtil.toJSON(request.getUrlWithPsaram()));
+        NetLog.d(LOG_TAG, "请求id==" + request.getMessageId());
+        NetLog.d(LOG_TAG, "请求url==" + request.getUrl());
+        NetLog.d(LOG_TAG, "请求headers==");
+        NetLog.json(LOG_TAG, request.getSendHeaderMap() == null ? "" : JSONUtil.toJSON(request.getSendHeaderMap()));
+        NetLog.d(LOG_TAG, "请求params==");
+        NetLog.json(LOG_TAG, request.getUrlWithPsaram() == null ? "" : JSONUtil.toJSON(request.getUrlWithPsaram()));
     }
 
     /**
@@ -159,7 +159,7 @@ public class HttpThread implements Runnable {
                 Thread.sleep(request.getDelayTime());
             }
         } catch (InterruptedException e) {
-            NetLog.e(LOG_TAG, "设置延迟加载失败",e);
+            NetLog.e(LOG_TAG, "设置延迟加载失败", e);
         }
         makeRequestWithRetries();
     }
@@ -173,17 +173,10 @@ public class HttpThread implements Runnable {
         boolean retry = false;// 是否失败重试
         int retryNumber = request.getRetryNumber();// 重试次数
         do {
-            if (httpRequestHandler != null) {
+            if (httpRequestHandler != null && retry) {
                 httpRequestHandler.resetRequestData();
             }
-            HttpURLConnection urlConnection = createHttpConnect(httpMethod,
-                    request);
-            boolean isSuccess = makeRequest(urlConnection, request);
-
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-                urlConnection = null;
-            }
+            boolean isSuccess = makeRequest();
             if (!isSuccess && request != null && request.isRetry()
                     && retryNumber > 0) {
                 retryNumber--;
@@ -201,15 +194,33 @@ public class HttpThread implements Runnable {
     /**
      * 开始执行http请求任务
      *
-     * @param urlConnection http连接对象
      * @return http请求任务是否完成
      * @see [类、类#方法、类#成员]
      */
-    private boolean makeRequest(HttpURLConnection urlConnection,
-                                RequestParam reques) {
+    private boolean makeRequest() {
+        HttpURLConnection urlConnection = createHttpConnect(httpMethod,
+                request);
         if (urlConnection != null) {
-            return httpRequestHandler
-                    .sendResponseMessage(urlConnection, reques);
+            int responseCode = httpRequestHandler.sendRequest(urlConnection, request);
+            if (responseCode == HttpError.RESPONSE_CODE_302
+                    && request.isFollowRedirects()) {
+                String url = null;
+                if (urlConnection != null) {
+                    url = urlConnection.getHeaderField("Location");
+                    urlConnection.disconnect();
+                    urlConnection = null;
+                }
+                if (httpRequestHandler != null) {
+                    httpRequestHandler.resetRequestData();
+                }
+                request.setUrl(url);
+                return makeRequest();
+            }
+            return httpRequestHandler.readResponse(urlConnection,responseCode,request);
+        }
+        if (urlConnection != null) {
+            urlConnection.disconnect();
+            urlConnection = null;
         }
         return false;
     }
@@ -290,32 +301,6 @@ public class HttpThread implements Runnable {
     }
 
     /**
-     * responseCode不等与200的处理
-     * @param httpMethod
-     * @param request
-     * @param responseCode
-     * @param urlConnection
-     * @return
-     */
-    private HttpURLConnection errorCodeHandle(HttpRequestMethod httpMethod,
-                                              RequestParam request,int responseCode, HttpURLConnection urlConnection) {
-        if (responseCode == HttpError.RESPONSE_CODE_302) {
-            String url=null;
-            if(urlConnection!=null){
-                url = urlConnection.getHeaderField("Location");
-                urlConnection.disconnect();
-                urlConnection=null;
-            }
-            if (httpRequestHandler != null) {
-                httpRequestHandler.resetRequestData();
-            }
-            request.setUrl(url);
-            return createHttpConnect(httpMethod,request);
-        }
-        return urlConnection;
-    }
-
-    /**
      * 根据url获取安全连接实例
      *
      * @return
@@ -328,7 +313,7 @@ public class HttpThread implements Runnable {
     private HttpURLConnection safeURLConnection(String urlSt)
             throws MalformedURLException, IOException {
         if (StringUtils.isHttpsUrl(urlSt)) {
-            NetLog.i(LOG_TAG,"安全连接===" + urlSt);
+            NetLog.i(LOG_TAG, "安全连接===" + urlSt);
             HttpsURLConnection urlConnection = (HttpsURLConnection) getProxyURLConnection(urlSt);
             if (sslSocketFactory != null) {
                 urlConnection.setSSLSocketFactory(sslSocketFactory);
