@@ -173,7 +173,9 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler {
                     responseCode = HttpError.UNKNOW_HTTP_ERROR;
                 }
             } finally {
-                if (responseCode == HttpError.RESPONSE_CODE_200 && isSuccess) {//下载成功
+                if ((responseCode == HttpError.RESPONSE_CODE_200
+                        &&responseCode == HttpError.RESPONSE_CODE_206)
+                        && isSuccess) {//下载成功
                     fileBuffer.save();
                     sendSuccessMessage(request.getMessageId(), headers, null);
                     return true;
