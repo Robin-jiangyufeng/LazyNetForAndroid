@@ -22,6 +22,9 @@ import com.robin.lazy.net.state.NetChangeObserver;
 import com.robin.lazy.net.state.NetWorkUtil;
 import com.robin.lazy.net.state.NetworkStateReceiver;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Proxy.Type;
@@ -44,7 +47,7 @@ import javax.net.ssl.SSLSocketFactory;
  */
 public class AsyncHttpClient implements NetChangeObserver {
 
-    private final static String LOG_TAG=AsyncHttpClient.class.getSimpleName();
+    private final static String LOG_TAG = AsyncHttpClient.class.getSimpleName();
 
     /**
      * 线程队列大小(当池子大小等于corePoolSize，把请求放入workQueue中，池子里的空闲线程就去从workQueue中取任务并处理)
@@ -112,6 +115,7 @@ public class AsyncHttpClient implements NetChangeObserver {
 
     /**
      * 初始化
+     *
      * @param queueSize 等待的线程队列大小
      * @see [类、类#方法、类#成员]
      */
@@ -129,12 +133,8 @@ public class AsyncHttpClient implements NetChangeObserver {
         loadDefaultProxy();
         sslSocketFactory = DefaultSSLSocketFactory
                 .getFixedSocketFactory();
-        ((DefaultSSLSocketFactory)sslSocketFactory).fixHttpsURLConnection();
-//        CookieManager manager = new CookieManager();
-//        //设置cookie策略，只接受与你对话服务器的cookie，而不接收Internet上其它服务器发送的cookie
-//        manager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
-//        CookieHandler.setDefault(manager);
-        NetLog.i(LOG_TAG,"当前活动线程数量=" + Thread.activeCount());
+        ((DefaultSSLSocketFactory) sslSocketFactory).fixHttpsURLConnection();
+        NetLog.i(LOG_TAG, "当前活动线程数量=" + Thread.activeCount());
     }
 
     /**
@@ -238,10 +238,10 @@ public class AsyncHttpClient implements NetChangeObserver {
                     httpRequestHandler.sendFailMessage(request.getMessageId(), HttpError.REQUEST_EXIST, null, null);
                 }
             }
-            NetLog.i(LOG_TAG,"当前任务数量requestMap.size=" + requestMap.size());
-            NetLog.v(LOG_TAG,"threadPool.getActiveCount()="
+            NetLog.i(LOG_TAG, "当前任务数量requestMap.size=" + requestMap.size());
+            NetLog.v(LOG_TAG, "threadPool.getActiveCount()="
                     + threadPool.getActiveCount());
-            NetLog.e(LOG_TAG,"当前活动线程数量=" + Thread.activeCount());
+            NetLog.e(LOG_TAG, "当前活动线程数量=" + Thread.activeCount());
         }
         return isSuccess;
     }
@@ -301,7 +301,7 @@ public class AsyncHttpClient implements NetChangeObserver {
                 try {
                     setProxy(getDefaultProxy());
                 } catch (Exception e) {
-                    NetLog.e(LOG_TAG,"加载默认的代理配置错误",e);
+                    NetLog.e(LOG_TAG, "加载默认的代理配置错误", e);
                 }
             }
         }).start();
@@ -331,6 +331,20 @@ public class AsyncHttpClient implements NetChangeObserver {
     }
 
     /**
+     * 设置cookie管理者
+     *
+     * @param cManager
+     */
+    public void setCookieManager(CookieManager cManager) {
+        if (cManager == null) {
+            cManager = new CookieManager();
+            //设置cookie策略，只接受与你对话服务器的cookie，而不接收Internet上其它服务器发送的cookie
+            cManager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
+        }
+        CookieHandler.setDefault(cManager);
+    }
+
+    /**
      * 删除已经完成的任务
      *
      * @see [类、类#方法、类#成员]
@@ -345,10 +359,10 @@ public class AsyncHttpClient implements NetChangeObserver {
             if (task != null && task.isFinished()) {
                 task.clean();
                 it.remove();
-                NetLog.i(LOG_TAG,"删除一个已完成的任务" + requestMap.size());
+                NetLog.i(LOG_TAG, "删除一个已完成的任务" + requestMap.size());
             }
         }
-        NetLog.i(LOG_TAG,"requestMap.size=" + requestMap.size());
+        NetLog.i(LOG_TAG, "requestMap.size=" + requestMap.size());
     }
 
     /**
@@ -429,7 +443,7 @@ public class AsyncHttpClient implements NetChangeObserver {
         RequestHandle requestHandle = getRequestHandle(messageId);
         if (requestHandle != null) {
             boolean isSuccess = requestHandle.resetRequest();
-            NetLog.i(LOG_TAG,"重置请求是否成功isSuccess=" + isSuccess);
+            NetLog.i(LOG_TAG, "重置请求是否成功isSuccess=" + isSuccess);
         }
     }
 
@@ -537,6 +551,7 @@ public class AsyncHttpClient implements NetChangeObserver {
 
     /**
      * 设置SSL或者TLS协议的安全套接字
+     *
      * @param sslSocketFactory
      */
     public void setSslSocketFactory(SSLSocketFactory sslSocketFactory) {
