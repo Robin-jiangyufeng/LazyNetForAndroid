@@ -76,7 +76,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler {
     @Override
     public void resetRequestData() {
         super.resetRequestData();
-        tfInfor=null;
+        tfInfor = null;
         tfInfor = fileBuffer.getTempFileInfor();
     }
 
@@ -91,8 +91,9 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler {
     @Override
     public int sendRequest(HttpURLConnection urlConnection, RequestParam request) {
         int responseCode = 0;
-        if (urlConnection != null && request != null && !fileBuffer.isExists()) {// 连接对象，请求数据及下载的文件没有被下载过的情况
-            boolean isSuccess = false;
+        if (fileBuffer.isExists() && !request.isCover()) {//下载的文件已经存在，并且不能覆盖的情况抛下载文件已存在错误
+            responseCode = HttpError.FIEL_EXIST;
+        } else if (urlConnection != null && request != null) {// 连接对象,请求数据
             try {
                 sendRequestData(urlConnection, request);
                 if (tfInfor == null) {
@@ -139,16 +140,13 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler {
                 if (responseCode == 0) {
                     responseCode = HttpError.UNKNOW_HTTP_ERROR;
                 }
-            }  finally {
+            } finally {
                 if (isCancelRequest()) {
-                    responseCode=HttpError.USER_CANCEL;
+                    responseCode = HttpError.USER_CANCEL;
                 }
             }
-        } else if (fileBuffer.isExists())// 要下载的文件已存在
-        {
-            responseCode=HttpError.FIEL_EXIST;
         } else {
-            responseCode=HttpError.UNKNOW_HTTP_ERROR;
+            responseCode = HttpError.UNKNOW_HTTP_ERROR;
             NetLog.e(LOG_TAG, "urlConnection为空,或者request为空");
         }
         return responseCode;
@@ -160,8 +158,10 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler {
             boolean isSuccess = false;
             Map<String, List<String>> headers = null;
             try {
-                isSuccess = readResponseData(urlConnection, request.getMessageId());
-                headers = urlConnection.getHeaderFields();
+                if (responseCode != HttpError.FIEL_EXIST) {
+                    isSuccess = readResponseData(urlConnection, request.getMessageId());
+                    headers = urlConnection.getHeaderFields();
+                }
             } catch (SecurityException e) {
                 e.printStackTrace();
                 if (responseCode == 0) {
@@ -174,7 +174,7 @@ public class DownloadHttpResponseHandler extends HttpResponseHandler {
                 }
             } finally {
                 if (isSuccess
-                        &&(responseCode == HttpError.RESPONSE_CODE_200
+                        && (responseCode == HttpError.RESPONSE_CODE_200
                         || responseCode == HttpError.RESPONSE_CODE_206)) {//下载成功
                     fileBuffer.save();
                     sendSuccessMessage(request.getMessageId(), headers, null);

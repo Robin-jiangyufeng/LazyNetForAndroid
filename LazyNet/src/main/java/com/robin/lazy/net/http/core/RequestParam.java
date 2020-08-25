@@ -100,6 +100,11 @@ public class RequestParam {
     private ConcurrentHashMap<String, FileWrapper> fileParams;
 
     /**
+     * 下载时是否覆盖已存在文件
+     */
+    private boolean isCover;
+
+    /**
      * @param messageId 自定报文id
      * @param url       http url连接
      */
@@ -378,6 +383,22 @@ public class RequestParam {
      */
     public ConcurrentHashMap<String, FileWrapper> getFileParams() {
         return fileParams;
+    }
+
+    /**
+     * 获取下载时是否覆盖已存在文件
+     * @return
+     */
+    public boolean isCover() {
+        return isCover;
+    }
+
+    /**
+     * 设置下载时是否覆盖已存在文件
+     * @param cover
+     */
+    public void setCover(boolean cover) {
+        isCover = cover;
     }
 
     /**

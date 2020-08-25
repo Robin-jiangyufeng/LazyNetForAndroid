@@ -242,6 +242,9 @@ public class FileBuffer {
      * @see [类、类#方法、类#成员]
      */
     public void save() {
+        if(file != null && file.exists()){
+            file.delete();
+        }
         boolean isSuccess = tempFile.renameTo(file);// 下载成功,修改临时文件为下载后的文件
         if (isSuccess) {
             deleteTempFile();
