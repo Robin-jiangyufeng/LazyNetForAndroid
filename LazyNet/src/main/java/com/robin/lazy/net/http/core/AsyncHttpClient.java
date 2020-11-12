@@ -11,8 +11,9 @@
 
 package com.robin.lazy.net.http.core;
 
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import com.robin.lazy.net.http.core.callback.DownloadCallbackInterface;
 import com.robin.lazy.net.http.core.callback.ResponseCallbackInterface;

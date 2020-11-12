@@ -11,7 +11,7 @@
 
 package com.robin.lazy.net.http.core;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -234,7 +234,7 @@ public class RequestParam {
      * @param key
      * @param fileWrapper
      */
-    public void addFile(@NonNull String key,@NonNull FileWrapper fileWrapper) {
+    public void addFile(@NonNull String key, @NonNull FileWrapper fileWrapper) {
         if (fileParams == null) {
             fileParams = new ConcurrentHashMap<String, FileWrapper>();
         }

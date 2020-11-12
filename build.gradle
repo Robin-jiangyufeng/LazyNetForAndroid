@@ -3,11 +3,8 @@
 buildscript {
     repositories {
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        google()
         jcenter()
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
     }
 
     dependencies {
@@ -24,12 +21,10 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'https://dl.bintray.com/jiangyufeng/maven/' }
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url "https://jitpack.io" }
+        google()
         jcenter()
-        maven {url 'https://dl.bintray.com/jiangyufeng/maven/'}
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
     }
 }

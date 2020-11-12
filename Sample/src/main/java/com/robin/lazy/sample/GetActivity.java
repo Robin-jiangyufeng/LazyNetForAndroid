@@ -2,11 +2,12 @@ package com.robin.lazy.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.robin.lazy.net.http.HttpRequestManager;
 import com.robin.lazy.net.http.RequestLifecycleContext;

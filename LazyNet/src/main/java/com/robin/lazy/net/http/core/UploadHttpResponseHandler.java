@@ -1,6 +1,6 @@
 package com.robin.lazy.net.http.core;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.robin.lazy.net.http.core.callback.UploadCallbackInterface;
 import com.robin.lazy.net.http.log.NetLog;

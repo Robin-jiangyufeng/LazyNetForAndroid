@@ -1,6 +1,7 @@
 package com.robin.lazy.sample;
 
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * @desc:
@@ -10,6 +11,6 @@ import android.support.v7.app.AppCompatActivity;
  * @createTime： 2017/8/10 下午3:58
  */
 
-public class DownloadingActivity extends AppCompatActivity{
+public class DownloadingActivity extends AppCompatActivity {
 
 }
