@@ -124,7 +124,6 @@ public class AsyncJsonResponseCallback<T extends Serializable, E extends Seriali
                                    Map<String, List<String>> headers, T responseData) {
         handler.sendMessage(handler.obtainMessage(SUCCESS_MESSAGE, messageId,
                 HttpError.RESPONSE_CODE_200, new Object[]{headers,responseData}));
-        handler = null;
     }
 
     @Override
@@ -132,7 +131,6 @@ public class AsyncJsonResponseCallback<T extends Serializable, E extends Seriali
                                 Map<String, List<String>> headers, E responseData) {
         handler.sendMessage(handler.obtainMessage(FAIL_MESSAGE, messageId,
                 statusCode, new Object[]{headers,responseData}));
-        handler = null;
     }
 
     @Override

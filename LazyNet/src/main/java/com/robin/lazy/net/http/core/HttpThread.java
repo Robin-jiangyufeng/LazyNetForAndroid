@@ -173,21 +173,20 @@ public class HttpThread implements Runnable {
         boolean retry = false;// 是否失败重试
         int retryNumber = request.getRetryNumber();// 重试次数
         do {
-            if (httpRequestHandler != null && retry) {
-                httpRequestHandler.resetRequestData();
-            }
-            boolean isSuccess = makeRequest();
-            if (!isSuccess && request != null && request.isRetry()
-                    && retryNumber > 0) {
-                retryNumber--;
-                retry = true;// 失败重试
-            } else {
-                if (retry) {
-                    retry = false;
+            synchronized (this){
+                if (httpRequestHandler != null && retry) {
+                    httpRequestHandler.resetRequestData();
+                }
+                boolean isSuccess = makeRequest();
+                if(request==null)break;
+                retry=isSuccess?false:request.isRetry();
+                if(retry&&retryNumber>0){
+                    retryNumber--;
                     continue;
+                }else {
+                    break;
                 }
             }
-
         } while (retry && !Thread.currentThread().isInterrupted());
     }
 
@@ -455,7 +454,7 @@ public class HttpThread implements Runnable {
      *
      * @see [类、类#方法、类#成员]
      */
-    public void clean() {
+    public synchronized void clean() {
         if (httpRequestHandler != null) {
             httpRequestHandler.clean();
             httpRequestHandler = null;
