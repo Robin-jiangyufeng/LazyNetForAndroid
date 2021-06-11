@@ -21,7 +21,6 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://dl.bintray.com/jiangyufeng/maven/' }
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         maven { url "https://jitpack.io" }
         google()
