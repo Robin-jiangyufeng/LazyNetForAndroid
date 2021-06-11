@@ -28,9 +28,9 @@ proguard/
 # files for buile
 /build
 /.gradle
-/gradle
-gradlew
-gradlew.bat
-gradle.properties
+#/gradle
+#gradlew
+#gradlew.bat
+#gradle.properties
 README.md
 
