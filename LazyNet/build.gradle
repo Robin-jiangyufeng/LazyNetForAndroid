@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.github.dcendents.android-maven'
 //apply plugin: 'com.jfrog.bintray'
-apply from :"./publishAndroidLib.gradle"
+//apply from :"./publishAndroidLib.gradle"
 
 android {
     compileSdkVersion 28
@@ -163,7 +163,7 @@ dependencies {
 //    }
 //}
 //
-//// 为注释中文提供解决方案
-//tasks.withType(JavaCompile) {
-//    options.encoding = "UTF-8"
-//}
+// 为注释中文提供解决方案
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
