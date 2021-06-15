@@ -26,10 +26,10 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.annotation:annotation:1.1.0'
-    api 'com.robin.lazy.cache:LazyCache:1.0.9'
-    api 'com.robin.lazy.json:LazyJsonParse:1.0.6'
-    api 'com.robin.lazy.util:UtilLibrary:1.1.6'
+    api 'androidx.annotation:annotation:1.1.0'
+    api 'com.github.Robin-jiangyufeng:LazyCacheForAndroid:1.0.9'
+    api 'com.github.Robin-jiangyufeng:LazyJsonForAndroid:1.0.6'
+    api 'com.github.Robin-jiangyufeng:LazyUtilForAndroid:1.1.6'
     testImplementation 'junit:junit:4.12'
 }
 
