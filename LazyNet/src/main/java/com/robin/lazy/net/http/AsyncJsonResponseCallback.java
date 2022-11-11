@@ -103,7 +103,7 @@ public class AsyncJsonResponseCallback<T extends Serializable, E extends Seriali
                 Map<String,List<String>> headers=(Map<String,List<String>>)objects[0];
                 E errorResponse=(E)objects[1];
                 if (loadingView != null) {
-                    loadingView.loadFail(messageId, statusCode,HttpError.getMessageByStatusCode(statusCode));
+                    loadingView.loadFail(messageId, statusCode,HttpError.getMessageByStatusCode(statusCode),errorResponse);
                     loadingView=null;
                 }
                 if (listener != null) {

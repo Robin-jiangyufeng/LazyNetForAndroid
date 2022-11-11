@@ -19,7 +19,7 @@ package com.robin.lazy.net.http;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface LoadingViewInterface<T> {
+public interface LoadingViewInterface<T,E> {
 
     /***
      * 加载开始
@@ -42,6 +42,6 @@ public interface LoadingViewInterface<T> {
      * @param failCode
      * @param failMessage
      */
-    void loadFail(int loadId, int failCode, String failMessage);
+    void loadFail(int loadId, int failCode, String failMessage,E responseData);
 
 }

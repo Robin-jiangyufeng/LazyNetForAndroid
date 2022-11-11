@@ -4,13 +4,13 @@ apply plugin: 'com.github.dcendents.android-maven'
 //apply from :"./publishAndroidLib.gradle"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 28
-        versionCode 100916
-        versionName "1.9.16"
+        targetSdkVersion 30
+        versionCode 100917
+        versionName "1.9.17"
     }
     buildTypes {
         release {

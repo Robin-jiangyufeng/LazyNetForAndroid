@@ -120,7 +120,7 @@ public class AsyncCacheTextResponseCallback extends CacheTextResponseCallback {
                 Map<String,List<String>> headers=(Map<String,List<String>>)objects[0];
                 String errorResponse=(String) objects[1];
                 if (loadingView != null) {
-                    loadingView.loadFail(messageId,statusCode, HttpError.getMessageByStatusCode(statusCode));
+                    loadingView.loadFail(messageId,statusCode, HttpError.getMessageByStatusCode(statusCode),errorResponse);
                     loadingView=null;
                 }
                 if (listener != null) {
