@@ -34,7 +34,7 @@ public class HttpCacheLoaderManager {
 	private CachePutEntity<CacheResponseEntity> cachePutEntity;
 
 	/** byte数组类型缓存加载任务 */
-	private LoadCacheTask cacheTask;
+	protected LoadCacheTask cacheTask;
 
 	public HttpCacheLoaderManager() {
 
@@ -48,6 +48,22 @@ public class HttpCacheLoaderManager {
 				new SerializableReadFromDisk<CacheResponseEntity>());
 		cachePutEntity = new CachePutEntity<CacheResponseEntity>(
 				new SerializableWriteInDisk<CacheResponseEntity>());
+	}
+
+	/**
+	 * 设置获取缓存处理类
+	 * @param cacheGetEntity
+	 */
+	public void setCacheGetEntity(CacheGetEntity<CacheResponseEntity> cacheGetEntity) {
+		this.cacheGetEntity = cacheGetEntity;
+	}
+
+	/**
+	 * 设置保存的缓存处理类
+	 * @param cachePutEntity
+	 */
+	public void setCachePutEntity(CachePutEntity<CacheResponseEntity> cachePutEntity) {
+		this.cachePutEntity = cachePutEntity;
 	}
 
 	/**
