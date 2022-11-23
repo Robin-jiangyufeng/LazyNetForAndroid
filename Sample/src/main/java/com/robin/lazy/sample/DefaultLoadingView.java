@@ -25,7 +25,7 @@ import com.robin.lazy.net.http.LoadingViewInterface;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public class DefaultLoadingView implements LoadingViewInterface<String>{
+public class DefaultLoadingView implements LoadingViewInterface<String,String>{
 
     private Context context;
     public DefaultLoadingView(Context context) {
@@ -47,7 +47,7 @@ public class DefaultLoadingView implements LoadingViewInterface<String>{
     }
 
     @Override
-    public void loadFail(int loadId, int failCode, String failMessage) {
+    public void loadFail(int loadId, int failCode, String failMessage,String responseError) {
         proDialog.dismiss();
     }
 }

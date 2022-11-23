@@ -19,7 +19,7 @@ package com.robin.lazy.net.http;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface CacheLoadingViewInterface<T> extends LoadingViewInterface<T>{
+public interface CacheLoadingViewInterface<T,E> extends LoadingViewInterface<T,E>{
     /**
      * 得到缓存后的回调
      *
