@@ -4,11 +4,11 @@ apply plugin: 'com.github.dcendents.android-maven'
 //apply from :"./publishAndroidLib.gradle"
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode 100917
         versionName "1.9.17"
     }
@@ -27,7 +27,7 @@ android {
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api 'androidx.annotation:annotation:1.1.0'
-    api 'com.github.Robin-jiangyufeng:LazyCacheForAndroid:1.0.9'
+    api 'com.github.Robin-jiangyufeng:LazyCacheForAndroid:1.1.0'
     api 'com.github.Robin-jiangyufeng:LazyJsonForAndroid:1.0.6'
     api 'com.github.Robin-jiangyufeng:LazyUtilForAndroid:1.1.6'
     testImplementation 'junit:junit:4.12'
