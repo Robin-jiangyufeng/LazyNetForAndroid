@@ -12,6 +12,7 @@
 package com.robin.lazy.net.http;
 
 import android.app.Activity;
+import android.content.Context;
 
 /**
  * 请求生命周期接口
@@ -30,6 +31,6 @@ public interface RequestLifecycleContext {
 	 * @throws
 	 * @see [类、类#方法、类#成员]
 	 */
-	public Activity getCurrContext();
+	public Context getCurrContext();
 }
 

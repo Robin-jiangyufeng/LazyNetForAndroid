@@ -1,6 +1,7 @@
 package com.robin.lazy.sample;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -58,7 +59,7 @@ public class GetActivity extends AppCompatActivity implements RequestLifecycleCo
     }
 
     @Override
-    public Activity getCurrContext() {
+    public Context getCurrContext() {
         return this;
     }
 
