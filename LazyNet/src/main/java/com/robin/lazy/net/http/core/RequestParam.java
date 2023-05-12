@@ -467,6 +467,9 @@ public class RequestParam {
          */
         private long contentLength;
 
+        public FileWrapper() {
+        }
+
         public FileWrapper(@NonNull File file, String contentType) {
             this.file = file;
             this.contentType = contentType;
