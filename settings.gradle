@@ -1,1 +1,3 @@
-include ':LazyNet', ':Sample'
+rootProject.name = "LazyNetForAndroid"
+include ':LazyNet'
+include ':Sample'
