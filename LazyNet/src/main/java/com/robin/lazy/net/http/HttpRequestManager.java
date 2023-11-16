@@ -473,7 +473,7 @@ public class HttpRequestManager extends AsyncHttpClient {
      * @throws
      * @see [类、类#方法、类#成员]
      */
-    protected void addContextRequest(RequestLifecycleContext requestContext,
+    protected synchronized void addContextRequest(RequestLifecycleContext requestContext,
                                      Integer messageId) {
         if (requestContext == null||messageId == null) return;
         if (contextRequests != null) {
@@ -532,7 +532,7 @@ public class HttpRequestManager extends AsyncHttpClient {
      * @throws
      * @see [类、类#方法、类#成员]
      */
-    public void cancelConetxtRequest(RequestLifecycleContext requestContext) {
+    public synchronized void cancelConetxtRequest(RequestLifecycleContext requestContext) {
         if (requestContext == null) return;
         if (contextRequests != null
                 && contextRequests.containsKey(requestContext)) {
@@ -564,7 +564,7 @@ public class HttpRequestManager extends AsyncHttpClient {
      * @param isNow 是否马上关闭链接(true就是马上,false就是等待现有的请求结束再关闭)
      * @see [类、类#方法、类#成员]
      */
-    public void close(boolean isNow) {
+    public synchronized void close(boolean isNow) {
         if (isNow) {
             shutdownNow();
         } else {
