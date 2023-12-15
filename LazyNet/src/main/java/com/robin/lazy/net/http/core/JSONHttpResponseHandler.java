@@ -71,7 +71,7 @@ public class JSONHttpResponseHandler<T extends Serializable, E extends Serializa
                 outStream = urlConnection.getOutputStream();
                 out = new DataOutputStream(outStream);
                 String json = request.getSendData();
-                out.writeBytes(json);
+                out.write(json.getBytes(getResponseCharset()));
             }
         } catch (IOException e) {
             e.printStackTrace();
