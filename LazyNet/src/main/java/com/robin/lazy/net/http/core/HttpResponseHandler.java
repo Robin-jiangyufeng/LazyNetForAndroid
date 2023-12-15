@@ -194,7 +194,7 @@ public abstract class HttpResponseHandler implements HttpResponseHandlerBase {
             if (!request.isEmptyForData()) {
                 outStream = urlConnection.getOutputStream();
                 out = new DataOutputStream(outStream);
-                out.write(request.getSendData().getBytes());
+                out.write(request.getSendData().getBytes(responseCharset));
             }
         } catch (IOException e) {
             e.printStackTrace();
